@@ -24,7 +24,11 @@ export async function PATCH(
 
     return NextResponse.json({
       success: true,
-      question: { ...question, id: Number(question.id) },
+      question: {
+        ...question,
+        id: Number(question.id),
+        syllabusPackId: question.syllabusPackId ? Number(question.syllabusPackId) : null,
+      },
     });
   } catch (error) {
     console.error("Question update error:", error);
