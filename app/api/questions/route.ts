@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 200, headers: corsHeaders });
+}
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -26,16 +36,22 @@ export async function GET(req: NextRequest) {
       prisma.question.count({ where: { status: "flagged" } }),
     ]);
 
-    return NextResponse.json({
-      questions: questions.map((q) => ({
-        ...q,
-        id: Number(q.id),
-        syllabusPackId: q.syllabusPackId ? Number(q.syllabusPackId) : null,
-      })),
-      stats: { total, drafts, verified, flagged },
-    });
+    return NextResponse.json(
+      {
+        questions: questions.map((q) => ({
+          ...q,
+          id: Number(q.id),
+          syllabusPackId: q.syllabusPackId ? Number(q.syllabusPackId) : null,
+        })),
+        stats: { total, drafts, verified, flagged },
+      },
+      { headers: corsHeaders }
+    );
   } catch (error) {
     console.error("Questions fetch error:", error);
-    return NextResponse.json({ error: "Failed to fetch questions" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch questions" },
+      { status: 500, headers: corsHeaders }
+    );
   }
 }
