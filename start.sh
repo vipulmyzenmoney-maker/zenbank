@@ -3,10 +3,8 @@ set -e
 
 echo "🚀 Starting ZenBank Engine..."
 
-# Push Prisma schema to Postgres
-echo "📦 Running Prisma schema sync..."
-npx prisma db push --skip-generate || true
+echo "📦 Running Prisma DB push..."
+./node_modules/.bin/prisma db push --accept-data-loss || npx prisma db push --accept-data-loss || true
 
-# Start Next.js standalone server
 echo "⚡ Starting Next.js server on port ${PORT:-8080}..."
 exec node server.js
