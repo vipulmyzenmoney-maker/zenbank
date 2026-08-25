@@ -5,33 +5,39 @@
   --font-body: "Inter", system-ui, sans-serif;
 }
 
-/* Global Reset */
-* { box-sizing: border-box; }
+/* Global Dark Mode Base */
+* {
+  box-sizing: border-box;
+}
 
-body {
+html, body {
+  background-color: #020617; /* Slate 950 */
+  color: #f8fafc;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Zen Gradient Text */
+/* Zen Neon Gradient Text */
 .text-gradient-zen {
-  background: linear-gradient(135deg, #10b981, #14b8a6, #2563eb);
+  background: linear-gradient(135deg, #10b981, #14b8a6, #38bdf8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Confidence Badge Pulse */
-@keyframes pulse-soft {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+/* Custom Scrollbar for Dark Mode */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-.animate-pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
-
-/* Smooth page transitions */
-.page-enter { animation: fadeUp 0.3s ease-out; }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+::-webkit-scrollbar-track {
+  background: #090d16;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
 }
