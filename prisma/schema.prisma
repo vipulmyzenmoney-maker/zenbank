@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SyllabusPack {
+  id         BigInt     @id @default(autoincrement())
+  title      String     @db.VarChar(255)
+  gradeLevel String     @db.VarChar(50) @map("grade_level")
+  subject    String     @db.VarChar(100)
+  topics     Json       @default("[]")
+  createdAt  DateTime   @default(now()) @map("created_at")
+  questions  Question[]
+
+  @@map("syllabus_packs")
+}
+
+model Question {
+  id             BigInt        @id @default(autoincrement())
+  syllabusPackId BigInt?       @map("syllabus_pack_id")
+  questionText   String        @map("question_text")
+  options        Json
+  correctAnswer  String        @map("correct_answer")
+  explanation    String
+  gradeLevel     String        @map("grade_level")
+  subject        String
+  topic          String        @default("")
+  difficulty     String        @default("medium")
+  confidence     Int           @default(95)
+  status         String        @default("draft")
+  flagReason     String?       @map("flag_reason")
+  verifiedAt     DateTime?     @map("verified_at")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  syllabusPack   SyllabusPack? @relation(fields: [syllabusPackId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([gradeLevel, subject])
+  @@map("questions")
+}
