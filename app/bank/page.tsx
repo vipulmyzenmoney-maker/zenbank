@@ -13,7 +13,8 @@ import {
   CheckSquare, 
   Square,
   AlertTriangle,
-  RefreshCw
+  RefreshCw,
+  UserCheck
 } from "lucide-react";
 
 interface QuestionItem {
@@ -28,6 +29,8 @@ interface QuestionItem {
   difficulty: string;
   confidence: number;
   status: string;
+  verifiedBy?: string | null;
+  verifiedAt?: string | null;
 }
 
 export default function BankPage() {
@@ -135,7 +138,19 @@ export default function BankPage() {
   };
 
   const handleExportCSV = () => {
-    const headers = ["ID", "Grade", "Subject", "Topic", "Question", "Correct Answer", "Explanation", "Difficulty", "Status", "Confidence"];
+    const headers = [
+      "ID",
+      "Grade",
+      "Subject",
+      "Topic",
+      "Question",
+      "Correct Answer",
+      "Explanation",
+      "Difficulty",
+      "Status",
+      "Verified By",
+      "Confidence"
+    ];
     const rows = questions.map((q) => [
       q.id,
       q.gradeLevel,
@@ -146,6 +161,7 @@ export default function BankPage() {
       `"${q.explanation.replace(/"/g, '""')}"`,
       q.difficulty,
       q.status,
+      `"${(q.verifiedBy || "").replace(/"/g, '""')}"`,
       q.confidence,
     ]);
     const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
@@ -157,13 +173,21 @@ export default function BankPage() {
     a.click();
   };
 
-  const statusBadge = (status: string) => {
-    switch (status) {
+  const statusBadge = (q: QuestionItem) => {
+    switch (q.status) {
       case "verified":
         return (
-          <span className="inline-flex items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
-            <CheckCircle2 className="h-3 w-3" /> Verified
-          </span>
+          <div className="flex flex-col items-start gap-0.5">
+            <span className="inline-flex items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
+              <CheckCircle2 className="h-3 w-3" /> Verified
+            </span>
+            {q.verifiedBy && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-slate-400">
+                <UserCheck className="h-2.5 w-2.5 text-emerald-400" />
+                {q.verifiedBy}
+              </span>
+            )}
+          </div>
         );
       case "flagged":
         return (
@@ -191,7 +215,7 @@ export default function BankPage() {
               Question Bank Manager
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">
-              Review, filter, export, or remove questions from your central database.
+              Review, filter, export, or remove verified and draft questions.
             </p>
           </div>
 
@@ -242,7 +266,7 @@ export default function BankPage() {
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search questions by keyword..."
+                placeholder="Search questions by keyword or topic..."
                 className="w-full rounded-xl border border-slate-800 bg-slate-900/80 py-2.5 pl-10 pr-4 text-sm font-medium text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
               />
             </div>
@@ -325,7 +349,7 @@ export default function BankPage() {
                     <th className="px-4 py-3 text-[10px] font-extrabold uppercase text-slate-400 hidden sm:table-cell">Grade</th>
                     <th className="px-4 py-3 text-[10px] font-extrabold uppercase text-slate-400 hidden md:table-cell">Subject</th>
                     <th className="px-4 py-3 text-[10px] font-extrabold uppercase text-slate-400 hidden lg:table-cell">Topic</th>
-                    <th className="px-4 py-3 text-[10px] font-extrabold uppercase text-slate-400">Status</th>
+                    <th className="px-4 py-3 text-[10px] font-extrabold uppercase text-slate-400">Status & Verifier</th>
                     <th className="px-4 py-3 text-[10px] font-extrabold uppercase text-slate-400 text-right">Actions</th>
                   </tr>
                 </thead>
@@ -366,7 +390,7 @@ export default function BankPage() {
                         <td className="px-4 py-3 text-xs font-semibold text-slate-400 hidden lg:table-cell">
                           {q.topic}
                         </td>
-                        <td className="px-4 py-3">{statusBadge(q.status)}</td>
+                        <td className="px-4 py-3">{statusBadge(q)}</td>
                         <td className="px-4 py-3 text-right">
                           <button
                             onClick={() => handleDeleteSingle(q.id)}

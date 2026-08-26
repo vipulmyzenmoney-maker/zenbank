@@ -5,3 +5,4 @@ export const groq = new Groq({
 });
 
 export const GENERATION_MODEL = "llama-3.3-70b-versatile";
+export const VISION_MODEL = "llama-3.2-11b-vision-preview";

@@ -8,14 +8,17 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await req.json();
-    const { status, flagReason, questionText, explanation } = body;
+    const { status, flagReason, questionText, explanation, verifiedBy } = body;
 
     const updateData: Record<string, unknown> = {};
     if (status) updateData.status = status;
     if (flagReason !== undefined) updateData.flagReason = flagReason;
     if (questionText) updateData.questionText = questionText;
     if (explanation) updateData.explanation = explanation;
-    if (status === "verified") updateData.verifiedAt = new Date();
+    if (status === "verified") {
+      updateData.verifiedAt = new Date();
+      updateData.verifiedBy = verifiedBy || "Zen Reviewer";
+    }
 
     const question = await prisma.question.update({
       where: { id: BigInt(id) },

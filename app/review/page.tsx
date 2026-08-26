@@ -13,8 +13,9 @@ import {
   Star,
   ChevronLeft,
   ChevronRight,
-  SlidersHorizontal,
   Sparkles,
+  UserCheck,
+  Tag
 } from "lucide-react";
 
 interface QuestionItem {
@@ -30,6 +31,8 @@ interface QuestionItem {
   confidence: number;
   status: string;
   flagReason: string | null;
+  verifiedBy?: string | null;
+  verifiedAt?: string | null;
 }
 
 export default function ReviewPage() {
@@ -40,7 +43,18 @@ export default function ReviewPage() {
   const [editMode, setEditMode] = useState(false);
   const [editText, setEditText] = useState("");
   const [editExplanation, setEditExplanation] = useState("");
+  const [reviewerName, setReviewerName] = useState("Zen Admin");
   const [stats, setStats] = useState({ total: 0, drafts: 0, verified: 0, flagged: 0 });
+
+  useEffect(() => {
+    const saved = localStorage.getItem("zen_reviewer_name");
+    if (saved) setReviewerName(saved);
+  }, []);
+
+  const handleReviewerNameChange = (val: string) => {
+    setReviewerName(val);
+    localStorage.setItem("zen_reviewer_name", val);
+  };
 
   const fetchDrafts = useCallback(async () => {
     setLoading(true);
@@ -76,6 +90,7 @@ export default function ReviewPage() {
           body: JSON.stringify({
             status: action === "approve" ? "verified" : "flagged",
             flagReason: reason || null,
+            verifiedBy: action === "approve" ? (reviewerName || "Zen Reviewer") : null,
           }),
         });
       }
@@ -105,6 +120,7 @@ export default function ReviewPage() {
           questionText: editText,
           explanation: editExplanation,
           status: "verified",
+          verifiedBy: reviewerName || "Zen Reviewer",
         }),
       });
       setQuestions((prev) => prev.filter((_, i) => i !== currentIdx));
@@ -121,7 +137,11 @@ export default function ReviewPage() {
   const handleBatchApprove = async () => {
     setActionLoading(true);
     try {
-      const res = await fetch("/api/questions/batch-approve", { method: "POST" });
+      const res = await fetch("/api/questions/batch-approve", { 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ verifiedBy: reviewerName || "AI Auto-Verifier" })
+      });
       const data = await res.json();
       alert(`${data.approvedCount || 0} high-confidence questions approved!`);
       fetchDrafts();
@@ -177,16 +197,26 @@ export default function ReviewPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Verified By Input */}
+            <div className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950 px-2.5 py-1">
+              <UserCheck className="h-3.5 w-3.5 text-emerald-400" />
+              <span className="text-[11px] font-bold text-slate-400">Verified by:</span>
+              <input
+                type="text"
+                value={reviewerName}
+                onChange={(e) => handleReviewerNameChange(e.target.value)}
+                placeholder="Reviewer Name"
+                className="w-24 bg-transparent text-xs font-bold text-emerald-300 focus:outline-none placeholder-slate-600"
+              />
+            </div>
+
             <div className="flex items-center gap-1.5 text-xs font-bold">
               <span className="rounded-lg bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 text-amber-400">
                 {stats.drafts} Drafts
               </span>
               <span className="rounded-lg bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 text-emerald-400">
                 {stats.verified} Verified
-              </span>
-              <span className="rounded-lg bg-red-500/10 border border-red-500/30 px-2.5 py-1 text-red-400">
-                {stats.flagged} Flagged
               </span>
             </div>
 
@@ -207,14 +237,14 @@ export default function ReviewPage() {
             <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-400" />
             <h2 className="mt-3 font-display text-xl font-bold text-white">All Drafts Reviewed!</h2>
             <p className="mt-1 text-xs text-slate-400">
-              No pending questions in queue. Use the generator to create more.
+              No pending questions in queue. Use the syllabus upload or generator to create more.
             </p>
             <div className="mt-5">
               <Link
                 href="/"
                 className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-2.5 text-xs font-extrabold text-slate-950 hover:bg-emerald-400 transition-all"
               >
-                Go to Generator <ArrowRight className="h-3.5 w-3.5" />
+                Go to Syllabus Generator <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
           </div>
@@ -306,42 +336,49 @@ export default function ReviewPage() {
               </div>
 
               {/* Floating Action Buttons */}
-              <div className="mt-6 flex flex-wrap items-center gap-2.5 border-t border-slate-800 pt-5">
-                <button
-                  onClick={() => handleAction("approve")}
-                  disabled={actionLoading}
-                  className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-xs font-extrabold text-slate-950 shadow-md shadow-emerald-500/20 hover:opacity-95 transition-all disabled:opacity-40"
-                >
-                  <CheckCircle2 className="h-4 w-4" />
-                  Approve (Enter)
-                </button>
-                <button
-                  onClick={() => {
-                    setEditText(current.questionText);
-                    setEditExplanation(current.explanation);
-                    setEditMode(true);
-                  }}
-                  className="flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs font-bold text-slate-300 hover:text-white transition-all"
-                >
-                  <Pencil className="h-3.5 w-3.5" />
-                  Edit (E)
-                </button>
-                <button
-                  onClick={() => handleAction("flag", "Flagged by reviewer")}
-                  disabled={actionLoading}
-                  className="flex items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2.5 text-xs font-bold text-amber-400 hover:bg-amber-500/20 transition-all disabled:opacity-40"
-                >
-                  <Flag className="h-3.5 w-3.5" />
-                  Flag (F)
-                </button>
-                <button
-                  onClick={() => handleAction("delete")}
-                  disabled={actionLoading}
-                  className="flex items-center gap-1.5 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-xs font-bold text-red-400 hover:bg-red-500/20 transition-all disabled:opacity-40"
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                  Delete
-                </button>
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-2.5 border-t border-slate-800 pt-5">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <button
+                    onClick={() => handleAction("approve")}
+                    disabled={actionLoading}
+                    className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-xs font-extrabold text-slate-950 shadow-md shadow-emerald-500/20 hover:opacity-95 transition-all disabled:opacity-40"
+                  >
+                    <CheckCircle2 className="h-4 w-4" />
+                    Approve (Enter)
+                  </button>
+                  <button
+                    onClick={() => {
+                      setEditText(current.questionText);
+                      setEditExplanation(current.explanation);
+                      setEditMode(true);
+                    }}
+                    className="flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs font-bold text-slate-300 hover:text-white transition-all"
+                  >
+                    <Pencil className="h-3.5 w-3.5" />
+                    Edit (E)
+                  </button>
+                  <button
+                    onClick={() => handleAction("flag", "Flagged by reviewer")}
+                    disabled={actionLoading}
+                    className="flex items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2.5 text-xs font-bold text-amber-400 hover:bg-amber-500/20 transition-all disabled:opacity-40"
+                  >
+                    <Flag className="h-3.5 w-3.5" />
+                    Flag (F)
+                  </button>
+                  <button
+                    onClick={() => handleAction("delete")}
+                    disabled={actionLoading}
+                    className="flex items-center gap-1.5 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-xs font-bold text-red-400 hover:bg-red-500/20 transition-all disabled:opacity-40"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    Delete
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500">
+                  <UserCheck className="h-3.5 w-3.5 text-emerald-400" />
+                  <span>Will be marked: <strong className="text-emerald-400">{reviewerName || "Zen Reviewer"}</strong></span>
+                </div>
               </div>
             </div>
           </div>
@@ -379,7 +416,7 @@ export default function ReviewPage() {
                 className="flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-2.5 text-xs font-extrabold text-slate-950 hover:bg-emerald-400 transition-all disabled:opacity-40"
               >
                 <CheckCircle2 className="h-4 w-4" />
-                Save & Approve
+                Save & Approve as {reviewerName || "Zen Reviewer"}
               </button>
               <button
                 onClick={() => setEditMode(false)}

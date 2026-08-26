@@ -1,8 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function POST() {
+export async function POST(req: NextRequest) {
   try {
+    let verifiedBy = "AI Auto-Verifier";
+    try {
+      const body = await req.json();
+      if (body?.verifiedBy) verifiedBy = body.verifiedBy;
+    } catch {
+      // JSON body might be empty, use default
+    }
+
     const result = await prisma.question.updateMany({
       where: {
         status: "draft",
@@ -11,6 +19,7 @@ export async function POST() {
       data: {
         status: "verified",
         verifiedAt: new Date(),
+        verifiedBy,
       },
     });
 
