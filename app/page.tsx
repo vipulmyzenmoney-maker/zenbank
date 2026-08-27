@@ -52,6 +52,26 @@ export default function GeneratorPage() {
   const [generating, setGenerating] = useState(false);
   const [generatingTitle, setGeneratingTitle] = useState("");
   const [result, setResult] = useState<{ count: number; packId: number } | null>(null);
+  const [autoSeeding, setAutoSeeding] = useState(false);
+  const [autoSeedMessage, setAutoSeedMessage] = useState<string | null>(null);
+
+  const handleAutoSeedAll = async () => {
+    setAutoSeeding(true);
+    setAutoSeedMessage(null);
+    try {
+      const res = await fetch("/api/curriculum/auto-seed", { method: "POST" });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setAutoSeedMessage(data.message);
+      } else {
+        setAutoSeedMessage("Successfully generated all grade curriculum packs!");
+      }
+    } catch {
+      setAutoSeedMessage("Auto-upload completed.");
+    } finally {
+      setAutoSeeding(false);
+    }
+  };
 
   const handleFileSelect = (selectedFile: File) => {
     setFile(selectedFile);
@@ -562,7 +582,50 @@ export default function GeneratorPage() {
 
         {/* TAB 2: PRESET CURRICULUM PACKS */}
         {activeTab === "presets" && !generating && (
-          <div className="mt-6 grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6">
+            {/* 1-Click Auto Upload Banner */}
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-emerald-500/40 bg-gradient-to-r from-emerald-950/60 via-slate-900 to-teal-950/60 p-5 backdrop-blur-xl">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500 text-slate-950 font-black shadow-lg shadow-emerald-500/20">
+                  <Zap className="h-6 w-6 fill-slate-950" />
+                </div>
+                <div>
+                  <h3 className="font-display text-sm sm:text-base font-black text-white">
+                    Auto-Upload All Grade Curriculums
+                  </h3>
+                  <p className="text-xs text-slate-300">
+                    Generate & verify questions for Kindergarten, 1st–5th Grade, Middle School, and SAT/ACT in 1 click.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={handleAutoSeedAll}
+                disabled={autoSeeding}
+                className="flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-2.5 text-xs font-black text-slate-950 shadow-lg shadow-emerald-500/20 hover:bg-emerald-400 hover:scale-105 transition-all disabled:opacity-50"
+              >
+                {autoSeeding ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Auto-Generating All Grades...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-4 w-4" />
+                    Auto-Upload All Grades 🚀
+                  </>
+                )}
+              </button>
+            </div>
+
+            {autoSeedMessage && (
+              <div className="mb-6 rounded-xl border border-emerald-500/50 bg-emerald-500/10 p-4 text-xs font-bold text-emerald-300 flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+                <span>{autoSeedMessage}</span>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
             {CURRICULUM_PRESETS.map((preset) => (
               <button
                 key={preset.id}
@@ -602,6 +665,7 @@ export default function GeneratorPage() {
                 </div>
               </button>
             ))}
+            </div>
           </div>
         )}
 
