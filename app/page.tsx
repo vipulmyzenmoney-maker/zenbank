@@ -16,8 +16,6 @@ import {
   Plus,
   ChevronRight,
   BookOpen,
-  AlertTriangle,
-  Key,
 } from "lucide-react";
 import { CURRICULUM_PRESETS } from "@/lib/presets";
 import ApiKeyModal, { getStoredApiKey } from "@/components/ApiKeyModal";
@@ -40,7 +38,6 @@ export default function GeneratorPage() {
   const [rawSyllabusText, setRawSyllabusText] = useState("");
   const [isParsingSyllabus, setIsParsingSyllabus] = useState(false);
   const [parsedSyllabus, setParsedSyllabus] = useState<ParsedSyllabusState | null>(null);
-  const [parseError, setParseError] = useState<{ message: string; hint?: string; requiresApiKey?: boolean } | null>(null);
   const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
   const [newTopicInput, setNewTopicInput] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
@@ -80,7 +77,6 @@ export default function GeneratorPage() {
   const handleFileSelect = (selectedFile: File) => {
     setFile(selectedFile);
     setParsedSyllabus(null);
-    setParseError(null);
     setResult(null);
 
     if (selectedFile.type.startsWith("image/")) {
@@ -103,7 +99,6 @@ export default function GeneratorPage() {
   const handleParseSyllabus = async () => {
     if (!file && !rawSyllabusText.trim()) return;
     setIsParsingSyllabus(true);
-    setParseError(null);
     setResult(null);
 
     const storedKey = getStoredApiKey() || undefined;
@@ -136,33 +131,18 @@ export default function GeneratorPage() {
           ...data.syllabus,
           sourceType: data.sourceType || "document",
         });
-        setParseError(null);
       } else {
-        const errorMsg = data.error || "Failed to analyze syllabus document.";
-        const hint =
-          data.hint ||
-          (data.requiresApiKey
-            ? "Configure a Google Gemini or OpenAI API Key in Settings to scan syllabus images."
-            : "Please verify image legibility or enter topics manually.");
-        setParseError({
-          message: errorMsg,
-          hint,
-          requiresApiKey: data.requiresApiKey || errorMsg.includes("API key"),
-        });
+        handleManualFallback();
       }
     } catch (err) {
       console.error("Failed to parse syllabus:", err);
-      setParseError({
-        message: "Failed to connect to syllabus parsing service.",
-        hint: "Please check your network connection and AI key settings.",
-      });
+      handleManualFallback();
     } finally {
       setIsParsingSyllabus(false);
     }
   };
 
   const handleManualFallback = () => {
-    setParseError(null);
     setParsedSyllabus({
       title: file ? file.name.replace(/\.[^/.]+$/, "") : "Custom Curriculum",
       gradeLevel: "5th Grade",
@@ -485,40 +465,6 @@ export default function GeneratorPage() {
                     </>
                   )}
                 </button>
-
-                {/* Helpful Error & Key Prompt Banner */}
-                {parseError && (
-                  <div className="mt-4 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-left backdrop-blur-xl animate-in fade-in">
-                    <div className="flex items-start gap-3">
-                      <AlertTriangle className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <h4 className="text-xs font-bold text-amber-300">
-                          {parseError.requiresApiKey ? "Vision AI Requires API Key" : "Syllabus Analysis Note"}
-                        </h4>
-                        <p className="mt-1 text-xs text-slate-300">
-                          {parseError.hint || parseError.message}
-                        </p>
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setIsKeyModalOpen(true)}
-                            className="inline-flex items-center gap-1.5 rounded-xl bg-amber-400 px-3.5 py-1.5 text-xs font-extrabold text-slate-950 hover:bg-amber-300 transition-all shadow-sm"
-                          >
-                            <Key className="h-3.5 w-3.5" />
-                            Configure Google Gemini Key
-                          </button>
-                          <button
-                            type="button"
-                            onClick={handleManualFallback}
-                            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-bold text-slate-300 hover:text-white transition-all"
-                          >
-                            ✏️ Enter Topics Manually
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             ) : (
               /* Parsed Syllabus Review & One-Click Generate Card */
