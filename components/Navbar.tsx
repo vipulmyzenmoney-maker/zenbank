@@ -9,10 +9,39 @@ import ApiKeyModal, { getStoredApiKey } from "@/components/ApiKeyModal";
 export default function Navbar() {
   const pathname = usePathname();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [hasKey, setHasKey] = useState(false);
+  const [aiStatus, setAiStatus] = useState<{
+    active: boolean;
+    provider: string | null;
+    source: string;
+    message: string;
+  } | null>(null);
+  const [checkingStatus, setCheckingStatus] = useState(true);
+
+  const fetchStatus = async () => {
+    setCheckingStatus(true);
+    try {
+      const key = getStoredApiKey() || "";
+      const res = await fetch(`/api/ai/status${key ? `?key=${encodeURIComponent(key)}` : ""}`, {
+        headers: key ? { "x-api-key": key } : {},
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAiStatus(data);
+      }
+    } catch {
+      setAiStatus({
+        active: false,
+        provider: null,
+        source: "none",
+        message: "Failed to check status",
+      });
+    } finally {
+      setCheckingStatus(false);
+    }
+  };
 
   useEffect(() => {
-    setHasKey(Boolean(getStoredApiKey()));
+    fetchStatus();
   }, []);
 
   const links = [
@@ -63,13 +92,39 @@ export default function Navbar() {
 
         {/* Right Action & External Links */}
         <div className="flex items-center gap-2">
+          {/* Live AI Status Light & Settings Button */}
           <button
             onClick={() => setIsSettingsOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-900/60 px-3 py-1.5 text-xs font-bold text-slate-300 hover:border-emerald-500/50 hover:text-white transition-all"
-            title="Settings (AI Engine)"
+            className={`flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-bold transition-all shadow-sm ${
+              checkingStatus
+                ? "border-slate-800 bg-slate-900/60 text-slate-300"
+                : aiStatus?.active
+                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 hover:border-emerald-400"
+                : "border-rose-500/40 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 hover:border-rose-400"
+            }`}
+            title={aiStatus?.message || "Click to check or configure AI status"}
           >
-            <Sliders className="h-3.5 w-3.5 text-emerald-400" />
-            <span className="hidden sm:inline">Settings</span>
+            {checkingStatus ? (
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-400 animate-pulse" />
+            ) : aiStatus?.active ? (
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400 shadow-sm shadow-emerald-400" />
+              </span>
+            ) : (
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500 shadow-sm shadow-rose-500" />
+              </span>
+            )}
+            <span className="font-black text-[11px] sm:text-xs">
+              {checkingStatus
+                ? "Checking..."
+                : aiStatus?.active
+                ? `AI Online (${aiStatus.provider?.toUpperCase()})`
+                : "AI Offline (No Key)"}
+            </span>
+            <Sliders className="h-3 w-3 opacity-60 ml-0.5" />
           </button>
 
           <a
@@ -86,8 +141,11 @@ export default function Navbar() {
 
       <ApiKeyModal
         isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        onSaved={(key) => setHasKey(Boolean(key))}
+        onClose={() => {
+          setIsSettingsOpen(false);
+          fetchStatus();
+        }}
+        onSaved={() => fetchStatus()}
       />
     </header>
   );

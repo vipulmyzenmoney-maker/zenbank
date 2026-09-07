@@ -29,6 +29,9 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalPro
   const [keyInput, setKeyInput] = useState<string>("");
   const [savedSuccess, setSavedSuccess] = useState(false);
 
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState<{ active: boolean; message: string } | null>(null);
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -40,8 +43,27 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalPro
       setKeyInput(stored);
       setProvider(storedProv);
       setSavedSuccess(false);
+      setTestResult(null);
     }
   }, [isOpen]);
+
+  const handleTest = async () => {
+    setTesting(true);
+    setTestResult(null);
+    try {
+      const keyToTest = keyInput.trim() || getStoredApiKey() || "";
+      const res = await fetch(`/api/ai/status?test=true&key=${encodeURIComponent(keyToTest)}`);
+      const data = await res.json();
+      setTestResult({
+        active: data.active,
+        message: data.message || (data.active ? "API connection verified & active!" : "API key inactive or invalid"),
+      });
+    } catch {
+      setTestResult({ active: false, message: "Network connection check failed" });
+    } finally {
+      setTesting(false);
+    }
+  };
 
   if (!isOpen || !mounted) return null;
 
@@ -195,6 +217,46 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalPro
             <span>
               Your key is saved locally in your browser and used securely to process curriculum sheets and question banks.
             </span>
+          </div>
+
+          {/* Live Test Diagnostic */}
+          <div className="mt-3 flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/70 p-2.5">
+            <div className="flex items-center gap-2">
+              <span
+                className={`h-2.5 w-2.5 rounded-full ${
+                  testing
+                    ? "bg-amber-400 animate-pulse"
+                    : testResult?.active
+                    ? "bg-emerald-400 shadow-sm shadow-emerald-400"
+                    : testResult
+                    ? "bg-rose-500 shadow-sm shadow-rose-500"
+                    : "bg-slate-600"
+                }`}
+              />
+              <span className="text-[11px] font-semibold text-slate-300">
+                {testing
+                  ? "Testing API key connection..."
+                  : testResult
+                  ? testResult.message
+                  : "Check if this API key is active"}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleTest}
+              disabled={testing}
+              className="rounded-lg bg-slate-800 px-2.5 py-1 text-[10px] font-bold text-slate-200 hover:bg-slate-700 hover:text-white transition-all disabled:opacity-50"
+            >
+              {testing ? "Testing..." : "Test Connection"}
+            </button>
+          </div>
+
+          {/* Automation Note */}
+          <div className="mt-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-[11px] text-slate-300">
+            <p className="font-bold text-emerald-400 mb-0.5">🚀 Permanent Server Automation:</p>
+            <p className="text-slate-400 text-[10.5px]">
+              You only need to provide your key once. If you share it in chat, I will save it permanently in Railway (<code className="text-emerald-300">GEMINI_API_KEY</code>) so it works automatically for everyone.
+            </p>
           </div>
         </div>
 
