@@ -94,6 +94,16 @@ export async function GET(req: NextRequest) {
           } else {
             testMessage = "OpenAI GPT-4o mini is verified & online";
           }
+        } else if (provider === "groq") {
+          const testRes = await fetch("https://api.groq.com/openai/v1/models", {
+            headers: { Authorization: `Bearer ${activeKey}` },
+          });
+          if (!testRes.ok) {
+            testSuccess = false;
+            testMessage = `Groq API returned error ${testRes.status}`;
+          } else {
+            testMessage = "Groq LPU (Qwen 3.8 / GPT-OSS) is verified & online";
+          }
         }
       } catch (testErr) {
         testSuccess = false;
