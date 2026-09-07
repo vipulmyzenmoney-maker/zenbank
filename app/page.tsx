@@ -18,7 +18,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { CURRICULUM_PRESETS } from "@/lib/presets";
-import ApiKeyModal, { getStoredApiKey } from "@/components/ApiKeyModal";
+import { getStoredApiKey } from "@/components/ApiKeyModal";
 
 interface ParsedSyllabusState {
   title: string;
@@ -38,7 +38,6 @@ export default function GeneratorPage() {
   const [rawSyllabusText, setRawSyllabusText] = useState("");
   const [isParsingSyllabus, setIsParsingSyllabus] = useState(false);
   const [parsedSyllabus, setParsedSyllabus] = useState<ParsedSyllabusState | null>(null);
-  const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
   const [newTopicInput, setNewTopicInput] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -731,11 +730,6 @@ export default function GeneratorPage() {
           </div>
         )}
       </div>
-
-      <ApiKeyModal
-        isOpen={isKeyModalOpen}
-        onClose={() => setIsKeyModalOpen(false)}
-      />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Key, Check, X, ExternalLink, Sparkles, ShieldCheck } from "lucide-react";
 
 export const STORAGE_KEY = "zenbank_api_key";
@@ -23,9 +24,14 @@ interface ApiKeyModalProps {
 }
 
 export default function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [provider, setProvider] = useState<string>("gemini");
   const [keyInput, setKeyInput] = useState<string>("");
   const [savedSuccess, setSavedSuccess] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -37,7 +43,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalPro
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const handleSave = () => {
     const trimmed = keyInput.trim();
@@ -64,8 +70,13 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalPro
     onClose();
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-3 sm:p-4 backdrop-blur-md overflow-y-auto animate-in fade-in">
+  return createPortal(
+    <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/85 p-3 sm:p-4 backdrop-blur-md overflow-y-auto animate-in fade-in"
+    >
       <div className="relative w-full max-w-md max-h-[88vh] overflow-y-auto my-auto rounded-2xl sm:rounded-3xl border border-slate-800 bg-slate-900 p-4 sm:p-6 shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-800">
@@ -223,6 +234,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalPro
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
