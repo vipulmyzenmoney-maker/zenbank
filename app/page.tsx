@@ -16,9 +16,22 @@ import {
   Plus,
   ChevronRight,
   BookOpen,
+  Check,
+  Clock,
 } from "lucide-react";
 import { CURRICULUM_PRESETS } from "@/lib/presets";
 import { getStoredApiKey } from "@/components/ApiKeyModal";
+
+interface GenerationProgress {
+  currentTopic: string;
+  topicIndex: number;
+  totalTopics: number;
+  topics: string[];
+  completedTopics: string[];
+  totalGenerated: number;
+  totalExpected: number;
+  percent: number;
+}
 
 interface ParsedSyllabusState {
   title: string;
@@ -52,6 +65,7 @@ export default function GeneratorPage() {
   const [questionCount, setQuestionCount] = useState(10);
   const [generating, setGenerating] = useState(false);
   const [generatingTitle, setGeneratingTitle] = useState("");
+  const [progress, setProgress] = useState<GenerationProgress | null>(null);
   const [result, setResult] = useState<{ count: number; packId: number } | null>(null);
   const [autoSeeding, setAutoSeeding] = useState(false);
   const [autoSeedMessage, setAutoSeedMessage] = useState<string | null>(null);
@@ -256,6 +270,18 @@ export default function GeneratorPage() {
     setGeneratingTitle(payload.title);
     setResult(null);
 
+    const totalExpected = payload.topics.length * payload.count;
+    setProgress({
+      currentTopic: payload.topics[0] || "",
+      topicIndex: payload.topics.length > 0 ? 1 : 0,
+      totalTopics: payload.topics.length,
+      topics: payload.topics,
+      completedTopics: [],
+      totalGenerated: 0,
+      totalExpected,
+      percent: 0,
+    });
+
     const storedKey = getStoredApiKey() || undefined;
 
     try {
@@ -267,17 +293,92 @@ export default function GeneratorPage() {
         },
         body: JSON.stringify({ ...payload, apiKey: storedKey }),
       });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setResult({ 
-          count: data.questionsGenerated || data.count || (payload.topics.length * payload.count), 
-          packId: data.packId || 1 
-        });
+
+      const contentType = res.headers.get("content-type") || "";
+
+      if (contentType.includes("application/x-ndjson") && res.body) {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let finalPackId = 1;
+        let finalCount = totalExpected;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop() || "";
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed) continue;
+            try {
+              const event = JSON.parse(trimmed);
+              if (event.type === "init") {
+                finalPackId = event.packId || finalPackId;
+                finalCount = event.totalExpected || finalCount;
+                setProgress({
+                  currentTopic: event.topics?.[0] || payload.topics[0] || "",
+                  topicIndex: 1,
+                  totalTopics: event.totalTopics || payload.topics.length,
+                  topics: event.topics || payload.topics,
+                  completedTopics: [],
+                  totalGenerated: 0,
+                  totalExpected: event.totalExpected || totalExpected,
+                  percent: 0,
+                });
+              } else if (event.type === "topic_start") {
+                setProgress((prev) => ({
+                  currentTopic: event.topic,
+                  topicIndex: event.topicIndex,
+                  totalTopics: event.totalTopics,
+                  topics: prev?.topics || payload.topics,
+                  completedTopics: prev?.completedTopics || [],
+                  totalGenerated: event.totalGenerated,
+                  totalExpected: event.totalExpected,
+                  percent: event.percent ?? (prev?.percent || 0),
+                }));
+              } else if (event.type === "topic_done") {
+                setProgress((prev) => ({
+                  currentTopic: event.topic,
+                  topicIndex: event.topicIndex,
+                  totalTopics: event.totalTopics,
+                  topics: prev?.topics || payload.topics,
+                  completedTopics: [...(prev?.completedTopics || []), event.topic],
+                  totalGenerated: event.totalGenerated,
+                  totalExpected: event.totalExpected,
+                  percent: event.percent,
+                }));
+              } else if (event.type === "complete") {
+                finalPackId = event.packId || finalPackId;
+                finalCount = event.totalGenerated || event.count || finalCount;
+                setProgress((prev) => (prev ? { ...prev, percent: 100, totalGenerated: finalCount } : null));
+              } else if (event.type === "error") {
+                console.error("Server stream error:", event.error);
+              }
+            } catch (jsonErr) {
+              console.warn("Failed to parse stream line:", trimmed, jsonErr);
+            }
+          }
+        }
+
+        setResult({ count: finalCount, packId: finalPackId });
       } else {
-        setResult({ count: payload.topics.length * payload.count, packId: 1 });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          setResult({ 
+            count: data.questionsGenerated || data.count || totalExpected, 
+            packId: data.packId || 1 
+          });
+        } else {
+          setResult({ count: totalExpected, packId: 1 });
+        }
       }
-    } catch {
-      setResult({ count: payload.topics.length * payload.count, packId: 1 });
+    } catch (err) {
+      console.error("Question generation failed:", err);
+      setResult({ count: totalExpected, packId: 1 });
     } finally {
       setGenerating(false);
     }
@@ -399,16 +500,118 @@ export default function GeneratorPage() {
           </div>
         </div>
 
-        {/* Live Loading Overlay */}
+        {/* Live Loading & Real-time Progress Bar Overlay */}
         {generating && (
-          <div className="mt-8 rounded-3xl border border-emerald-500/30 bg-slate-900/90 p-8 text-center backdrop-blur-xl shadow-2xl animate-in fade-in">
-            <Loader2 className="mx-auto h-10 w-10 text-emerald-400 animate-spin" />
-            <h3 className="mt-4 font-display text-lg font-bold text-white">
-              Generating Question Bank for "{generatingTitle}"
-            </h3>
-            <p className="mt-1 text-xs text-slate-400">
-              Formulating questions, 4 distinct options, step-by-step logic, and confidence rankings...
-            </p>
+          <div className="mt-8 rounded-3xl border border-emerald-500/30 bg-slate-900/95 p-6 sm:p-8 backdrop-blur-xl shadow-2xl shadow-emerald-950/40 animate-in fade-in">
+            {/* Header / Current Status */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400">
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 border border-emerald-500/20">
+                      Live AI Engine
+                    </span>
+                    <span className="text-xs text-slate-400">
+                      {progress?.totalTopics
+                        ? `Topic ${progress.topicIndex} of ${progress.totalTopics}`
+                        : "Preparing curriculum..."}
+                    </span>
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-white mt-0.5 truncate max-w-md">
+                    Generating "{generatingTitle}"
+                  </h3>
+                </div>
+              </div>
+
+              {/* Live Percent & Question Counter Badge */}
+              <div className="flex items-center gap-4 bg-slate-950/80 px-4 py-2.5 rounded-2xl border border-slate-800">
+                <div className="text-right">
+                  <div className="text-2xl font-black text-emerald-400 tracking-tight leading-none">
+                    {progress?.percent ?? 0}%
+                  </div>
+                  <div className="text-[11px] font-semibold text-slate-400 mt-1">
+                    {progress?.totalGenerated ?? 0} / {progress?.totalExpected ?? "?"} questions
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Glowing Animated Progress Bar */}
+            <div className="mt-5 space-y-2">
+              <div className="relative h-3.5 w-full overflow-hidden rounded-full bg-slate-950 border border-slate-800/90 p-0.5 shadow-inner">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 transition-all duration-500 ease-out shadow-[0_0_14px_rgba(16,185,129,0.6)]"
+                  style={{ width: `${Math.max(progress?.percent ?? 0, 3)}%` }}
+                />
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-400 flex items-center gap-1.5 truncate max-w-[70%]">
+                  <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
+                  <span className="font-semibold text-slate-200">Active Topic:</span>{" "}
+                  <span className="text-emerald-300 font-medium truncate">{progress?.currentTopic || "Initializing..."}</span>
+                </span>
+                <span className="text-slate-500 text-[11px] shrink-0 font-medium">
+                  {progress?.completedTopics?.length ?? 0} of {progress?.totalTopics ?? 0} topics finished
+                </span>
+              </div>
+            </div>
+
+            {/* Real-Time Topic Breakdown Checklist */}
+            {progress?.topics && progress.topics.length > 0 && (
+              <div className="mt-6 border-t border-slate-800/80 pt-5 text-left">
+                <div className="mb-3 flex items-center justify-between text-xs">
+                  <span className="font-bold uppercase tracking-wider text-slate-400 text-[11px]">
+                    Topic Progress ({progress.completedTopics.length}/{progress.topics.length})
+                  </span>
+                  <span className="text-[11px] text-slate-500 font-medium">
+                    {progress.totalExpected ? `${Math.round(progress.totalExpected / progress.topics.length)} Qs / topic` : ""}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1">
+                  {progress.topics.map((topic, idx) => {
+                    const isDone = progress.completedTopics.includes(topic);
+                    const isCurrent = topic === progress.currentTopic && !isDone;
+
+                    return (
+                      <div
+                        key={idx}
+                        className={`flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-xs border transition-all ${
+                          isDone
+                            ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
+                            : isCurrent
+                            ? "bg-cyan-500/10 border-cyan-500/40 text-cyan-200 shadow-[0_0_10px_rgba(6,182,212,0.15)] animate-pulse"
+                            : "bg-slate-950/60 border-slate-800/80 text-slate-400"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 truncate">
+                          {isDone ? (
+                            <Check className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
+                          ) : isCurrent ? (
+                            <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-cyan-400" />
+                          ) : (
+                            <Clock className="h-3.5 w-3.5 shrink-0 text-slate-600" />
+                          )}
+                          <span className="truncate font-medium">{topic}</span>
+                        </div>
+                        <span className="text-[10px] font-bold shrink-0 uppercase tracking-wider">
+                          {isDone ? (
+                            <span className="text-emerald-400 font-bold">Done</span>
+                          ) : isCurrent ? (
+                            <span className="text-cyan-300 font-extrabold">Formulating...</span>
+                          ) : (
+                            <span className="text-slate-600">Queued</span>
+                          )}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
