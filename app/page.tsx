@@ -69,6 +69,15 @@ export default function GeneratorPage() {
   const [result, setResult] = useState<{ count: number; packId: number } | null>(null);
   const [autoSeeding, setAutoSeeding] = useState(false);
   const [autoSeedMessage, setAutoSeedMessage] = useState<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  const handleCancelGenerate = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setGenerating(false);
+  };
 
   const handleAutoSeedAll = async () => {
     setAutoSeeding(true);
@@ -283,6 +292,8 @@ export default function GeneratorPage() {
     });
 
     const storedKey = getStoredApiKey() || undefined;
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     try {
       const res = await fetch("/api/generate", {
@@ -292,6 +303,7 @@ export default function GeneratorPage() {
           ...(storedKey ? { "x-api-key": storedKey } : {}),
         },
         body: JSON.stringify({ ...payload, apiKey: storedKey }),
+        signal: controller.signal,
       });
 
       const contentType = res.headers.get("content-type") || "";
@@ -526,16 +538,27 @@ export default function GeneratorPage() {
                 </div>
               </div>
 
-              {/* Live Percent & Question Counter Badge */}
-              <div className="flex items-center gap-4 bg-slate-950/80 px-4 py-2.5 rounded-2xl border border-slate-800">
-                <div className="text-right">
-                  <div className="text-2xl font-black text-emerald-400 tracking-tight leading-none">
-                    {progress?.percent ?? 0}%
-                  </div>
-                  <div className="text-[11px] font-semibold text-slate-400 mt-1">
-                    {progress?.totalGenerated ?? 0} / {progress?.totalExpected ?? "?"} questions
+              {/* Live Percent, Question Counter & Stop Button */}
+              <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-4 bg-slate-950/80 px-4 py-2.5 rounded-2xl border border-slate-800">
+                  <div className="text-right">
+                    <div className="text-2xl font-black text-emerald-400 tracking-tight leading-none">
+                      {progress?.percent ?? 0}%
+                    </div>
+                    <div className="text-[11px] font-semibold text-slate-400 mt-1">
+                      {progress?.totalGenerated ?? 0} / {progress?.totalExpected ?? "?"} questions
+                    </div>
                   </div>
                 </div>
+
+                <button
+                  onClick={handleCancelGenerate}
+                  className="flex items-center gap-1.5 rounded-2xl border border-red-500/40 bg-red-500/10 px-3 py-2.5 text-xs font-bold text-red-400 hover:bg-red-500 hover:text-white transition-all shadow-xs"
+                  title="Stop generating more questions"
+                >
+                  <X className="h-4 w-4" />
+                  <span className="hidden sm:inline">Stop</span>
+                </button>
               </div>
             </div>
 

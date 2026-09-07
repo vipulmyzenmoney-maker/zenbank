@@ -196,6 +196,26 @@ export default function ReviewPage() {
     }
   };
 
+  const handlePurgeDrafts = async () => {
+    if (!confirm(`Are you sure you want to permanently delete all ${stats.drafts} pending draft questions?`)) return;
+
+    setActionLoading(true);
+    try {
+      const res = await fetch("/api/questions/purge-drafts", { method: "POST" });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setQuestions([]);
+        setStats((prev) => ({ ...prev, drafts: 0 }));
+        alert(`Successfully purged ${data.deletedCount || 0} draft questions.`);
+      }
+    } catch (err) {
+      console.error("Purge drafts error:", err);
+      alert("Failed to purge draft questions.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   // Keyboard navigation
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -271,6 +291,16 @@ export default function ReviewPage() {
             >
               <Zap className="h-3.5 w-3.5" />
               Approve 95%+
+            </button>
+
+            <button
+              onClick={handlePurgeDrafts}
+              disabled={actionLoading || stats.drafts === 0}
+              className="flex items-center gap-1.5 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-bold text-red-400 hover:bg-red-500/20 transition-all disabled:opacity-40"
+              title="Permanently delete all draft questions"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              Purge Drafts
             </button>
           </div>
         </div>

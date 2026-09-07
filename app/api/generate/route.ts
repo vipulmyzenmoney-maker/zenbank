@@ -228,6 +228,11 @@ export async function POST(req: NextRequest) {
             let totalGenerated = 0;
 
             for (let i = 0; i < totalTopics; i++) {
+              if (req.signal?.aborted) {
+                console.log("Client aborted question generation stream.");
+                break;
+              }
+
               const topic = topics[i];
 
               // Notify client which topic is now being generated
