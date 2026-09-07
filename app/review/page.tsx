@@ -15,7 +15,8 @@ import {
   ChevronRight,
   Sparkles,
   UserCheck,
-  Tag
+  Tag,
+  Lightbulb,
 } from "lucide-react";
 
 interface QuestionItem {
@@ -45,6 +46,7 @@ export default function ReviewPage() {
   const [editExplanation, setEditExplanation] = useState("");
   const [reviewerName, setReviewerName] = useState("Zen Admin");
   const [stats, setStats] = useState({ total: 0, drafts: 0, verified: 0, flagged: 0 });
+  const [simplifyingExplanation, setSimplifyingExplanation] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("zen_reviewer_name");
@@ -54,6 +56,48 @@ export default function ReviewPage() {
   const handleReviewerNameChange = (val: string) => {
     setReviewerName(val);
     localStorage.setItem("zen_reviewer_name", val);
+  };
+
+  const handleSimplifyForKids = async () => {
+    const currentQ = questions[currentIdx];
+    if (!currentQ) return;
+
+    setSimplifyingExplanation(true);
+    try {
+      const res = await fetch("/api/ai/simplify-explanation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          questionText: currentQ.questionText,
+          correctAnswer: currentQ.correctAnswer,
+          currentExplanation: currentQ.explanation,
+          gradeLevel: currentQ.gradeLevel,
+          subject: currentQ.subject,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success && data.explanation) {
+        const simplified = data.explanation;
+        setQuestions((prev) =>
+          prev.map((q, idx) =>
+            idx === currentIdx ? { ...q, explanation: simplified } : q
+          )
+        );
+        setEditExplanation(simplified);
+
+        // Persist to database immediately
+        await fetch(`/api/questions/${currentQ.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ explanation: simplified }),
+        });
+      }
+    } catch (err) {
+      console.error("Failed to simplify explanation:", err);
+      alert("Failed to simplify explanation. Please try again.");
+    } finally {
+      setSimplifyingExplanation(false);
+    }
   };
 
   const fetchDrafts = useCallback(async () => {
@@ -325,12 +369,33 @@ export default function ReviewPage() {
                 ))}
               </div>
 
-              {/* Step-by-Step Explanation */}
-              <div className="mt-5 rounded-2xl border border-blue-500/20 bg-blue-500/10 p-4">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-blue-400 mb-1">
-                  Step-by-Step Logic & Explanation
+              {/* Kid-Friendly Step-by-Step Explanation */}
+              <div className="mt-5 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 p-4">
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-1.5 text-xs font-extrabold text-emerald-400">
+                    <Lightbulb className="h-4 w-4 text-emerald-400" />
+                    <span>Kid-Friendly Explanation & Helpful Tip</span>
+                  </div>
+                  <button
+                    onClick={handleSimplifyForKids}
+                    disabled={simplifyingExplanation || actionLoading}
+                    className="flex items-center gap-1.5 rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-2.5 py-1 text-[11px] font-bold text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-500/60 transition-all disabled:opacity-40 shadow-xs"
+                    title="Rewrite this explanation with AI to make it super simple, clear, and easy for kids"
+                  >
+                    {simplifyingExplanation ? (
+                      <>
+                        <Loader2 className="h-3 w-3 animate-spin text-cyan-400" />
+                        <span>Simplifying for Kids...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-3 w-3 text-cyan-400" />
+                        <span>✨ Simplify for Kids</span>
+                      </>
+                    )}
+                  </button>
                 </div>
-                <p className="text-xs sm:text-sm text-blue-200 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
                   {current.explanation}
                 </p>
               </div>
@@ -400,11 +465,19 @@ export default function ReviewPage() {
             </div>
 
             <div className="mt-4">
-              <label className="block text-xs font-bold text-slate-400 mb-1">Explanation</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-bold text-slate-400">
+                  Kid-Friendly Explanation
+                </label>
+                <span className="text-[10px] text-emerald-400 font-semibold">
+                  Keep it simple & easy for kids to understand
+                </span>
+              </div>
               <textarea
                 value={editExplanation}
                 onChange={(e) => setEditExplanation(e.target.value)}
-                rows={3}
+                rows={4}
+                placeholder="Step 1: ... Step 2: ... 💡 Helpful Tip: ..."
                 className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm font-medium text-white focus:border-emerald-500 focus:outline-none resize-none"
               />
             </div>

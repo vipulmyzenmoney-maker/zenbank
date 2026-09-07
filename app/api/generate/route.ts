@@ -56,7 +56,14 @@ For each question, provide:
 1. A clear, challenging, and age-appropriate question text
 2. Exactly 4 options (A, B, C, D) with exactly one definitively correct answer and 3 realistic distractors reflecting common student errors
 3. The letter of the correct answer (randomize between A, B, C, D)
-4. A concise, step-by-step educational explanation explaining why the correct option is right and how to avoid the distractors
+4. A KID-FRIENDLY, EASY-TO-UNDERSTAND EXPLANATION (CRITICAL REQUIREMENT):
+   - MUST be written directly to a ${gradeLevel} student in warm, encouraging, simple language that a child can read on their own.
+   - NEVER write internal AI thoughts, model reasoning processes, or test-maker commentary.
+   - NEVER use adult or test-author jargon (DO NOT use words like "distractor", "misconception", "the model selected", "evaluates mastery", "option A is flawed").
+   - Structure in 2 to 3 friendly steps:
+     • Step 1: Explain the main concept or rule in plain words (use relatable visuals or everyday objects like pizza slices, counting coins, or blocks).
+     • Step 2: Walk through the easy calculation or reasoning step-by-step.
+     • 💡 Helpful Tip: A quick, memorable memory trick or rule of thumb for kids!
 5. Difficulty level ("easy", "medium", or "hard")
 6. A confidence score from 92-100
 
@@ -72,7 +79,7 @@ Return ONLY valid JSON in this exact format with no extra text:
         {"id": "D", "text": "...", "isCorrect": false}
       ],
       "correctAnswer": "B",
-      "explanation": "...",
+      "explanation": "Step 1: ... Step 2: ... 💡 Helpful Tip: ...",
       "difficulty": "medium",
       "confidence": 96
     }
@@ -136,12 +143,25 @@ Return ONLY valid JSON in this exact format with no extra text:
     }
   }
 
+function sanitizeKidExplanation(raw: string): string {
+  if (!raw) return "";
+  return raw
+    .replace(/<think>[\s\S]*?<\/think>/gi, "")
+    .replace(/^(thinking process|reasoning|internal analysis|rationale):\s*/gi, "")
+    .replace(/(?:distractor|misconception)\s+[A-D]\b[^.\n]*[.\n]?/gi, "")
+    .trim();
+}
+
   // 3. If AI did not return questions or no key, use curriculum template engine
   if (topicQuestions.length === 0) {
     topicQuestions = generateCurriculumQuestions(topic, subject, gradeLevel, count);
   }
 
-  return topicQuestions;
+  // Ensure all explanations are sanitized and kid-friendly
+  return topicQuestions.map((q) => ({
+    ...q,
+    explanation: sanitizeKidExplanation(q.explanation),
+  }));
 }
 
 export async function POST(req: NextRequest) {
