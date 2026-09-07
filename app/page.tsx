@@ -27,6 +27,7 @@ interface ParsedSyllabusState {
   topics: string[];
   summary?: string;
   sourceType?: string;
+  provider?: string;
 }
 
 export default function GeneratorPage() {
@@ -85,6 +86,9 @@ export default function GeneratorPage() {
     } else {
       setImagePreview(null);
     }
+
+    // Auto-analyze immediately so user sees detected topics without an extra click
+    parseFileDirectly(selectedFile);
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -145,49 +149,72 @@ export default function GeneratorPage() {
     });
   };
 
-  const handleParseSyllabus = async () => {
-    if (!file && !rawSyllabusText.trim()) return;
+  const parseFileDirectly = async (targetFile: File) => {
     setIsParsingSyllabus(true);
     setResult(null);
-
     const storedKey = getStoredApiKey() || undefined;
 
     try {
-      let res;
-      if (file) {
-        const fileToSend = file.type.startsWith("image/")
-          ? await optimizeImageIfNeeded(file)
-          : file;
-        const formData = new FormData();
-        formData.append("file", fileToSend);
-        if (storedKey) formData.append("apiKey", storedKey);
-        res = await fetch("/api/syllabus/parse", {
-          method: "POST",
-          headers: storedKey ? { "x-api-key": storedKey } : {},
-          body: formData,
-        });
-      } else {
-        res = await fetch("/api/syllabus/parse", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(storedKey ? { "x-api-key": storedKey } : {}),
-          },
-          body: JSON.stringify({ text: rawSyllabusText, apiKey: storedKey }),
-        });
-      }
+      const fileToSend = targetFile.type.startsWith("image/")
+        ? await optimizeImageIfNeeded(targetFile)
+        : targetFile;
+      const formData = new FormData();
+      formData.append("file", fileToSend);
+      if (storedKey) formData.append("apiKey", storedKey);
+      const res = await fetch("/api/syllabus/parse", {
+        method: "POST",
+        headers: storedKey ? { "x-api-key": storedKey } : {},
+        body: formData,
+      });
 
       const data = await res.json();
       if (res.ok && data.success && data.syllabus) {
         setParsedSyllabus({
           ...data.syllabus,
-          sourceType: data.sourceType || "document",
+          sourceType: data.sourceType || "image",
         });
       } else {
         handleManualFallback();
       }
     } catch (err) {
-      console.error("Failed to parse syllabus:", err);
+      console.error("Failed to parse syllabus from file:", err);
+      handleManualFallback();
+    } finally {
+      setIsParsingSyllabus(false);
+    }
+  };
+
+  const handleParseSyllabus = async () => {
+    if (file) {
+      return parseFileDirectly(file);
+    }
+    if (!rawSyllabusText.trim()) return;
+
+    setIsParsingSyllabus(true);
+    setResult(null);
+    const storedKey = getStoredApiKey() || undefined;
+
+    try {
+      const res = await fetch("/api/syllabus/parse", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(storedKey ? { "x-api-key": storedKey } : {}),
+        },
+        body: JSON.stringify({ text: rawSyllabusText, apiKey: storedKey }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success && data.syllabus) {
+        setParsedSyllabus({
+          ...data.syllabus,
+          sourceType: data.sourceType || "text",
+        });
+      } else {
+        handleManualFallback();
+      }
+    } catch (err) {
+      console.error("Failed to parse syllabus from text:", err);
       handleManualFallback();
     } finally {
       setIsParsingSyllabus(false);
@@ -430,211 +457,274 @@ export default function GeneratorPage() {
                 />
 
                 {/* Dropzone */}
-                <div
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    setIsDragOver(true);
-                  }}
-                  onDragLeave={() => setIsDragOver(false)}
-                  onDrop={handleDrop}
-                  onClick={() => fileInputRef.current?.click()}
-                  className={`cursor-pointer rounded-2xl border-2 border-dashed p-8 text-center transition-all ${
-                    isDragOver
-                      ? "border-emerald-500 bg-emerald-500/10"
-                      : file
-                      ? "border-emerald-500/50 bg-slate-950/80"
-                      : "border-slate-800 bg-slate-950/40 hover:border-slate-700 hover:bg-slate-950/70"
-                  }`}
-                >
-                  {file ? (
-                    <div className="flex flex-col items-center">
-                      {imagePreview ? (
-                        <img
-                          src={imagePreview}
-                          alt="Syllabus Preview"
-                          className="h-32 max-w-full rounded-xl object-contain border border-slate-800 mb-3"
-                        />
-                      ) : (
-                        <FileType className="h-12 w-12 text-emerald-400 mb-2" />
-                      )}
-                      <p className="text-sm font-bold text-white">{file.name}</p>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        {(file.size / 1024).toFixed(1)} KB · Click or drop to replace
-                      </p>
+                {/* Dropzone or Active Scanning State */}
+                {isParsingSyllabus ? (
+                  <div className="rounded-2xl border border-emerald-500/40 bg-slate-950/90 p-8 text-center backdrop-blur-xl animate-in fade-in">
+                    <div className="relative mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                      <Sparkles className="h-7 w-7 animate-pulse text-emerald-400" />
+                      <Loader2 className="absolute -top-1 -right-1 h-5 w-5 text-emerald-400 animate-spin" />
                     </div>
-                  ) : (
-                    <div>
-                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mb-3">
-                        <UploadCloud className="h-7 w-7" />
+                    <h3 className="font-display text-base font-bold text-white">
+                      Scanning Syllabus Image with Groq Vision...
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+                      Reading table of contents, identifying subject, grade level, and extracting all discrete learning topics.
+                    </p>
+                  </div>
+                ) : (
+                  <div
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setIsDragOver(true);
+                    }}
+                    onDragLeave={() => setIsDragOver(false)}
+                    onDrop={handleDrop}
+                    onClick={() => fileInputRef.current?.click()}
+                    className={`cursor-pointer rounded-2xl border-2 border-dashed p-8 text-center transition-all ${
+                      isDragOver
+                        ? "border-emerald-500 bg-emerald-500/10"
+                        : file
+                        ? "border-emerald-500/50 bg-slate-950/80"
+                        : "border-slate-800 bg-slate-950/40 hover:border-slate-700 hover:bg-slate-950/70"
+                    }`}
+                  >
+                    {file ? (
+                      <div className="flex flex-col items-center">
+                        {imagePreview ? (
+                          <img
+                            src={imagePreview}
+                            alt="Syllabus Preview"
+                            className="h-32 max-w-full rounded-xl object-contain border border-slate-800 mb-3"
+                          />
+                        ) : (
+                          <FileType className="h-12 w-12 text-emerald-400 mb-2" />
+                        )}
+                        <p className="text-sm font-bold text-white">{file.name}</p>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                          {(file.size / 1024).toFixed(1)} KB · Click or drop to replace
+                        </p>
                       </div>
-                      <p className="text-sm font-bold text-white">
-                        Click to upload or drag & drop syllabus
-                      </p>
-                      <p className="text-xs text-slate-400 mt-1">
-                        Supports <span className="text-slate-300 font-semibold">PDF, Scanned Image (PNG/JPG), TXT</span>
-                      </p>
-                    </div>
-                  )}
-                </div>
+                    ) : (
+                      <div>
+                        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mb-3">
+                          <UploadCloud className="h-7 w-7" />
+                        </div>
+                        <p className="text-sm font-bold text-white">
+                          Click to upload or drag & drop syllabus
+                        </p>
+                        <p className="text-xs text-slate-400 mt-1">
+                          Supports <span className="text-slate-300 font-semibold">PDF, Scanned Image (PNG/JPG), TXT</span> · Auto-analyzes on upload
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Or Paste Syllabus text */}
-                <div className="mt-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="h-px flex-1 bg-slate-800" />
-                    <span className="text-[11px] font-bold text-slate-500 uppercase">Or Paste Syllabus Text</span>
-                    <div className="h-px flex-1 bg-slate-800" />
-                  </div>
-                  <textarea
-                    value={rawSyllabusText}
-                    onChange={(e) => {
-                      setRawSyllabusText(e.target.value);
-                      if (file) {
-                        setFile(null);
-                        setImagePreview(null);
-                      }
-                    }}
-                    rows={3}
-                    placeholder="Paste chapters, units, or curriculum outline here (e.g. Unit 1: Kinetic Theory, Unit 2: Thermodynamics...)"
-                    className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs font-medium text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none resize-none"
-                  />
-                </div>
+                {!isParsingSyllabus && (
+                  <div className="mt-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="h-px flex-1 bg-slate-800" />
+                      <span className="text-[11px] font-bold text-slate-500 uppercase">Or Paste Syllabus Text</span>
+                      <div className="h-px flex-1 bg-slate-800" />
+                    </div>
+                    <textarea
+                      value={rawSyllabusText}
+                      onChange={(e) => {
+                        setRawSyllabusText(e.target.value);
+                        if (file) {
+                          setFile(null);
+                          setImagePreview(null);
+                        }
+                      }}
+                      rows={3}
+                      placeholder="Paste chapters, units, or curriculum outline here (e.g. Unit 1: Kinetic Theory, Unit 2: Thermodynamics...)"
+                      className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs font-medium text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none resize-none"
+                    />
 
-                {/* Extract Button */}
-                <button
-                  onClick={handleParseSyllabus}
-                  disabled={isParsingSyllabus || (!file && !rawSyllabusText.trim())}
-                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 py-3 text-xs font-extrabold text-slate-950 shadow-md shadow-emerald-500/20 hover:opacity-95 transition-all disabled:opacity-40"
-                >
-                  {isParsingSyllabus ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Analyzing Syllabus & Extracting Topics...
-                    </>
-                  ) : (
-                    <>
+                    <button
+                      onClick={handleParseSyllabus}
+                      disabled={isParsingSyllabus || (!file && !rawSyllabusText.trim())}
+                      className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 py-2.5 text-xs font-extrabold text-slate-950 shadow-md shadow-emerald-500/20 hover:opacity-95 transition-all disabled:opacity-40"
+                    >
                       <Sparkles className="h-4 w-4" />
                       Analyze & Extract Topics
-                    </>
-                  )}
-                </button>
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               /* Parsed Syllabus Review & One-Click Generate Card */
-              <div className="rounded-3xl border border-emerald-500/40 bg-slate-900/80 p-6 backdrop-blur-xl shadow-2xl animate-in fade-in">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                  <div>
-                    <span className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
-                      Extracted Syllabus
-                    </span>
-                    <h2 className="mt-1 font-display text-lg font-bold text-white">
-                      {parsedSyllabus.title}
-                    </h2>
+              <div className="rounded-3xl border border-emerald-500/40 bg-slate-900/90 p-6 sm:p-7 backdrop-blur-xl shadow-2xl animate-in fade-in">
+                {/* Header / Thumbnail / Action */}
+                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                  <div className="flex items-center gap-3.5">
+                    {imagePreview ? (
+                      <img
+                        src={imagePreview}
+                        alt="Syllabus thumbnail"
+                        className="h-16 w-16 rounded-xl object-cover border border-emerald-500/40 shadow-md"
+                      />
+                    ) : (
+                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                        <BookOpen className="h-7 w-7" />
+                      </div>
+                    )}
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-3 py-0.5 text-xs font-black text-emerald-300">
+                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                          Syllabus Analyzed
+                        </span>
+                        <span className="rounded-full bg-slate-800 px-2.5 py-0.5 text-[10px] font-bold text-slate-400">
+                          {parsedSyllabus.provider || "Groq Vision (qwen/qwen3.8-27b)"}
+                        </span>
+                      </div>
+                      <h2 className="mt-1 font-display text-lg sm:text-xl font-black text-white">
+                        {parsedSyllabus.title}
+                      </h2>
+                    </div>
                   </div>
+
                   <button
                     onClick={() => {
                       setParsedSyllabus(null);
                       setFile(null);
+                      setImagePreview(null);
                       setRawSyllabusText("");
                     }}
-                    className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1 text-xs font-bold text-slate-400 hover:text-white"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/90 px-3.5 py-2 text-xs font-bold text-slate-300 hover:border-slate-600 hover:text-white transition-all"
                   >
-                    Upload New
+                    <UploadCloud className="h-3.5 w-3.5" />
+                    Upload Another Image
                   </button>
                 </div>
 
-                {/* Metadata Row */}
-                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
-                      Title
-                    </label>
-                    <input
-                      type="text"
-                      value={parsedSyllabus.title}
-                      onChange={(e) =>
-                        setParsedSyllabus({ ...parsedSyllabus, title: e.target.value })
-                      }
-                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-bold text-white focus:border-emerald-500 focus:outline-none"
-                    />
+                {/* Hero Discovery Metrics */}
+                <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  {/* Subject Metric */}
+                  <div className="rounded-2xl border border-emerald-500/20 bg-slate-950/70 p-4">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                      <BookOpen className="h-3.5 w-3.5 text-emerald-400" />
+                      Detected Subject
+                    </span>
+                    <p className="mt-1.5 text-lg font-black text-white">
+                      {parsedSyllabus.subject}
+                    </p>
                   </div>
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
-                      Grade Level
-                    </label>
-                    <input
-                      type="text"
-                      value={parsedSyllabus.gradeLevel}
-                      onChange={(e) =>
-                        setParsedSyllabus({ ...parsedSyllabus, gradeLevel: e.target.value })
-                      }
-                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-bold text-white focus:border-emerald-500 focus:outline-none"
-                    />
+
+                  {/* Grade Level Metric */}
+                  <div className="rounded-2xl border border-emerald-500/20 bg-slate-950/70 p-4">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                      <Zap className="h-3.5 w-3.5 text-teal-400" />
+                      Target Grade
+                    </span>
+                    <p className="mt-1.5 text-lg font-black text-white">
+                      {parsedSyllabus.gradeLevel}
+                    </p>
                   </div>
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      value={parsedSyllabus.subject}
-                      onChange={(e) =>
-                        setParsedSyllabus({ ...parsedSyllabus, subject: e.target.value })
-                      }
-                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-bold text-white focus:border-emerald-500 focus:outline-none"
-                    />
+
+                  {/* Topics Count Metric */}
+                  <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-4">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                      <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+                      Topics Detected
+                    </span>
+                    <p className="mt-1.5 text-lg font-black text-emerald-300">
+                      {parsedSyllabus.topics.length} Topics Found
+                    </p>
                   </div>
                 </div>
 
-                {/* Topics Tag List */}
-                <div className="mt-5">
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    Topics to Generate ({parsedSyllabus.topics.length})
-                  </label>
-                  <div className="flex flex-wrap gap-2">
+                {/* AI Summary Quote (if available) */}
+                {parsedSyllabus.summary && (
+                  <div className="mt-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-3.5 text-xs text-slate-300 flex items-start gap-2.5">
+                    <span className="text-emerald-400 font-bold shrink-0">Overview:</span>
+                    <p className="italic text-slate-300 leading-relaxed">"{parsedSyllabus.summary}"</p>
+                  </div>
+                )}
+
+                {/* Numbered List of Found Topics */}
+                <div className="mt-6">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+                      Topics Found in Image ({parsedSyllabus.topics.length})
+                    </h3>
+                    <span className="text-xs font-medium text-slate-400">
+                      Review, reorder, or remove before generating
+                    </span>
+                  </div>
+
+                  <div className="space-y-2">
                     {parsedSyllabus.topics.map((topic, i) => (
-                      <span
+                      <div
                         key={i}
-                        className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-200"
+                        className="flex items-center justify-between gap-3 rounded-xl border border-slate-800 bg-slate-950/80 px-4 py-3 transition-all hover:border-emerald-500/40"
                       >
-                        {topic}
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-500/20 text-xs font-black text-emerald-300">
+                            {i + 1}
+                          </span>
+                          <span className="text-xs sm:text-sm font-bold text-white truncate">
+                            {topic}
+                          </span>
+                        </div>
                         <button
                           onClick={() => handleRemoveTopic(i)}
-                          className="text-emerald-400/60 hover:text-emerald-200"
+                          title="Remove this topic"
+                          className="rounded-lg p-1 text-slate-500 hover:bg-rose-500/10 hover:text-rose-400 transition-all"
                         >
-                          <X className="h-3.5 w-3.5" />
+                          <X className="h-4 w-4" />
                         </button>
-                      </span>
+                      </div>
                     ))}
                   </div>
 
-                  {/* Add Topic Bar */}
+                  {/* Add Another Topic */}
                   <div className="mt-3 flex gap-2">
                     <input
                       type="text"
                       value={newTopicInput}
                       onChange={(e) => setNewTopicInput(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && handleAddTopic()}
-                      placeholder="Add another topic..."
-                      className="flex-1 rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-medium text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+                      placeholder="Add another topic from syllabus..."
+                      className="flex-1 rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
                     />
                     <button
                       onClick={handleAddTopic}
-                      className="rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-bold text-slate-300 hover:text-white"
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs font-bold text-slate-200 hover:bg-slate-700 hover:text-white transition-all"
                     >
                       <Plus className="h-3.5 w-3.5" />
+                      Add Topic
                     </button>
                   </div>
                 </div>
 
-                {/* Generate Action Button */}
-                <button
-                  onClick={handleSyllabusGenerate}
-                  disabled={parsedSyllabus.topics.length === 0}
-                  className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-600 py-3.5 text-sm font-black text-slate-950 shadow-xl shadow-emerald-500/20 hover:opacity-95 hover:-translate-y-0.5 transition-all disabled:opacity-40"
-                >
-                  <Zap className="h-4 w-4" />
-                  Generate {parsedSyllabus.topics.length * questionCount} Questions from Syllabus
-                </button>
+                {/* Generation Formula & Trigger */}
+                <div className="mt-7 rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-slate-950 p-4 sm:p-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+                        Ready to Generate
+                      </span>
+                      <p className="text-sm font-bold text-white mt-0.5">
+                        {parsedSyllabus.topics.length} topics × {questionCount} questions ={" "}
+                        <span className="text-emerald-300 font-black">
+                          {parsedSyllabus.topics.length * questionCount} Total Questions
+                        </span>
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={handleSyllabusGenerate}
+                      disabled={parsedSyllabus.topics.length === 0}
+                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-600 px-6 py-3.5 text-xs sm:text-sm font-black text-slate-950 shadow-xl shadow-emerald-500/20 hover:opacity-95 hover:-translate-y-0.5 transition-all disabled:opacity-40"
+                    >
+                      <Zap className="h-4 w-4 fill-slate-950" />
+                      Generate {parsedSyllabus.topics.length * questionCount} Questions
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
           </div>
