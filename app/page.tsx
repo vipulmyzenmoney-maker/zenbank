@@ -384,8 +384,8 @@ export default function GeneratorPage() {
           {/* Question Count Selector */}
           <div className="flex items-center gap-2 px-2">
             <span className="text-xs font-bold text-slate-400">Questions / Topic:</span>
-            <div className="flex gap-1">
-              {[5, 10, 20].map((num) => (
+            <div className="flex flex-wrap gap-1">
+              {[5, 10, 15, 20, 25, 30].map((num) => (
                 <button
                   key={num}
                   onClick={() => setQuestionCount(num)}
@@ -700,25 +700,60 @@ export default function GeneratorPage() {
                   </div>
                 </div>
 
+                {/* Inline Question Count Selector */}
+                <div className="mt-5 rounded-2xl border border-slate-800/90 bg-slate-950/80 p-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <label className="block text-xs font-bold text-white">
+                        Questions per Topic
+                      </label>
+                      <p className="text-[11px] text-slate-400">
+                        Choose how many diversified questions to create for each detected topic
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {[5, 10, 15, 20, 25, 30].map((num) => (
+                        <button
+                          key={num}
+                          type="button"
+                          onClick={() => setQuestionCount(num)}
+                          className={`rounded-xl px-3.5 py-1.5 text-xs font-black transition-all ${
+                            questionCount === num
+                              ? "bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 scale-105"
+                              : "border border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500 hover:text-white"
+                          }`}
+                        >
+                          {num}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
                 {/* Generation Formula & Trigger */}
-                <div className="mt-7 rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-slate-950 p-4 sm:p-5">
+                <div className="mt-4 rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-slate-950 p-4 sm:p-5">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                        Ready to Generate
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                        <Sparkles className="h-3 w-3" />
+                        Comprehensive & Diversified Coverage
                       </span>
                       <p className="text-sm font-bold text-white mt-0.5">
                         {parsedSyllabus.topics.length} topics × {questionCount} questions ={" "}
-                        <span className="text-emerald-300 font-black">
+                        <span className="text-emerald-300 font-black text-base">
                           {parsedSyllabus.topics.length * questionCount} Total Questions
                         </span>
+                      </p>
+                      <p className="text-[11px] text-slate-400 mt-1 max-w-md">
+                        Each topic will be thoroughly diversified across concepts, calculations, multi-step word problems, visual models, and misconceptions.
                       </p>
                     </div>
 
                     <button
                       onClick={handleSyllabusGenerate}
                       disabled={parsedSyllabus.topics.length === 0}
-                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-600 px-6 py-3.5 text-xs sm:text-sm font-black text-slate-950 shadow-xl shadow-emerald-500/20 hover:opacity-95 hover:-translate-y-0.5 transition-all disabled:opacity-40"
+                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-600 px-6 py-3.5 text-xs sm:text-sm font-black text-slate-950 shadow-xl shadow-emerald-500/20 hover:opacity-95 hover:-translate-y-0.5 transition-all disabled:opacity-40 shrink-0"
                     >
                       <Zap className="h-4 w-4 fill-slate-950" />
                       Generate {parsedSyllabus.topics.length * questionCount} Questions

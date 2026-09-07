@@ -56,18 +56,33 @@ export async function POST(req: NextRequest) {
         confidence: number;
       }[] = [];
 
-      const prompt = `You are an expert K-12 educator. Generate exactly ${count} multiple-choice questions for:
+      const prompt = `You are an expert K-12 curriculum specialist and assessment designer.
+Generate exactly ${count} diverse, high-quality multiple-choice questions for:
 - Grade Level: ${gradeLevel}
 - Subject: ${subject}
 - Topic: ${topic}
 
+CRITICAL REQUIREMENT - HIGH DIVERSITY & COMPREHENSIVE COVERAGE:
+Every single question of the ${count} questions MUST test a distinctly DIFFERENT concept, scenario, or angle of "${topic}". DO NOT repeat question formats or make simple number variations.
+Distribute the ${count} questions across:
+1. Conceptual Understanding & Definitions (core mathematical/scientific principles, properties, reasoning why rules work)
+2. Procedural Problem Solving (step-by-step computation, multi-digit operations, standard algorithms)
+3. Real-World Applications & Multi-Step Word Problems (practical everyday scenarios, financial/measurement contexts)
+4. Visual, Spatial & Model Reasoning (interpreting number lines, area models, grids, geometric diagrams, charts)
+5. Error Analysis & Common Misconceptions ("Which step contains an error?", identifying flawed reasoning)
+
+Difficulty Distribution:
+- ~30% Easy (foundational recall and direct recognition)
+- ~40% Medium (application, two-step problem solving)
+- ~30% Hard (multi-step synthesis, non-routine critical thinking)
+
 For each question, provide:
-1. A clear question text
-2. Exactly 4 options (A, B, C, D) with exactly one correct answer
-3. The letter of the correct answer
-4. A concise but educational step-by-step explanation
-5. Difficulty level (easy, medium, or hard)
-6. A confidence score from 90-100 rating how certain you are the answer is correct
+1. A clear, challenging, and age-appropriate question text
+2. Exactly 4 options (A, B, C, D) with exactly one definitively correct answer and 3 realistic distractors reflecting common student errors
+3. The letter of the correct answer (randomize between A, B, C, D)
+4. A concise, step-by-step educational explanation explaining why the correct option is right and how to avoid the distractors
+5. Difficulty level ("easy", "medium", or "hard")
+6. A confidence score from 92-100
 
 Return ONLY valid JSON in this exact format with no extra text:
 {

@@ -15,13 +15,21 @@ export interface ParsedVisionSyllabus {
 }
 
 const SYLLABUS_PROMPT = `You are an expert curriculum director, academic educator, and OCR specialist.
-Carefully examine this syllabus, textbook table of contents, curriculum sheet, or lesson plan image.
+Carefully examine this syllabus, textbook table of contents, curriculum sheet, lesson plan, or whiteboard image.
 
 Task:
 1. Accurately identify the exact subject (e.g., Mathematics, Science, English Language Arts, Social Studies, Physics, Chemistry, Biology, History).
 2. Accurately identify the specific grade level (e.g., "5th Grade", "6th Grade", "Kindergarten", "10th Grade", "Undergraduate"). If not explicitly printed, infer the target grade level strictly from the curriculum difficulty of the topics shown.
 3. Extract a concise, accurate course or unit title (e.g., "Grade 5 Mathematics Curriculum", "Fractions & Decimals Unit").
-4. Extract every discrete learning topic or chapter as a clean list of individual topic titles.
+4. COMPREHENSIVE, GRANULAR TOPIC EXTRACTION:
+   - Extract EVERY SINGLE discrete topic, subtopic, chapter, unit, bullet point, and specific skill visible in the image.
+   - DO NOT combine, group, or condense distinct subtopics into broad generic buckets.
+   - For example: rather than one generic topic like "Fractions", extract each distinct subtopic separately, such as:
+     * "Adding and Subtracting Fractions with Unlike Denominators"
+     * "Multiplying Fractions and Mixed Numbers"
+     * "Dividing Unit Fractions by Whole Numbers"
+     * "Converting Between Fractions and Decimals"
+   - If the image contains 10, 15, 20, or more distinct topics/subtopics, list ALL of them individually. We need complete and diversified curriculum coverage without omitting anything.
 5. Provide a brief 1-2 sentence summary of what the syllabus covers.
 
 Return ONLY a valid JSON object matching this schema with no extra conversational text or markdown formatting:
@@ -30,9 +38,9 @@ Return ONLY a valid JSON object matching this schema with no extra conversationa
   "gradeLevel": "e.g. 5th Grade",
   "subject": "e.g. Mathematics",
   "topics": [
-    "Topic 1",
-    "Topic 2",
-    "Topic 3"
+    "Specific Topic 1",
+    "Specific Topic 2",
+    "Specific Topic 3"
   ],
   "summary": "Brief 1-2 sentence overview of the curriculum"
 }`;
