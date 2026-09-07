@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import Groq from "groq-sdk";
 import { groq, GENERATION_MODEL } from "@/lib/groq";
 import { generateCurriculumQuestions } from "@/lib/fallbackGenerator";
 
@@ -26,6 +27,24 @@ export async function POST(req: NextRequest) {
     let totalGenerated = 0;
     const questionsCreated: unknown[] = [];
 
+    const headerApiKey =
+      req.headers.get("x-api-key") ||
+      req.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ||
+      undefined;
+    const effectiveKey = apiKey || headerApiKey;
+
+    const geminiKey =
+      effectiveKey?.startsWith("AIza") ? effectiveKey : process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+    const activeGroqKey =
+      effectiveKey && !effectiveKey.startsWith("AIza") && !effectiveKey.startsWith("sk-")
+        ? effectiveKey
+        : process.env.GROQ_API_KEY;
+
+    const groqClient =
+      activeGroqKey && activeGroqKey !== "your-groq-api-key-here"
+        ? new Groq({ apiKey: activeGroqKey })
+        : groq;
+
     // 2. Generate questions for each topic
     for (const topic of topics as string[]) {
       let topicQuestions: {
@@ -36,19 +55,6 @@ export async function POST(req: NextRequest) {
         difficulty: string;
         confidence: number;
       }[] = [];
-
-      const headerApiKey =
-        req.headers.get("x-api-key") ||
-        req.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ||
-        undefined;
-      const effectiveKey = apiKey || headerApiKey;
-
-      const geminiKey =
-        effectiveKey?.startsWith("AIza") ? effectiveKey : process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
-      const activeGroqKey =
-        effectiveKey && !effectiveKey.startsWith("AIza") && !effectiveKey.startsWith("sk-")
-          ? effectiveKey
-          : process.env.GROQ_API_KEY;
 
       const prompt = `You are an expert K-12 educator. Generate exactly ${count} multiple-choice questions for:
 - Grade Level: ${gradeLevel}
@@ -117,11 +123,11 @@ Return ONLY valid JSON in this exact format with no extra text:
       // 2b. Attempt generation with Groq if Gemini wasn't used or returned empty
       if (topicQuestions.length === 0 && activeGroqKey && activeGroqKey !== "your-groq-api-key-here") {
         try {
-          const completion = await groq.chat.completions.create({
+          const completion = await groqClient.chat.completions.create({
             model: GENERATION_MODEL,
             messages: [{ role: "user", content: prompt }],
             temperature: 0.3,
-            max_tokens: 8000,
+            max_tokens: 6000,
             response_format: { type: "json_object" },
           });
 
@@ -166,6 +172,11 @@ Return ONLY valid JSON in this exact format with no extra text:
           console.warn("DB question save error:", saveError);
           totalGenerated++;
         }
+      }
+
+      // Small 400ms buffer between topics to keep token rate limits smooth
+      if (topics.length > 1) {
+        await new Promise((resolve) => setTimeout(resolve, 400));
       }
     }
 
