@@ -1,4 +1,5 @@
-import { groq, GENERATION_MODEL, VISION_MODEL } from "@/lib/groq";
+import { groq, GENERATION_MODEL } from "@/lib/groq";
+import { extractSyllabusFromImage } from "@/lib/visionParser";
 import pdfParse from "pdf-parse-fork";
 
 export interface ParsedSyllabus {
@@ -129,71 +130,14 @@ export async function parseSyllabusFromImage(
   mimeType: string = "image/jpeg",
   apiKey?: string
 ): Promise<ParsedSyllabus> {
-  const activeKey = apiKey || process.env.GROQ_API_KEY;
-
-  if (activeKey && activeKey !== "your-groq-api-key-here") {
-    try {
-      const prompt = `You are an expert curriculum director and OCR specialist. Analyze this syllabus, curriculum sheet, or textbook index image. Extract the course title, grade level, academic subject, and all discrete learning topics.
-
-Return ONLY a JSON object in this exact schema:
-{
-  "title": "Concise course/unit title",
-  "gradeLevel": "Target grade level (e.g. 6th Grade, 9th Grade, College)",
-  "subject": "Main subject (e.g. Math, Physics, Biology, History)",
-  "topics": [
-    "Topic 1",
-    "Topic 2",
-    "Topic 3"
-  ],
-  "summary": "Brief 1-2 sentence overview"
-}`;
-
-      const completion = await groq.chat.completions.create({
-        model: VISION_MODEL,
-        messages: [
-          {
-            role: "user",
-            content: [
-              { type: "text", text: prompt },
-              {
-                type: "image_url",
-                image_url: {
-                  url: imageBase64.startsWith("data:")
-                    ? imageBase64
-                    : `data:${mimeType};base64,${imageBase64}`,
-                },
-              },
-            ],
-          },
-        ],
-        temperature: 0.2,
-        response_format: { type: "json_object" },
-      });
-
-      const content = completion.choices[0]?.message?.content;
-      if (content) {
-        const parsed = JSON.parse(content);
-        if (parsed.title && Array.isArray(parsed.topics) && parsed.topics.length > 0) {
-          return {
-            title: parsed.title,
-            gradeLevel: parsed.gradeLevel || "High School",
-            subject: parsed.subject || "General Science",
-            topics: parsed.topics.map((t: string) => String(t).trim()).filter(Boolean),
-            summary: parsed.summary,
-          };
-        }
-      }
-    } catch (err) {
-      console.warn("Groq vision syllabus parse failed, using fallback:", err);
-    }
-  }
-
+  // Delegate directly to universal vision parser (Gemini 2.0 Flash / OpenAI)
+  const result = await extractSyllabusFromImage(imageBase64, mimeType, apiKey);
   return {
-    title: "Visual Syllabus Pack",
-    gradeLevel: "10th Grade",
-    subject: "Science & Technology",
-    topics: ["Foundational Concepts", "Core Theories & Principles", "Problem Solving & Applications", "Experimental Analysis"],
-    summary: "Visual syllabus processed with core curriculum modules.",
+    title: result.title,
+    gradeLevel: result.gradeLevel,
+    subject: result.subject,
+    topics: result.topics,
+    summary: result.summary,
   };
 }
 

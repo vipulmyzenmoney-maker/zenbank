@@ -37,12 +37,20 @@ export async function POST(req: NextRequest) {
         confidence: number;
       }[] = [];
 
-      const activeGroqKey = apiKey || process.env.GROQ_API_KEY;
+      const headerApiKey =
+        req.headers.get("x-api-key") ||
+        req.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ||
+        undefined;
+      const effectiveKey = apiKey || headerApiKey;
 
-      // Attempt AI generation if Groq key exists
-      if (activeGroqKey && activeGroqKey !== "your-groq-api-key-here") {
-        try {
-          const prompt = `You are an expert K-12 educator. Generate exactly ${count} multiple-choice questions for:
+      const geminiKey =
+        effectiveKey?.startsWith("AIza") ? effectiveKey : process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+      const activeGroqKey =
+        effectiveKey && !effectiveKey.startsWith("AIza") && !effectiveKey.startsWith("sk-")
+          ? effectiveKey
+          : process.env.GROQ_API_KEY;
+
+      const prompt = `You are an expert K-12 educator. Generate exactly ${count} multiple-choice questions for:
 - Grade Level: ${gradeLevel}
 - Subject: ${subject}
 - Topic: ${topic}
@@ -74,6 +82,41 @@ Return ONLY valid JSON in this exact format with no extra text:
   ]
 }`;
 
+      // 2a. Attempt generation with Google Gemini 2.0 Flash
+      if (geminiKey) {
+        try {
+          const geminiRes = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                  response_mime_type: "application/json",
+                  temperature: 0.3,
+                },
+              }),
+            }
+          );
+          if (geminiRes.ok) {
+            const data = await geminiRes.json();
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+              const parsed = JSON.parse(text);
+              if (Array.isArray(parsed.questions) && parsed.questions.length > 0) {
+                topicQuestions = parsed.questions;
+              }
+            }
+          }
+        } catch (geminiError) {
+          console.warn(`Gemini generation failed for topic "${topic}":`, geminiError);
+        }
+      }
+
+      // 2b. Attempt generation with Groq if Gemini wasn't used or returned empty
+      if (topicQuestions.length === 0 && activeGroqKey && activeGroqKey !== "your-groq-api-key-here") {
+        try {
           const completion = await groq.chat.completions.create({
             model: GENERATION_MODEL,
             messages: [{ role: "user", content: prompt }],

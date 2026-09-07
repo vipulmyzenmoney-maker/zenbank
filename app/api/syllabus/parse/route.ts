@@ -11,12 +11,18 @@ export async function POST(req: NextRequest) {
   try {
     const contentType = req.headers.get("content-type") || "";
 
+    const headerApiKey =
+      req.headers.get("x-api-key") ||
+      req.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ||
+      undefined;
+
     // 1. Handle Multipart / FormData (File Uploads)
     if (contentType.includes("multipart/form-data")) {
       const formData = await req.formData();
       const file = formData.get("file") as File | null;
       const rawText = formData.get("text") as string | null;
-      const apiKey = (formData.get("apiKey") as string | null) || undefined;
+      const formApiKey = (formData.get("apiKey") as string | null) || undefined;
+      const apiKey = formApiKey || headerApiKey;
 
       if (!file && !rawText) {
         return NextResponse.json(
@@ -72,7 +78,8 @@ export async function POST(req: NextRequest) {
 
     // 2. Handle Direct JSON payload
     const body = await req.json();
-    const { text, imageBase64, mimeType, apiKey } = body;
+    const { text, imageBase64, mimeType, apiKey: bodyApiKey } = body;
+    const apiKey = bodyApiKey || headerApiKey;
 
     if (imageBase64) {
       const parsed = await parseSyllabusFromImage(
@@ -94,9 +101,20 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error("Syllabus parse error:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to parse syllabus.";
+    const isMissingKey =
+      errorMessage.includes("NO_API_KEY") || errorMessage.includes("API key");
+
     return NextResponse.json(
-      { error: "Failed to parse syllabus. Please check your file format." },
-      { status: 500 }
+      {
+        error: errorMessage,
+        requiresApiKey: isMissingKey,
+        hint: isMissingKey
+          ? "Please configure your Google Gemini API Key in Settings or set GEMINI_API_KEY in Railway."
+          : "Could not extract clear topics from this image. Please ensure text is legible or type topics manually.",
+      },
+      { status: isMissingKey ? 401 : 422 }
     );
   }
 }

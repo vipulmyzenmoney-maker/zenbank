@@ -1,11 +1,19 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Zap, CheckCircle2, Database, Sparkles, ExternalLink } from "lucide-react";
+import { Zap, CheckCircle2, Database, Sparkles, ExternalLink, Key } from "lucide-react";
+import ApiKeyModal, { getStoredApiKey } from "@/components/ApiKeyModal";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [hasKey, setHasKey] = useState(false);
+
+  useEffect(() => {
+    setHasKey(Boolean(getStoredApiKey()));
+  }, []);
 
   const links = [
     { href: "/", label: "Generator", icon: Zap },
@@ -53,19 +61,41 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* External Link to Main App */}
-        <div className="hidden sm:flex items-center">
+        {/* Right Action & External Links */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsSettingsOpen(true)}
+            className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-900/60 px-3 py-1.5 text-xs font-bold text-slate-300 hover:border-emerald-500/50 hover:text-white transition-all"
+            title="Configure Gemini or OpenAI Key"
+          >
+            <Key className="h-3.5 w-3.5 text-emerald-400" />
+            <span className="hidden xs:inline">
+              {hasKey ? "AI Key Active" : "Set AI Key"}
+            </span>
+            <span
+              className={`h-2 w-2 rounded-full ${
+                hasKey ? "bg-emerald-400 shadow-sm shadow-emerald-400" : "bg-slate-600"
+              }`}
+            />
+          </button>
+
           <a
             href="https://myzenlearning.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-900/50 px-3 py-1.5 text-xs font-semibold text-slate-400 hover:border-slate-700 hover:text-white transition-all"
+            className="hidden md:flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-900/50 px-3 py-1.5 text-xs font-semibold text-slate-400 hover:border-slate-700 hover:text-white transition-all"
           >
             <span>My Zen Learning</span>
             <ExternalLink className="h-3 w-3" />
           </a>
         </div>
       </div>
+
+      <ApiKeyModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        onSaved={(key) => setHasKey(Boolean(key))}
+      />
     </header>
   );
 }

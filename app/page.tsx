@@ -14,11 +14,13 @@ import {
   FileType,
   X,
   Plus,
-  SlidersHorizontal,
   ChevronRight,
-  BookOpen
+  BookOpen,
+  AlertTriangle,
+  Key,
 } from "lucide-react";
 import { CURRICULUM_PRESETS } from "@/lib/presets";
+import ApiKeyModal, { getStoredApiKey } from "@/components/ApiKeyModal";
 
 interface ParsedSyllabusState {
   title: string;
@@ -38,6 +40,8 @@ export default function GeneratorPage() {
   const [rawSyllabusText, setRawSyllabusText] = useState("");
   const [isParsingSyllabus, setIsParsingSyllabus] = useState(false);
   const [parsedSyllabus, setParsedSyllabus] = useState<ParsedSyllabusState | null>(null);
+  const [parseError, setParseError] = useState<{ message: string; hint?: string; requiresApiKey?: boolean } | null>(null);
+  const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
   const [newTopicInput, setNewTopicInput] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -76,6 +80,7 @@ export default function GeneratorPage() {
   const handleFileSelect = (selectedFile: File) => {
     setFile(selectedFile);
     setParsedSyllabus(null);
+    setParseError(null);
     setResult(null);
 
     if (selectedFile.type.startsWith("image/")) {
@@ -98,22 +103,30 @@ export default function GeneratorPage() {
   const handleParseSyllabus = async () => {
     if (!file && !rawSyllabusText.trim()) return;
     setIsParsingSyllabus(true);
+    setParseError(null);
     setResult(null);
+
+    const storedKey = getStoredApiKey() || undefined;
 
     try {
       let res;
       if (file) {
         const formData = new FormData();
         formData.append("file", file);
+        if (storedKey) formData.append("apiKey", storedKey);
         res = await fetch("/api/syllabus/parse", {
           method: "POST",
+          headers: storedKey ? { "x-api-key": storedKey } : {},
           body: formData,
         });
       } else {
         res = await fetch("/api/syllabus/parse", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: rawSyllabusText }),
+          headers: {
+            "Content-Type": "application/json",
+            ...(storedKey ? { "x-api-key": storedKey } : {}),
+          },
+          body: JSON.stringify({ text: rawSyllabusText, apiKey: storedKey }),
         });
       }
 
@@ -123,30 +136,40 @@ export default function GeneratorPage() {
           ...data.syllabus,
           sourceType: data.sourceType || "document",
         });
+        setParseError(null);
       } else {
-        // Fallback simple parsing
-        const fallbackTopics = rawSyllabusText
-          ? rawSyllabusText.split(/[\n,;]+/).map((s) => s.trim()).filter(Boolean)
-          : ["Unit 1: Foundations", "Unit 2: Core Analysis", "Unit 3: Applications"];
-        setParsedSyllabus({
-          title: file ? file.name.replace(/\.[^/.]+$/, "") : "Custom Syllabus",
-          gradeLevel: "5th Grade",
-          subject: "Science & Math",
-          topics: fallbackTopics.length ? fallbackTopics : ["Module 1", "Module 2"],
-          summary: "Parsed syllabus ready for question generation.",
+        const errorMsg = data.error || "Failed to analyze syllabus document.";
+        const hint =
+          data.hint ||
+          (data.requiresApiKey
+            ? "Configure a Google Gemini or OpenAI API Key in Settings to scan syllabus images."
+            : "Please verify image legibility or enter topics manually.");
+        setParseError({
+          message: errorMsg,
+          hint,
+          requiresApiKey: data.requiresApiKey || errorMsg.includes("API key"),
         });
       }
     } catch (err) {
       console.error("Failed to parse syllabus:", err);
-      setParsedSyllabus({
-        title: "Uploaded Syllabus",
-        gradeLevel: "5th Grade",
-        subject: "General",
-        topics: ["Core Fundamentals", "Key Principles", "Applications"],
+      setParseError({
+        message: "Failed to connect to syllabus parsing service.",
+        hint: "Please check your network connection and AI key settings.",
       });
     } finally {
       setIsParsingSyllabus(false);
     }
+  };
+
+  const handleManualFallback = () => {
+    setParseError(null);
+    setParsedSyllabus({
+      title: file ? file.name.replace(/\.[^/.]+$/, "") : "Custom Curriculum",
+      gradeLevel: "5th Grade",
+      subject: "Mathematics",
+      topics: ["Fractions & Decimals", "Multiplication & Division", "Word Problems & Measurements"],
+      summary: "Custom curriculum ready for question generation.",
+    });
   };
 
   const handleRemoveTopic = (index: number) => {
@@ -177,11 +200,16 @@ export default function GeneratorPage() {
     setGeneratingTitle(payload.title);
     setResult(null);
 
+    const storedKey = getStoredApiKey() || undefined;
+
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+          ...(storedKey ? { "x-api-key": storedKey } : {}),
+        },
+        body: JSON.stringify({ ...payload, apiKey: storedKey }),
       });
       const data = await res.json();
       if (res.ok && data.success) {
@@ -457,6 +485,40 @@ export default function GeneratorPage() {
                     </>
                   )}
                 </button>
+
+                {/* Helpful Error & Key Prompt Banner */}
+                {parseError && (
+                  <div className="mt-4 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-left backdrop-blur-xl animate-in fade-in">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <h4 className="text-xs font-bold text-amber-300">
+                          {parseError.requiresApiKey ? "Vision AI Requires API Key" : "Syllabus Analysis Note"}
+                        </h4>
+                        <p className="mt-1 text-xs text-slate-300">
+                          {parseError.hint || parseError.message}
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setIsKeyModalOpen(true)}
+                            className="inline-flex items-center gap-1.5 rounded-xl bg-amber-400 px-3.5 py-1.5 text-xs font-extrabold text-slate-950 hover:bg-amber-300 transition-all shadow-sm"
+                          >
+                            <Key className="h-3.5 w-3.5" />
+                            Configure Google Gemini Key
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleManualFallback}
+                            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-bold text-slate-300 hover:text-white transition-all"
+                          >
+                            ✏️ Enter Topics Manually
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               /* Parsed Syllabus Review & One-Click Generate Card */
@@ -723,6 +785,11 @@ export default function GeneratorPage() {
           </div>
         )}
       </div>
+
+      <ApiKeyModal
+        isOpen={isKeyModalOpen}
+        onClose={() => setIsKeyModalOpen(false)}
+      />
     </div>
   );
 }
