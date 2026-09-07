@@ -144,6 +144,60 @@ async function parseWithOpenAI(
 }
 
 /**
+ * Parses an image using Groq Vision (qwen/qwen3.8-27b)
+ * Sub-second response time (~0.4s) using high-throughput LPU vision models.
+ */
+async function parseWithGroq(
+  base64Data: string,
+  mimeType: string,
+  apiKey: string
+): Promise<ParsedVisionSyllabus> {
+  const cleanBase64 = base64Data.startsWith("data:")
+    ? base64Data
+    : `data:${mimeType};base64,${base64Data}`;
+
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+      "User-Agent": "ZenBank/1.0",
+    },
+    body: JSON.stringify({
+      model: "qwen/qwen3.8-27b",
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: SYLLABUS_PROMPT },
+            {
+              type: "image_url",
+              image_url: { url: cleanBase64 },
+            },
+          ],
+        },
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.1,
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Groq Vision API error (${response.status}): ${errText}`);
+  }
+
+  const json = await response.json();
+  const textContent = json?.choices?.[0]?.message?.content;
+  if (!textContent) {
+    throw new Error("Groq Vision returned empty response content.");
+  }
+
+  const parsed = JSON.parse(textContent);
+  return validateParsedData(parsed, "Groq Vision (qwen/qwen3.8-27b)");
+}
+
+/**
  * Validates and normalizes parsed AI JSON structure
  */
 function validateParsedData(parsed: any, provider: string): ParsedVisionSyllabus {
@@ -173,6 +227,7 @@ function validateParsedData(parsed: any, provider: string): ParsedVisionSyllabus
 /**
  * Automated local OCR when cloud AI keys are not configured or unreachable.
  * Reads the actual text from the image without requiring any API key.
+ * Enforces an 8-second timeout so it never hangs the server.
  */
 async function parseWithLocalOCR(
   base64Data: string,
@@ -182,11 +237,18 @@ async function parseWithLocalOCR(
     const cleanBase64 = base64Data.replace(/^data:[^;]+;base64,/, "");
     const buffer = Buffer.from(cleanBase64, "base64");
 
-    const worker = await createWorker("eng");
-    const result = await worker.recognize(buffer);
-    await worker.terminate();
+    const ocrPromise = (async () => {
+      const worker = await createWorker("eng");
+      const result = await worker.recognize(buffer);
+      await worker.terminate();
+      return result?.data?.text || "";
+    })();
 
-    const ocrText = result?.data?.text || "";
+    const timeoutPromise = new Promise<string>((_, reject) =>
+      setTimeout(() => reject(new Error("OCR processing exceeded 8s limit")), 8000)
+    );
+
+    const ocrText = await Promise.race([ocrPromise, timeoutPromise]);
     if (ocrText.trim().length > 15) {
       const heuristic = parseSyllabusHeuristic(ocrText);
       return {
@@ -199,7 +261,7 @@ async function parseWithLocalOCR(
       };
     }
   } catch (ocrErr) {
-    console.warn("Local OCR worker error, falling back to curriculum draft:", ocrErr);
+    console.warn("Local OCR worker error/timeout, falling back to curriculum draft:", ocrErr);
   }
 
   // Graceful automated fallback if OCR could not recognize enough letters
@@ -221,13 +283,20 @@ async function parseWithLocalOCR(
 
 /**
  * Primary entry point for Vision OCR & Syllabus analysis.
- * Fully automated: tries cloud AI if configured, otherwise automatically uses local OCR.
+ * Fully automated:
+ * 1. Groq Vision (qwen/qwen3.8-27b): Sub-second LPU speed (~0.4s) using GROQ_API_KEY
+ * 2. Google Gemini 2.0 Flash: Multimodal TPU speed
+ * 3. OpenAI GPT-4o-mini
+ * 4. Local OCR fallback with strict timeout
  */
 export async function extractSyllabusFromImage(
   base64Data: string,
   mimeType: string = "image/jpeg",
   customKey?: string
 ): Promise<ParsedVisionSyllabus> {
+  const groqKey =
+    customKey?.startsWith("gsk_") ? customKey : process.env.GROQ_API_KEY;
+
   const geminiKey =
     customKey?.startsWith("AIza") ? customKey : process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 
@@ -236,7 +305,16 @@ export async function extractSyllabusFromImage(
 
   const anyCustomKey = customKey && customKey !== "your-groq-api-key-here" ? customKey : null;
 
-  // 1. Try Google Gemini 2.0 Flash (Top OCR and curriculum extraction)
+  // 1. Try Groq Vision first (Sub-second ~0.4s response time, active on Railway)
+  if (groqKey && groqKey !== "your-groq-api-key-here") {
+    try {
+      return await parseWithGroq(base64Data, mimeType, groqKey);
+    } catch (err) {
+      console.warn("Groq vision parse failed, attempting next provider:", err);
+    }
+  }
+
+  // 2. Try Google Gemini 2.0 Flash (Top OCR and curriculum extraction)
   if (geminiKey) {
     try {
       return await parseWithGemini(base64Data, mimeType, geminiKey);
@@ -245,7 +323,7 @@ export async function extractSyllabusFromImage(
     }
   }
 
-  // 2. Try OpenAI GPT-4o-mini
+  // 3. Try OpenAI GPT-4o-mini
   if (openAiKey) {
     try {
       return await parseWithOpenAI(base64Data, mimeType, openAiKey);
@@ -254,10 +332,12 @@ export async function extractSyllabusFromImage(
     }
   }
 
-  // 3. Try custom key if passed
+  // 4. Try custom key if passed and provider was not matched above
   if (anyCustomKey) {
     try {
-      if (anyCustomKey.startsWith("sk-")) {
+      if (anyCustomKey.startsWith("gsk_")) {
+        return await parseWithGroq(base64Data, mimeType, anyCustomKey);
+      } else if (anyCustomKey.startsWith("sk-")) {
         return await parseWithOpenAI(base64Data, mimeType, anyCustomKey);
       } else {
         return await parseWithGemini(base64Data, mimeType, anyCustomKey);
@@ -267,6 +347,6 @@ export async function extractSyllabusFromImage(
     }
   }
 
-  // 4. Automated Local OCR: Zero key required! Reads the image and extracts text & grade
+  // 5. Automated Local OCR: Zero key required! Reads the image and extracts text & grade
   return await parseWithLocalOCR(base64Data, mimeType);
 }

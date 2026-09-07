@@ -95,6 +95,56 @@ export default function GeneratorPage() {
     }
   };
 
+  const optimizeImageIfNeeded = async (imageFile: File): Promise<File> => {
+    if (!imageFile.type.startsWith("image/")) return imageFile;
+    return new Promise((resolve) => {
+      const img = new Image();
+      const url = URL.createObjectURL(imageFile);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const MAX_DIM = 1600;
+        let { width, height } = img;
+        if (width <= MAX_DIM && height <= MAX_DIM && imageFile.size < 800 * 1024) {
+          return resolve(imageFile);
+        }
+        if (width > height) {
+          if (width > MAX_DIM) {
+            height = Math.round((height * MAX_DIM) / width);
+            width = MAX_DIM;
+          }
+        } else {
+          if (height > MAX_DIM) {
+            width = Math.round((width * MAX_DIM) / height);
+            height = MAX_DIM;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return resolve(imageFile);
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) return resolve(imageFile);
+            const optimized = new File([blob], imageFile.name.replace(/\.[^/.]+$/, ".jpg"), {
+              type: "image/jpeg",
+              lastModified: Date.now(),
+            });
+            resolve(optimized);
+          },
+          "image/jpeg",
+          0.85
+        );
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        resolve(imageFile);
+      };
+      img.src = url;
+    });
+  };
+
   const handleParseSyllabus = async () => {
     if (!file && !rawSyllabusText.trim()) return;
     setIsParsingSyllabus(true);
@@ -105,8 +155,11 @@ export default function GeneratorPage() {
     try {
       let res;
       if (file) {
+        const fileToSend = file.type.startsWith("image/")
+          ? await optimizeImageIfNeeded(file)
+          : file;
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append("file", fileToSend);
         if (storedKey) formData.append("apiKey", storedKey);
         res = await fetch("/api/syllabus/parse", {
           method: "POST",
