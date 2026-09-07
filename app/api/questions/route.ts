@@ -16,10 +16,12 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status");
     const search = searchParams.get("search");
+    const batchId = searchParams.get("batchId");
     const limit = parseInt(searchParams.get("limit") || "100", 10);
 
     const where: Record<string, unknown> = {};
     if (status && status !== "all") where.status = status;
+    if (batchId && batchId !== "all") where.syllabusPackId = BigInt(batchId);
     if (search) {
       where.questionText = { contains: search, mode: "insensitive" };
     }
@@ -27,6 +29,17 @@ export async function GET(req: NextRequest) {
     const [questions, total, drafts, verified, flagged] = await Promise.all([
       prisma.question.findMany({
         where,
+        include: {
+          syllabusPack: {
+            select: {
+              id: true,
+              title: true,
+              gradeLevel: true,
+              subject: true,
+              createdAt: true,
+            },
+          },
+        },
         orderBy: { createdAt: "desc" },
         take: limit,
       }),
@@ -42,6 +55,15 @@ export async function GET(req: NextRequest) {
           ...q,
           id: Number(q.id),
           syllabusPackId: q.syllabusPackId ? Number(q.syllabusPackId) : null,
+          syllabusPack: q.syllabusPack
+            ? {
+                id: Number(q.syllabusPack.id),
+                title: q.syllabusPack.title,
+                gradeLevel: q.syllabusPack.gradeLevel,
+                subject: q.syllabusPack.subject,
+                createdAt: q.syllabusPack.createdAt.toISOString(),
+              }
+            : null,
         })),
         stats: { total, drafts, verified, flagged },
       },
