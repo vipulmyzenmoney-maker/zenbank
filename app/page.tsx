@@ -74,10 +74,13 @@ export default function GeneratorPage() {
     }
   };
 
+  const [parseError, setParseError] = useState<string | null>(null);
+
   const handleFileSelect = (selectedFile: File) => {
     setFile(selectedFile);
     setParsedSyllabus(null);
     setResult(null);
+    setParseError(null);
 
     if (selectedFile.type.startsWith("image/")) {
       const reader = new FileReader();
@@ -152,6 +155,7 @@ export default function GeneratorPage() {
   const parseFileDirectly = async (targetFile: File) => {
     setIsParsingSyllabus(true);
     setResult(null);
+    setParseError(null);
     const storedKey = getStoredApiKey() || undefined;
 
     try {
@@ -169,16 +173,17 @@ export default function GeneratorPage() {
 
       const data = await res.json();
       if (res.ok && data.success && data.syllabus) {
+        setParseError(null);
         setParsedSyllabus({
           ...data.syllabus,
           sourceType: data.sourceType || "image",
         });
       } else {
-        handleManualFallback();
+        setParseError(data.error || "Could not extract topics from this image. Please ensure headings and text are clearly visible.");
       }
     } catch (err) {
       console.error("Failed to parse syllabus from file:", err);
-      handleManualFallback();
+      setParseError("Image processing error. Please try uploading again.");
     } finally {
       setIsParsingSyllabus(false);
     }
@@ -192,6 +197,7 @@ export default function GeneratorPage() {
 
     setIsParsingSyllabus(true);
     setResult(null);
+    setParseError(null);
     const storedKey = getStoredApiKey() || undefined;
 
     try {
@@ -206,29 +212,20 @@ export default function GeneratorPage() {
 
       const data = await res.json();
       if (res.ok && data.success && data.syllabus) {
+        setParseError(null);
         setParsedSyllabus({
           ...data.syllabus,
           sourceType: data.sourceType || "text",
         });
       } else {
-        handleManualFallback();
+        setParseError(data.error || "Could not parse syllabus text.");
       }
     } catch (err) {
       console.error("Failed to parse syllabus from text:", err);
-      handleManualFallback();
+      setParseError("Text parsing error. Please try again.");
     } finally {
       setIsParsingSyllabus(false);
     }
-  };
-
-  const handleManualFallback = () => {
-    setParsedSyllabus({
-      title: file ? file.name.replace(/\.[^/.]+$/, "") : "Custom Curriculum",
-      gradeLevel: "5th Grade",
-      subject: "Mathematics",
-      topics: ["Fractions & Decimals", "Multiplication & Division", "Word Problems & Measurements"],
-      summary: "Custom curriculum ready for question generation.",
-    });
   };
 
   const handleRemoveTopic = (index: number) => {
@@ -516,6 +513,27 @@ export default function GeneratorPage() {
                           Supports <span className="text-slate-300 font-semibold">PDF, Scanned Image (PNG/JPG), TXT</span> · Auto-analyzes on upload
                         </p>
                       </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Error Banner if OCR/Parsing Fails */}
+                {parseError && !isParsingSyllabus && (
+                  <div className="mt-4 rounded-2xl border border-rose-500/40 bg-rose-500/10 p-4 text-xs text-rose-300 flex items-center justify-between gap-3 animate-in fade-in">
+                    <div className="flex items-center gap-2.5">
+                      <X className="h-4 w-4 text-rose-400 shrink-0" />
+                      <span>{parseError}</span>
+                    </div>
+                    {file && (
+                      <button
+                        onClick={() => {
+                          setParseError(null);
+                          parseFileDirectly(file);
+                        }}
+                        className="shrink-0 rounded-xl bg-rose-500/20 px-3 py-1.5 text-xs font-bold text-rose-200 hover:bg-rose-500/30 transition-all"
+                      >
+                        Retry Scan
+                      </button>
                     )}
                   </div>
                 )}

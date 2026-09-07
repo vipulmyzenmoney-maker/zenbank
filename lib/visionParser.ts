@@ -152,7 +152,7 @@ async function parseWithOpenAI(
 }
 
 /**
- * Parses an image using Groq Vision (qwen/qwen3.8-27b)
+ * Parses an image using Groq Vision (qwen/qwen3.8-27b / qwen/qwen3.6-27b)
  * Sub-second response time (~0.4s) using high-throughput LPU vision models.
  */
 async function parseWithGroq(
@@ -164,45 +164,58 @@ async function parseWithGroq(
     ? base64Data
     : `data:${mimeType};base64,${base64Data}`;
 
-  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-      "User-Agent": "ZenBank/1.0",
-    },
-    body: JSON.stringify({
-      model: "qwen/qwen3.8-27b",
-      messages: [
-        {
-          role: "user",
-          content: [
-            { type: "text", text: SYLLABUS_PROMPT },
+  const modelsToTry = ["qwen/qwen3.8-27b", "qwen/qwen3.6-27b"];
+  let lastError: Error | null = null;
+
+  for (const model of modelsToTry) {
+    try {
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+          "User-Agent": "ZenBank/1.0",
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
             {
-              type: "image_url",
-              image_url: { url: cleanBase64 },
+              role: "user",
+              content: [
+                { type: "text", text: SYLLABUS_PROMPT },
+                {
+                  type: "image_url",
+                  image_url: { url: cleanBase64 },
+                },
+              ],
             },
           ],
-        },
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.1,
-    }),
-  });
+          response_format: { type: "json_object" },
+          temperature: 0.1,
+          max_tokens: 800, // Explicit limit within Groq's 1000 OTPM ceiling
+        }),
+      });
 
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Groq Vision API error (${response.status}): ${errText}`);
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`Groq Vision (${model}) API error (${response.status}): ${errText}`);
+      }
+
+      const json = await response.json();
+      const textContent = json?.choices?.[0]?.message?.content;
+      if (!textContent) {
+        throw new Error(`Groq Vision (${model}) returned empty response content.`);
+      }
+
+      const parsed = JSON.parse(textContent);
+      return validateParsedData(parsed, `Groq Vision (${model})`);
+    } catch (err) {
+      console.warn(`Groq model ${model} parse attempt failed:`, err);
+      lastError = err instanceof Error ? err : new Error(String(err));
+    }
   }
 
-  const json = await response.json();
-  const textContent = json?.choices?.[0]?.message?.content;
-  if (!textContent) {
-    throw new Error("Groq Vision returned empty response content.");
-  }
-
-  const parsed = JSON.parse(textContent);
-  return validateParsedData(parsed, "Groq Vision (qwen/qwen3.8-27b)");
+  throw lastError || new Error("All Groq vision models failed.");
 }
 
 /**
@@ -269,24 +282,12 @@ async function parseWithLocalOCR(
       };
     }
   } catch (ocrErr) {
-    console.warn("Local OCR worker error/timeout, falling back to curriculum draft:", ocrErr);
+    console.warn("Local OCR worker error/timeout:", ocrErr);
   }
 
-  // Graceful automated fallback if OCR could not recognize enough letters
-  return {
-    title: "5th Grade Mathematics Curriculum",
-    gradeLevel: "5th Grade",
-    subject: "Mathematics",
-    topics: [
-      "Fractions & Decimals Operations",
-      "Volume & 3D Geometry",
-      "Multi-Digit Multiplication & Division",
-      "Algebraic Patterns & Coordinate Graphing",
-      "Measurement & Unit Conversions",
-    ],
-    summary: "Curriculum modules ready for review and question generation.",
-    provider: "Automated Smart Engine",
-  };
+  throw new Error(
+    "Could not detect readable curriculum topics in this image. Please ensure the image is focused and headings are visible."
+  );
 }
 
 /**
