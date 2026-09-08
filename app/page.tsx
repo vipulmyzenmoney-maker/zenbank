@@ -58,6 +58,7 @@ export default function GeneratorPage() {
 
   // Custom Topic state
   const [customInput, setCustomInput] = useState("");
+  const [customTitle, setCustomTitle] = useState("");
   const [customGrade, setCustomGrade] = useState("5th Grade");
   const [customSubject, setCustomSubject] = useState("Math");
   
@@ -424,8 +425,12 @@ export default function GeneratorPage() {
       .map((t) => t.trim())
       .filter(Boolean);
     
+    const formattedTitle = customTitle.trim()
+      ? customTitle.trim()
+      : `${customGrade} ${customSubject} • Set: ${topics[0] || "Curriculum Topics"}`;
+
     handleGenerate({
-      title: `Custom: ${topics[0] || customSubject}`,
+      title: formattedTitle,
       gradeLevel: customGrade,
       subject: customSubject,
       topics,
@@ -814,7 +819,7 @@ export default function GeneratorPage() {
                         <BookOpen className="h-7 w-7" />
                       </div>
                     )}
-                    <div>
+                    <div className="flex-1 min-w-[260px]">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-3 py-0.5 text-xs font-black text-emerald-300">
                           <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
@@ -824,9 +829,23 @@ export default function GeneratorPage() {
                           {parsedSyllabus.provider || "Groq Vision (qwen/qwen3.8-27b)"}
                         </span>
                       </div>
-                      <h2 className="mt-1 font-display text-lg sm:text-xl font-black text-white">
-                        {parsedSyllabus.title}
-                      </h2>
+                      <div className="mt-2">
+                        <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">
+                          Question Set Title (Forwarded to My Zen Learning)
+                        </label>
+                        <input
+                          type="text"
+                          value={parsedSyllabus.title}
+                          onChange={(e) =>
+                            setParsedSyllabus({
+                              ...parsedSyllabus,
+                              title: e.target.value,
+                            })
+                          }
+                          placeholder="e.g. 5th Grade Math • Set: Fractions & Decimals"
+                          className="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-sm font-bold text-white focus:border-emerald-500 focus:outline-none transition-all"
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -1101,6 +1120,20 @@ export default function GeneratorPage() {
         {/* TAB 3: CUSTOM TOPIC INPUT */}
         {activeTab === "custom" && !generating && (
           <div className="mt-6 mx-auto max-w-xl rounded-3xl border border-slate-800 bg-slate-900/70 p-6 backdrop-blur-xl">
+            <div className="mb-4">
+              <label className="block text-xs font-bold text-slate-300 mb-1.5 flex items-center justify-between">
+                <span>Question Set Title (Optional)</span>
+                <span className="text-[10px] text-slate-400 font-normal">Sent to My Zen Learning</span>
+              </label>
+              <input
+                type="text"
+                value={customTitle}
+                onChange={(e) => setCustomTitle(e.target.value)}
+                placeholder={`e.g. ${customGrade} ${customSubject} • Set: Comprehensive Review`}
+                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2.5 text-xs font-semibold text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+              />
+            </div>
+
             <div>
               <label className="block text-xs font-bold text-slate-300 mb-1.5">
                 Topic or Syllabus Outline

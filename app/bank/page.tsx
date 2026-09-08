@@ -24,7 +24,8 @@ import {
   ChevronUp,
   Lightbulb,
   X,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Pencil
 } from "lucide-react";
 
 interface SyllabusPackSummary {
@@ -95,6 +96,11 @@ export default function BankPage() {
     count: number;
   } | null>(null);
   const [deletingBatch, setDeletingBatch] = useState(false);
+
+  // Set Rename modal state
+  const [renameTarget, setRenameTarget] = useState<{ id: number; title: string } | null>(null);
+  const [newTitleInput, setNewTitleInput] = useState("");
+  const [renaming, setRenaming] = useState(false);
 
   const fetchBatches = useCallback(async () => {
     setBatchesLoading(true);
@@ -267,6 +273,54 @@ export default function BankPage() {
     }
   };
 
+  const handleOpenRename = (id: number, currentTitle: string) => {
+    setRenameTarget({ id, title: currentTitle });
+    setNewTitleInput(currentTitle);
+  };
+
+  const handleConfirmRename = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!renameTarget || !newTitleInput.trim()) return;
+
+    setRenaming(true);
+    try {
+      const res = await fetch(`/api/batches/${renameTarget.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: newTitleInput.trim() }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setBatches((prev) =>
+          prev.map((b) =>
+            b.id === renameTarget.id ? { ...b, title: newTitleInput.trim() } : b
+          )
+        );
+        setQuestions((prev) =>
+          prev.map((q) =>
+            q.syllabusPackId === renameTarget.id && q.syllabusPack
+              ? {
+                  ...q,
+                  syllabusPack: {
+                    ...q.syllabusPack,
+                    title: newTitleInput.trim(),
+                  },
+                }
+              : q
+          )
+        );
+        setRenameTarget(null);
+      } else {
+        alert("Could not rename question set: " + (data.error || "Unknown error"));
+      }
+    } catch (err) {
+      console.error("Rename set error:", err);
+      alert("Failed to rename question set.");
+    } finally {
+      setRenaming(false);
+    }
+  };
+
   // Select All on current page toggle
   const handleToggleSelectPage = () => {
     const pageIds = paginatedQuestions.map((q) => q.id);
@@ -288,7 +342,7 @@ export default function BankPage() {
   const handleExportCSV = () => {
     const headers = [
       "ID",
-      "Batch ID",
+      "Set ID",
       "Grade",
       "Subject",
       "Topic",
@@ -369,7 +423,7 @@ export default function BankPage() {
               Question Bank Manager
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">
-              Paginated question library with batch tracking, batch filters, and 1-click batch removal.
+              Paginated question library with set tracking, filters, instant set renaming, and safe deletion.
             </p>
           </div>
 
@@ -393,7 +447,7 @@ export default function BankPage() {
               }`}
             >
               <Layers className="h-3.5 w-3.5 text-cyan-400" />
-              Batches ({batches.length})
+              Question Sets ({batches.length})
             </button>
             <button
               onClick={handleExportCSV}
@@ -425,15 +479,15 @@ export default function BankPage() {
           </div>
         </div>
 
-        {/* Collapsible Batches Overview Panel */}
+        {/* Collapsible Question Sets Overview Panel */}
         {showBatchesPanel && (
           <div className="mt-6 rounded-3xl border border-cyan-500/30 bg-slate-900/95 p-5 backdrop-blur-xl shadow-2xl animate-in fade-in slide-in-from-top-3">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
                 <Layers className="h-4 w-4 text-cyan-400" />
-                <h3 className="text-sm font-extrabold text-white">Generation Batches Overview</h3>
+                <h3 className="text-sm font-extrabold text-white">Question Sets Overview</h3>
                 <span className="rounded-full bg-cyan-500/10 px-2 py-0.5 text-[10px] font-bold text-cyan-400 border border-cyan-500/20">
-                  {batches.length} total packs
+                  {batches.length} total sets
                 </span>
               </div>
               <button
@@ -445,7 +499,7 @@ export default function BankPage() {
             </div>
 
             {batches.length === 0 ? (
-              <p className="mt-4 text-xs text-slate-400 text-center py-4">No generation batches found.</p>
+              <p className="mt-4 text-xs text-slate-400 text-center py-4">No question sets found.</p>
             ) : (
               <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-72 overflow-y-auto pr-1">
                 {batches.map((batch) => {
@@ -463,7 +517,7 @@ export default function BankPage() {
                       <div>
                         <div className="flex items-center justify-between gap-2">
                           <span className="inline-flex items-center gap-1 rounded-md bg-cyan-500/20 border border-cyan-500/40 px-2 py-0.5 text-[10px] font-black text-cyan-300">
-                            Batch #{batch.id}
+                            Set #{batch.id}
                           </span>
                           <span className="text-[10px] font-medium text-slate-500">
                             {new Date(batch.createdAt).toLocaleDateString([], {
@@ -474,7 +528,7 @@ export default function BankPage() {
                             })}
                           </span>
                         </div>
-                        <h4 className="mt-2 text-xs font-bold text-white line-clamp-1">
+                        <h4 className="mt-2 text-xs font-bold text-white line-clamp-1" title={batch.title}>
                           {batch.title}
                         </h4>
                         <div className="mt-1 flex items-center gap-2 text-[11px] text-slate-400">
@@ -511,6 +565,13 @@ export default function BankPage() {
                           {isSelected ? "Active Filter" : "Filter Questions"}
                         </button>
                         <button
+                          onClick={() => handleOpenRename(batch.id, batch.title)}
+                          className="inline-flex items-center justify-center h-7 w-7 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:text-white hover:border-slate-600 transition-all shrink-0"
+                          title="Rename this question set"
+                        >
+                          <Pencil className="h-3 w-3" />
+                        </button>
+                        <button
                           onClick={() =>
                             setBatchDeleteTarget({
                               id: batch.id,
@@ -519,7 +580,7 @@ export default function BankPage() {
                             })
                           }
                           className="inline-flex items-center justify-center h-7 w-7 rounded-lg border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all shrink-0"
-                          title="Delete entire batch and all its questions"
+                          title="Delete entire set and all its questions"
                         >
                           <Trash2 className="h-3 w-3" />
                         </button>
@@ -548,10 +609,10 @@ export default function BankPage() {
             </div>
           </form>
 
-          {/* Batch Selector Dropdown */}
+          {/* Question Set Selector Dropdown */}
           <div className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-900/70 px-3 py-1.5 text-xs">
             <Layers className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
-            <span className="font-bold text-slate-400 text-[11px]">Batch:</span>
+            <span className="font-bold text-slate-400 text-[11px]">Set:</span>
             <select
               value={selectedBatchId}
               onChange={(e) => {
@@ -561,11 +622,11 @@ export default function BankPage() {
               className="bg-transparent font-bold text-white focus:outline-none cursor-pointer text-xs max-w-[180px] truncate"
             >
               <option value="all" className="bg-slate-900 text-white">
-                All Batches ({batches.length})
+                All Question Sets ({batches.length})
               </option>
               {batches.map((b) => (
                 <option key={b.id} value={String(b.id)} className="bg-slate-900 text-white">
-                  Batch #{b.id}: {b.title} ({b.totalQuestions} Qs)
+                  Set #{b.id}: {b.title} ({b.totalQuestions} Qs)
                 </option>
               ))}
             </select>
@@ -592,12 +653,12 @@ export default function BankPage() {
           </div>
         </div>
 
-        {/* Active Batch Filter Banner with Quick 1-Click Delete Shortcut */}
+        {/* Active Set Filter Banner with Quick Rename and Delete Shortcuts */}
         {activeBatch && (
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-cyan-500/40 bg-cyan-500/10 p-3.5 backdrop-blur-xl animate-in fade-in">
             <div className="flex items-center gap-2.5">
               <span className="inline-flex items-center gap-1 rounded-md bg-cyan-500/20 border border-cyan-500/40 px-2 py-0.5 text-xs font-black text-cyan-300">
-                Batch #{activeBatch.id}
+                Set #{activeBatch.id}
               </span>
               <span className="text-xs font-bold text-white">
                 {activeBatch.title}
@@ -609,13 +670,20 @@ export default function BankPage() {
 
             <div className="flex items-center gap-2">
               <button
+                onClick={() => handleOpenRename(activeBatch.id, activeBatch.title)}
+                className="flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-bold text-slate-200 hover:bg-slate-700 hover:text-white transition-all shadow-xs"
+              >
+                <Pencil className="h-3.5 w-3.5 text-emerald-400" />
+                Rename Set
+              </button>
+              <button
                 onClick={() => {
                   setSelectedBatchId("all");
                   setCurrentPage(1);
                 }}
                 className="rounded-xl px-3 py-1 text-xs font-bold text-slate-400 hover:text-white transition-colors"
               >
-                Clear Batch Filter
+                Clear Filter
               </button>
               <button
                 onClick={() =>
@@ -628,7 +696,7 @@ export default function BankPage() {
                 className="flex items-center gap-1.5 rounded-xl bg-red-600 px-3.5 py-1.5 text-xs font-extrabold text-white shadow-md hover:bg-red-500 transition-all"
               >
                 <Trash2 className="h-3.5 w-3.5" />
-                Delete Entire Batch #{activeBatch.id}
+                Delete Set #{activeBatch.id}
               </button>
             </div>
           </div>
@@ -735,7 +803,7 @@ export default function BankPage() {
                         )}
                       </button>
                     </th>
-                    <th className="px-3 py-3 text-[10px] font-extrabold uppercase text-slate-400 w-24">Batch</th>
+                    <th className="px-3 py-3 text-[10px] font-extrabold uppercase text-slate-400 w-24">Set</th>
                     <th className="px-4 py-3 text-[10px] font-extrabold uppercase text-slate-400">Question</th>
                     <th className="px-3 py-3 text-[10px] font-extrabold uppercase text-slate-400 hidden sm:table-cell">Grade</th>
                     <th className="px-3 py-3 text-[10px] font-extrabold uppercase text-slate-400 hidden md:table-cell">Subject</th>
@@ -770,7 +838,7 @@ export default function BankPage() {
                             </button>
                           </td>
 
-                          {/* Batch Column with Clickable Filter */}
+                          {/* Set Column with Clickable Filter */}
                           <td className="px-3 py-3 whitespace-nowrap">
                             {q.syllabusPackId ? (
                               <button
@@ -779,7 +847,7 @@ export default function BankPage() {
                                   setCurrentPage(1);
                                 }}
                                 className="inline-flex items-center gap-1 rounded-md border border-cyan-500/30 bg-cyan-500/10 px-2 py-0.5 text-[10px] font-extrabold text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-500/60 transition-all"
-                                title={`Filter to Batch #${q.syllabusPackId}: ${q.syllabusPack?.title || "Curriculum Pack"}`}
+                                title={`Filter to Set #${q.syllabusPackId}: ${q.syllabusPack?.title || "Curriculum Pack"}`}
                               >
                                 <Layers className="h-2.5 w-2.5 text-cyan-400" />
                                 #{q.syllabusPackId}
@@ -974,7 +1042,7 @@ export default function BankPage() {
           </div>
         )}
 
-        {/* 1-Click Batch Deletion Safe Confirmation Modal */}
+        {/* 1-Click Set Deletion Safe Confirmation Modal */}
         {batchDeleteTarget && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm animate-in fade-in">
             <div className="relative w-full max-w-md rounded-3xl border border-red-500/40 bg-slate-900 p-6 shadow-2xl shadow-red-950/50">
@@ -984,10 +1052,10 @@ export default function BankPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white">
-                    Delete Entire Batch #{batchDeleteTarget.id}?
+                    Delete Question Set #{batchDeleteTarget.id}?
                   </h3>
                   <p className="text-xs text-slate-400">
-                    Irreversible batch purging action
+                    Irreversible set purging action
                   </p>
                 </div>
               </div>
@@ -997,7 +1065,7 @@ export default function BankPage() {
                   {batchDeleteTarget.title}
                 </div>
                 <div className="mt-1 text-xs text-red-300 font-medium">
-                  ⚠️ This will permanently remove all <span className="font-extrabold text-red-200">{batchDeleteTarget.count} questions</span> generated in this batch from your database.
+                  ⚠️ This will permanently remove all <span className="font-extrabold text-red-200">{batchDeleteTarget.count} questions</span> generated in this set from your database.
                 </div>
               </div>
 
@@ -1017,16 +1085,76 @@ export default function BankPage() {
                   {deletingBatch ? (
                     <>
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                      Deleting Batch...
+                      Deleting Question Set...
                     </>
                   ) : (
                     <>
                       <Trash2 className="h-3.5 w-3.5" />
-                      Yes, Delete Entire Batch
+                      Yes, Delete Question Set
                     </>
                   )}
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Question Set Rename Modal */}
+        {renameTarget && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm animate-in fade-in">
+            <div className="relative w-full max-w-md rounded-3xl border border-emerald-500/40 bg-slate-900 p-6 shadow-2xl">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400">
+                  <Pencil className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">
+                    Rename Question Set #{renameTarget.id}
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    Update how this set appears in ZenBank and My Zen Learning
+                  </p>
+                </div>
+              </div>
+
+              <form onSubmit={handleConfirmRename} className="mt-5">
+                <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                  Question Set Name
+                </label>
+                <input
+                  type="text"
+                  value={newTitleInput}
+                  onChange={(e) => setNewTitleInput(e.target.value)}
+                  placeholder="e.g. Grade 5 Mathematics • Set 01: Fractions & Decimals"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+                  autoFocus
+                />
+
+                <div className="mt-6 flex items-center justify-end gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setRenameTarget(null)}
+                    disabled={renaming}
+                    className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-bold text-slate-300 hover:text-white transition-all disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={renaming || !newTitleInput.trim()}
+                    className="flex items-center gap-2 rounded-xl bg-emerald-500 px-4 py-2 text-xs font-extrabold text-slate-950 shadow-lg shadow-emerald-500/20 hover:bg-emerald-400 transition-all disabled:opacity-50"
+                  >
+                    {renaming ? (
+                      <>
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      "Save Changes"
+                    )}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}

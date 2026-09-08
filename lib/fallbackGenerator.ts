@@ -75,7 +75,7 @@ export function generateCurriculumQuestions(
         },
       ];
       const g = geoQuestions[(i - 1) % geoQuestions.length];
-      qText = `${g.q} (Topic: ${cleanTopic})`;
+      qText = g.q;
       opts = [
         { id: "A", text: g.w1, isCorrect: false },
         { id: "B", text: g.correct, isCorrect: true },
@@ -128,7 +128,7 @@ export function generateCurriculumQuestions(
         },
       ];
       const f = fracQuestions[(i - 1) % fracQuestions.length];
-      qText = `${f.q} (Topic: ${cleanTopic})`;
+      qText = f.q;
       opts = [
         { id: "A", text: f.w1, isCorrect: false },
         { id: "B", text: f.correct, isCorrect: true },
@@ -221,7 +221,7 @@ export function generateCurriculumQuestions(
         },
       ];
       const s = sciQuestions[(i - 1) % sciQuestions.length];
-      qText = `${s.q} (Topic: ${cleanTopic})`;
+      qText = s.q;
       opts = [
         { id: "A", text: s.w1, isCorrect: false },
         { id: "B", text: s.correct, isCorrect: true },
@@ -266,7 +266,7 @@ export function generateCurriculumQuestions(
         },
       ];
       const r = readQuestions[(i - 1) % readQuestions.length];
-      qText = `${r.q} (Topic: ${cleanTopic})`;
+      qText = r.q;
       opts = [
         { id: "A", text: r.w1, isCorrect: false },
         { id: "B", text: r.correct, isCorrect: true },
@@ -275,6 +275,51 @@ export function generateCurriculumQuestions(
       ];
       correct = "B";
       explanation = r.exp;
+    } else if (lowerTopic.includes("coordinate") || lowerTopic.includes("graph") || lowerTopic.includes("plane")) {
+      const coordQuestions = [
+        {
+          q: "In the ordered coordinate pair (4, 7), which number represents the x-coordinate?",
+          correct: "4",
+          w1: "7",
+          w2: "11",
+          w3: "0",
+          exp: "In any ordered pair (x, y), the first number is always the x-coordinate.",
+        },
+        {
+          q: "The point (0, 0) on a coordinate plane where the x-axis and y-axis intersect is called the...",
+          correct: "Origin",
+          w1: "Vertex",
+          w2: "Quadrant",
+          w3: "Midpoint",
+          exp: "The point where the x and y axes cross at (0, 0) is known as the origin.",
+        },
+        {
+          q: "Starting at the origin (0, 0), to plot the point (3, 5), which steps do you take?",
+          correct: "Move 3 units right along the x-axis, then 5 units up",
+          w1: "Move 5 units right, then 3 units up",
+          w2: "Move 3 units up along the y-axis, then 5 units right",
+          w3: "Move 5 units down along the y-axis",
+          exp: "Always move horizontally along the x-axis first (right for positive), then vertically along the y-axis (up for positive).",
+        },
+        {
+          q: "Which axis on a coordinate grid runs horizontally from left to right?",
+          correct: "x-axis",
+          w1: "y-axis",
+          w2: "z-axis",
+          w3: "Origin axis",
+          exp: "The horizontal line is the x-axis, and the vertical line is the y-axis.",
+        },
+      ];
+      const c = coordQuestions[(i - 1) % coordQuestions.length];
+      qText = c.q;
+      opts = [
+        { id: "A", text: c.w1, isCorrect: false },
+        { id: "B", text: c.correct, isCorrect: true },
+        { id: "C", text: c.w2, isCorrect: false },
+        { id: "D", text: c.w3, isCorrect: false },
+      ];
+      correct = "B";
+      explanation = c.exp;
     } else {
       // Default Math arithmetic based on grade level
       const a = i * 3 + 4;
@@ -283,7 +328,7 @@ export function generateCurriculumQuestions(
       const prod = a * b;
 
       if (lowerGrade.includes("k") || lowerGrade.includes("1")) {
-        qText = `What is ${a} + ${b}? (Topic: ${cleanTopic})`;
+        qText = `What is ${a} + ${b}?`;
         opts = [
           { id: "A", text: `${sum - 1}`, isCorrect: false },
           { id: "B", text: `${sum}`, isCorrect: true },
@@ -293,7 +338,7 @@ export function generateCurriculumQuestions(
         correct = "B";
         explanation = `Add step-by-step: ${a} + ${b} = ${sum}.`;
       } else {
-        qText = `What is ${a} × ${b}? (Topic: ${cleanTopic})`;
+        qText = `What is ${a} × ${b}?`;
         opts = [
           { id: "A", text: `${prod - a}`, isCorrect: false },
           { id: "B", text: `${prod}`, isCorrect: true },

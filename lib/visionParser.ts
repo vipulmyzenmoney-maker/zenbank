@@ -20,7 +20,13 @@ Carefully examine this syllabus, textbook table of contents, curriculum sheet, l
 Task:
 1. Accurately identify the exact subject (e.g., Mathematics, Science, English Language Arts, Social Studies, Physics, Chemistry, Biology, History).
 2. Accurately identify the specific grade level (e.g., "5th Grade", "6th Grade", "Kindergarten", "10th Grade", "Undergraduate"). If not explicitly printed, infer the target grade level strictly from the curriculum difficulty of the topics shown.
-3. Extract a concise, accurate course or unit title (e.g., "Grade 5 Mathematics Curriculum", "Fractions & Decimals Unit").
+3. Generate a professional, academic Question Set / Unit Title following standard curriculum conventions:
+   - Format: "[Grade Level] [Subject] • [Unit Theme / Key Topic]"
+   - Examples:
+     * "Grade 5 Mathematics • Unit: Fractions & Decimals"
+     * "Grade 4 Science • Unit: Earth's Systems & Matter"
+     * "Grade 3 English Language Arts • Unit: Context Clues & Vocabulary"
+   - Never use casual slang, lowercase names, or programmer tags like 'custom' or 'batch'.
 4. COMPREHENSIVE, GRANULAR TOPIC EXTRACTION:
    - Extract EVERY SINGLE discrete topic, subtopic, chapter, unit, bullet point, and specific skill visible in the image.
    - DO NOT combine, group, or condense distinct subtopics into broad generic buckets.
@@ -34,7 +40,7 @@ Task:
 
 Return ONLY a valid JSON object matching this schema with no extra conversational text or markdown formatting:
 {
-  "title": "Concise course/unit title",
+  "title": "e.g. Grade 5 Mathematics • Unit: Fractions & Decimals",
   "gradeLevel": "e.g. 5th Grade",
   "subject": "e.g. Mathematics",
   "topics": [
