@@ -17,6 +17,8 @@ import {
   UserCheck,
   Tag,
   Lightbulb,
+  Layers,
+  RefreshCw,
 } from "lucide-react";
 
 interface QuestionItem {
@@ -47,6 +49,7 @@ export default function ReviewPage() {
   const [reviewerName, setReviewerName] = useState("Zen Admin");
   const [stats, setStats] = useState({ total: 0, drafts: 0, verified: 0, flagged: 0 });
   const [simplifyingExplanation, setSimplifyingExplanation] = useState(false);
+  const [batchSize, setBatchSize] = useState<number>(200);
 
   useEffect(() => {
     const saved = localStorage.getItem("zen_reviewer_name");
@@ -100,10 +103,12 @@ export default function ReviewPage() {
     }
   };
 
-  const fetchDrafts = useCallback(async () => {
+  const fetchDrafts = useCallback(async (customLimit?: number) => {
     setLoading(true);
+    const limitToUse = customLimit !== undefined ? customLimit : batchSize;
     try {
-      const res = await fetch("/api/questions?status=draft&limit=200");
+      const limitParam = limitToUse === 0 ? "5000" : String(limitToUse);
+      const res = await fetch(`/api/questions?status=draft&limit=${limitParam}`);
       const data = await res.json();
       setQuestions(data.questions || []);
       setStats(data.stats || { total: 0, drafts: 0, verified: 0, flagged: 0 });
@@ -113,7 +118,7 @@ export default function ReviewPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [batchSize]);
 
   useEffect(() => {
     fetchDrafts();
@@ -138,14 +143,21 @@ export default function ReviewPage() {
           }),
         });
       }
+      const remainingCount = questions.length - 1;
       setQuestions((prev) => prev.filter((_, i) => i !== currentIdx));
       if (currentIdx >= questions.length - 1) setCurrentIdx(Math.max(0, currentIdx - 1));
+      const newDraftsCount = Math.max(0, stats.drafts - 1);
       setStats((prev) => ({
         ...prev,
-        drafts: Math.max(0, prev.drafts - 1),
+        drafts: newDraftsCount,
         verified: action === "approve" ? prev.verified + 1 : prev.verified,
         flagged: action === "flag" ? prev.flagged + 1 : prev.flagged,
       }));
+
+      // Auto-refill: if loaded chunk is emptied and there are still drafts in DB, automatically pull next slice!
+      if (remainingCount === 0 && newDraftsCount > 0) {
+        fetchDrafts();
+      }
     } catch {
       // ignore
     } finally {
@@ -167,10 +179,17 @@ export default function ReviewPage() {
           verifiedBy: reviewerName || "Zen Reviewer",
         }),
       });
+      const remainingCount = questions.length - 1;
       setQuestions((prev) => prev.filter((_, i) => i !== currentIdx));
       if (currentIdx >= questions.length - 1) setCurrentIdx(Math.max(0, currentIdx - 1));
-      setStats((prev) => ({ ...prev, drafts: Math.max(0, prev.drafts - 1), verified: prev.verified + 1 }));
+      const newDraftsCount = Math.max(0, stats.drafts - 1);
+      setStats((prev) => ({ ...prev, drafts: newDraftsCount, verified: prev.verified + 1 }));
       setEditMode(false);
+
+      // Auto-refill: if loaded chunk is emptied and there are still drafts in DB, automatically pull next slice!
+      if (remainingCount === 0 && newDraftsCount > 0) {
+        fetchDrafts();
+      }
     } catch {
       // ignore
     } finally {
@@ -275,6 +294,27 @@ export default function ReviewPage() {
               />
             </div>
 
+            {/* Queue Batch Size Selector */}
+            <div className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950 px-2.5 py-1">
+              <Layers className="h-3.5 w-3.5 text-cyan-400" />
+              <span className="text-[11px] font-bold text-slate-400">Load:</span>
+              <select
+                value={batchSize}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  setBatchSize(val);
+                  fetchDrafts(val);
+                }}
+                className="bg-transparent text-xs font-bold text-cyan-300 focus:outline-none cursor-pointer"
+              >
+                <option value={100} className="bg-slate-900 text-white">100 / batch</option>
+                <option value={200} className="bg-slate-900 text-white">200 / batch (Default)</option>
+                <option value={500} className="bg-slate-900 text-white">500 / batch</option>
+                <option value={1000} className="bg-slate-900 text-white">1,000 / batch</option>
+                <option value={0} className="bg-slate-900 text-white">All Drafts ({stats.drafts})</option>
+              </select>
+            </div>
+
             <div className="flex items-center gap-1.5 text-xs font-bold">
               <span className="rounded-lg bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 text-amber-400">
                 {stats.drafts} Drafts
@@ -306,21 +346,42 @@ export default function ReviewPage() {
         </div>
 
         {/* Empty State */}
-        {questions.length === 0 && (
+        {questions.length === 0 && !loading && (
           <div className="mt-16 rounded-3xl border border-slate-800 bg-slate-900/50 p-12 text-center backdrop-blur-xl">
-            <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-400" />
-            <h2 className="mt-3 font-display text-xl font-bold text-white">All Drafts Reviewed!</h2>
-            <p className="mt-1 text-xs text-slate-400">
-              No pending questions in queue. Use the syllabus upload or generator to create more.
-            </p>
-            <div className="mt-5">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-2.5 text-xs font-extrabold text-slate-950 hover:bg-emerald-400 transition-all"
-              >
-                Go to Syllabus Generator <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
+            {stats.drafts > 0 ? (
+              <>
+                <Zap className="mx-auto h-12 w-12 text-amber-400 animate-pulse" />
+                <h2 className="mt-3 font-display text-xl font-bold text-white">Batch Completed!</h2>
+                <p className="mt-1 text-xs text-slate-400 max-w-md mx-auto">
+                  You finished reviewing this batch. There are still <span className="font-extrabold text-amber-300">{stats.drafts} drafts</span> remaining in your database.
+                </p>
+                <div className="mt-5">
+                  <button
+                    onClick={() => fetchDrafts()}
+                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-xs font-extrabold text-slate-950 hover:opacity-90 transition-all shadow-md shadow-emerald-500/20"
+                  >
+                    <ArrowRight className="h-3.5 w-3.5" />
+                    Load Next Batch ({Math.min(stats.drafts, batchSize || stats.drafts)} Qs)
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-400" />
+                <h2 className="mt-3 font-display text-xl font-bold text-white">All Drafts Reviewed!</h2>
+                <p className="mt-1 text-xs text-slate-400">
+                  No pending questions in queue. Use the syllabus upload or generator to create more.
+                </p>
+                <div className="mt-5">
+                  <Link
+                    href="/"
+                    className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-2.5 text-xs font-extrabold text-slate-950 hover:bg-emerald-400 transition-all"
+                  >
+                    Go to Syllabus Generator <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         )}
 
@@ -336,9 +397,16 @@ export default function ReviewPage() {
               >
                 <ChevronLeft className="h-4 w-4" /> Prev
               </button>
-              <span>
-                Question {currentIdx + 1} of {questions.length}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-white font-extrabold">
+                  Question {currentIdx + 1} of {questions.length} loaded
+                </span>
+                {stats.drafts > questions.length && (
+                  <span className="text-[10px] font-bold text-amber-300 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-md hidden sm:inline-block">
+                    {stats.drafts} total in queue
+                  </span>
+                )}
+              </div>
               <button
                 onClick={() => setCurrentIdx((i) => Math.min(i + 1, questions.length - 1))}
                 disabled={currentIdx === questions.length - 1}
