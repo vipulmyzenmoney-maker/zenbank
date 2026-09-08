@@ -21,27 +21,21 @@ export async function POST() {
 
 async function handleCleanup() {
   try {
-    // 1. Find all questions that contain "(Topic:"
-    const dirtyQuestions = await prisma.question.findMany({
-      where: {
-        questionText: {
-          contains: "(Topic:",
-        },
-      },
+    // 1. Find all questions and clean any topic tags or trailing parens
+    const allQuestions = await prisma.question.findMany({
       select: {
         id: true,
         questionText: true,
-        topic: true,
       },
     });
 
     let cleanedQuestionsCount = 0;
 
-    for (const q of dirtyQuestions) {
-      // Clean string: remove " (Topic: ...)" even if the topic contains nested parentheses like (x, y)
-      const cleanText = q.questionText
-        .replace(/\s*\(Topic:.*\)$/gi, "")
-        .replace(/\s*\(Topic:[^)]+\)/gi, "")
+    for (const q of allQuestions) {
+      let cleanText = q.questionText
+        .replace(/\s*\(Topic:[^)]*\)?/gi, "")
+        .replace(/\s*\(Topic:.*$/gi, "")
+        .replace(/\?\)+$/g, "?")
         .trim();
 
       if (cleanText !== q.questionText) {
@@ -88,7 +82,7 @@ async function handleCleanup() {
         success: true,
         cleanedQuestionsCount,
         updatedPacksCount,
-        totalDirtyFound: dirtyQuestions.length,
+        totalQuestionsChecked: allQuestions.length,
       },
       { headers: corsHeaders }
     );
