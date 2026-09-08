@@ -38,8 +38,9 @@ async function handleCleanup() {
     let cleanedQuestionsCount = 0;
 
     for (const q of dirtyQuestions) {
-      // Clean string: remove " (Topic: ...)"
+      // Clean string: remove " (Topic: ...)" even if the topic contains nested parentheses like (x, y)
       const cleanText = q.questionText
+        .replace(/\s*\(Topic:.*\)$/gi, "")
         .replace(/\s*\(Topic:[^)]+\)/gi, "")
         .trim();
 
