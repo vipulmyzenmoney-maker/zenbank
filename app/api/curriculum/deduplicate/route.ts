@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { normalizeQuestionText } from "@/lib/deduplication";
+import { normalizeQuestionText, getStructuralSkeleton } from "@/lib/deduplication";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +28,7 @@ function getTopicRelevance(questionText: string, topic: string): number {
 export async function POST(req: NextRequest) {
   try {
     const crossTopic = req.nextUrl.searchParams.get("crossTopic") === "true";
+    const structural = req.nextUrl.searchParams.get("structural") === "true";
 
     const allQuestions = await prisma.question.findMany({
       select: {
@@ -42,16 +43,23 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Group questions by normalized text
+    // Group questions by normalized text or structural skeleton
     // If crossTopic is true, group across topics within the same grade and subject.
     // Otherwise group strictly within the same (grade, subject, topic).
     const groups = new Map<string, typeof allQuestions>();
 
     for (const q of allQuestions) {
-      const normText = normalizeQuestionText(q.questionText);
+      let textKey = normalizeQuestionText(q.questionText);
+      if (structural && q.questionText.length <= 110) {
+        const skel = getStructuralSkeleton(q.questionText);
+        if (skel.includes("<NUM>") || skel.includes("<FRAC>") || skel.includes("<NAME>")) {
+          textKey = `skel::${skel}`;
+        }
+      }
+
       const groupKey = crossTopic
-        ? `${q.gradeLevel.trim().toLowerCase()}::${normText}`
-        : `${q.gradeLevel.trim().toLowerCase()}::${q.subject.trim().toLowerCase()}::${q.topic.trim().toLowerCase()}::${normText}`;
+        ? `${q.gradeLevel.trim().toLowerCase()}::${textKey}`
+        : `${q.gradeLevel.trim().toLowerCase()}::${q.subject.trim().toLowerCase()}::${q.topic.trim().toLowerCase()}::${textKey}`;
 
       if (!groups.has(groupKey)) {
         groups.set(groupKey, []);
@@ -112,7 +120,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        message: `Successfully resolved ${duplicateGroupsCount} duplicate groups and removed ${deletedCount} redundant question rows (crossTopic: ${crossTopic}).`,
+        message: `Successfully resolved ${duplicateGroupsCount} duplicate groups and removed ${deletedCount} redundant question rows (crossTopic: ${crossTopic}, structural: ${structural}).`,
         totalScanned: allQuestions.length,
         duplicateGroups: duplicateGroupsCount,
         deletedCount,
