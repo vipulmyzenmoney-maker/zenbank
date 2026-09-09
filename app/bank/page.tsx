@@ -25,7 +25,8 @@ import {
   Lightbulb,
   X,
   SlidersHorizontal,
-  Pencil
+  Pencil,
+  Shuffle
 } from "lucide-react";
 
 interface SyllabusPackSummary {
@@ -88,6 +89,7 @@ export default function BankPage() {
   // Selection state for manual multi-delete
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [actionLoading, setActionLoading] = useState(false);
+  const [shuffling, setShuffling] = useState(false);
 
   // Batch deletion confirmation modal state
   const [batchDeleteTarget, setBatchDeleteTarget] = useState<{
@@ -239,6 +241,29 @@ export default function BankPage() {
       alert("Failed to delete questions.");
     } finally {
       setActionLoading(false);
+    }
+  };
+
+  // Uniformly re-shuffle MCQ options across A, B, C, D in database
+  const handleReshuffleOptions = async () => {
+    if (!confirm("Re-shuffle all MCQ options in the database evenly across A, B, C, and D?")) return;
+    setShuffling(true);
+    try {
+      const res = await fetch("/api/curriculum/reshuffle-options", { method: "POST" });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        alert(
+          `Success! Shuffled ${data.updatedCount} questions evenly across A, B, C, and D.\n\nNew distribution:\nA: ${data.afterDistribution.A || 0} | B: ${data.afterDistribution.B || 0} | C: ${data.afterDistribution.C || 0} | D: ${data.afterDistribution.D || 0}`
+        );
+        fetchQuestions();
+      } else {
+        alert("Failed to reshuffle questions: " + (data.error || "Unknown error"));
+      }
+    } catch (err) {
+      console.error("Reshuffle error:", err);
+      alert("Error reshuffling options.");
+    } finally {
+      setShuffling(false);
     }
   };
 
@@ -448,6 +473,15 @@ export default function BankPage() {
             >
               <Layers className="h-3.5 w-3.5 text-cyan-400" />
               Question Sets ({batches.length})
+            </button>
+            <button
+              onClick={handleReshuffleOptions}
+              disabled={shuffling}
+              className="flex items-center gap-1.5 rounded-xl border border-purple-500/40 bg-purple-500/10 px-3.5 py-2 text-xs font-bold text-purple-300 hover:bg-purple-500/20 hover:text-white transition-all shadow-xs disabled:opacity-50"
+              title="Evenly randomize MCQ options across A, B, C, D"
+            >
+              <Shuffle className={`h-3.5 w-3.5 text-purple-400 ${shuffling ? "animate-spin" : ""}`} />
+              {shuffling ? "Shuffling..." : "Balance MCQ Shuffle"}
             </button>
             <button
               onClick={handleExportCSV}

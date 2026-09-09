@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import Groq from "groq-sdk";
 import { groq, GENERATION_MODEL } from "@/lib/groq";
 import { generateCurriculumQuestions } from "@/lib/fallbackGenerator";
+import { shuffleMcqOptions } from "@/lib/shuffle";
 
 export const dynamic = "force-dynamic";
 
@@ -91,7 +92,7 @@ Difficulty Distribution:
 For each question, provide:
 1. A clear, challenging, and age-appropriate question text that is specifically about ${subject}
 2. Exactly 4 options (A, B, C, D) with exactly one definitively correct answer and 3 realistic distractors reflecting common student errors
-3. The letter of the correct answer (randomize between A, B, C, D)
+3. The letter of the correct answer: MUST be generously and evenly distributed across A, B, C, and D across the set (~25% each). DO NOT bias toward B or any single letter!
 4. A KID-FRIENDLY, EASY-TO-UNDERSTAND EXPLANATION (CRITICAL REQUIREMENT):
    - MUST be written directly to a ${gradeLevel} student in warm, encouraging, simple language that a child can read on their own.
    - NEVER write internal AI thoughts, model reasoning processes, or test-maker commentary.
@@ -103,18 +104,18 @@ For each question, provide:
 5. Difficulty level ("easy", "medium", or "hard")
 6. A confidence score from 92-100
 
-Return ONLY valid JSON in this exact format with no extra text:
+Return ONLY valid JSON in this exact format with no extra text (ensure correct answers are evenly spread across A, B, C, D):
 {
   "questions": [
     {
       "questionText": "...",
       "options": [
-        {"id": "A", "text": "...", "isCorrect": false},
-        {"id": "B", "text": "...", "isCorrect": true},
+        {"id": "A", "text": "...", "isCorrect": true},
+        {"id": "B", "text": "...", "isCorrect": false},
         {"id": "C", "text": "...", "isCorrect": false},
         {"id": "D", "text": "...", "isCorrect": false}
       ],
-      "correctAnswer": "B",
+      "correctAnswer": "A",
       "explanation": "Step 1: ... Step 2: ... 💡 Helpful Tip: ...",
       "difficulty": "medium",
       "confidence": 96
@@ -194,11 +195,16 @@ function sanitizeKidExplanation(raw: string): string {
     topicQuestions = generateCurriculumQuestions(topic, subject, gradeLevel, count);
   }
 
-  // Ensure all explanations are sanitized and kid-friendly
-  return topicQuestions.map((q) => ({
-    ...q,
-    explanation: sanitizeKidExplanation(q.explanation),
-  }));
+  // Uniformly shuffle MCQ options across A, B, C, D and ensure explanations are sanitized
+  return topicQuestions.map((q) => {
+    const shuffled = shuffleMcqOptions(q.options, q.correctAnswer);
+    return {
+      ...q,
+      options: shuffled.options,
+      correctAnswer: shuffled.correctAnswer,
+      explanation: sanitizeKidExplanation(q.explanation),
+    };
+  });
 }
 
 export async function POST(req: NextRequest) {

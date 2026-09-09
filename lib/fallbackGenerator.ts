@@ -1,3 +1,5 @@
+import { shuffleMcqOptions } from "./shuffle";
+
 export interface GeneratedQuestion {
   questionText: string;
   options: { id: string; text: string; isCorrect: boolean }[];
@@ -421,10 +423,12 @@ export function generateCurriculumQuestions(
       explanation = gen.exp;
     }
 
+    const shuffled = shuffleMcqOptions(opts, correct);
+
     questions.push({
       questionText: qText,
-      options: opts,
-      correctAnswer: correct,
+      options: shuffled.options,
+      correctAnswer: shuffled.correctAnswer,
       explanation,
       difficulty,
       confidence,
