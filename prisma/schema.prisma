@@ -41,6 +41,7 @@ model Question {
   syllabusPack   SyllabusPack? @relation(fields: [syllabusPackId], references: [id], onDelete: SetNull)
 
   @@index([status])
-  @@index([gradeLevel, subject])
+  @@index([gradeLevel, subject, topic])
+  @@index([gradeLevel, status])
   @@map("questions")
 }
