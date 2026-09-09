@@ -17,11 +17,17 @@ export async function GET(req: NextRequest) {
     const status = searchParams.get("status");
     const search = searchParams.get("search");
     const batchId = searchParams.get("batchId");
+    const topic = searchParams.get("topic");
+    const gradeLevel = searchParams.get("gradeLevel");
+    const subject = searchParams.get("subject");
     const limit = parseInt(searchParams.get("limit") || "100", 10);
 
     const where: Record<string, unknown> = {};
     if (status && status !== "all") where.status = status;
     if (batchId && batchId !== "all") where.syllabusPackId = BigInt(batchId);
+    if (topic && topic !== "all") where.topic = { equals: topic, mode: "insensitive" };
+    if (gradeLevel && gradeLevel !== "all") where.gradeLevel = { contains: gradeLevel, mode: "insensitive" };
+    if (subject && subject !== "all") where.subject = { contains: subject, mode: "insensitive" };
     if (search) {
       where.questionText = { contains: search, mode: "insensitive" };
     }

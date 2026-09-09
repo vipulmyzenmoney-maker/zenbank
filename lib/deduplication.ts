@@ -2,9 +2,9 @@
  * Question Deduplication & Semantic Similarity Engine for Zen Bank
  *
  * Prevents repetitive questions by:
- * 1. Normalizing question text (lowercasing, punctuation stripping, stop words, stem trimming)
+ * 1. Normalizing question text (lowercasing, punctuation stripping, math symbols)
  * 2. Computing token-level Jaccard similarity and character-level Levenshtein similarity
- * 3. Detecting exact matches and high-similarity paraphrases
+ * 3. Detecting structural/formulaic templates (e.g., repeating bare calculation drills)
  * 4. Filtering newly generated batches against existing database questions
  */
 
@@ -23,10 +23,45 @@ export function normalizeQuestionText(text: string): string {
     // Remove punctuation
     .replace(/[^a-z0-9\s/]/g, "")
     // Remove common question prefixes that don't add semantic uniqueness
-    .replace(/^(what is|which of the following|calculate|find the|determine the|solve for|how much is|identify the)\s+/i, "")
+    .replace(/^(what is|which of the following|calculate|find the|determine the|solve for|how much is|identify the|evaluate)\s+/i, "")
     // Normalize whitespace
     .replace(/\s+/g, " ")
     .trim();
+}
+
+/**
+ * Extracts a structural skeleton of a question to detect formulaic repetition.
+ * Replaces numbers, fractions, and student names with placeholders.
+ * e.g., "What is 13 × 9?" -> "<NUM> x <NUM>"
+ * e.g., "What is 16 × 11?" -> "<NUM> x <NUM>"
+ */
+export function getStructuralSkeleton(text: string): string {
+  return normalizeQuestionText(text)
+    .replace(/\b\d+\s*\/\s*\d+\b/g, "<FRAC>")
+    .replace(/\b\d+(\.\d+)?\b/g, "<NUM>")
+    .replace(
+      /\b(aarav|priya|maya|lucas|elena|rohan|chloe|zayn|ananya|liam|john|sarah|emma|alex|david|maria)\b/gi,
+      "<NAME>"
+    );
+}
+
+/**
+ * Detects whether two questions share an identical short formulaic structure.
+ */
+export function isStructuralDuplicate(candidate: string, existingList: string[]): boolean {
+  // Only apply to concise formulaic questions (under 75 characters)
+  if (candidate.length > 75) return false;
+  const skelCandidate = getStructuralSkeleton(candidate);
+
+  for (const existing of existingList) {
+    if (existing.length <= 75) {
+      const skelExisting = getStructuralSkeleton(existing);
+      if (skelCandidate === skelExisting) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 /**
@@ -94,7 +129,6 @@ export function calculateSimilarity(textA: string, textB: string): number {
 
   const jaccard = jaccardSimilarity(textA, textB);
 
-  // If token overlap is already high, compute Levenshtein ratio for fine verification
   const maxLen = Math.max(normA.length, normB.length);
   if (maxLen === 0) return 1.0;
   const levRatio = 1.0 - levenshteinDistance(normA, normB) / maxLen;
@@ -105,12 +139,13 @@ export function calculateSimilarity(textA: string, textB: string): number {
 
 /**
  * Tests whether a candidate question is duplicate or near-duplicate to any question in existingList.
- * Default threshold is 0.70 (70% similarity).
+ * Default threshold is 0.68 (68% similarity).
+ * Also checks structural skeleton equality.
  */
 export function isDuplicate(
   candidate: string,
   existingList: string[],
-  threshold = 0.70
+  threshold = 0.68
 ): boolean {
   const normCandidate = normalizeQuestionText(candidate);
   if (!normCandidate) return false;
@@ -121,11 +156,16 @@ export function isDuplicate(
     if (normCandidate === normExisting) {
       return true;
     }
-    // 2. High similarity match
+    // 2. High lexical / token similarity match
     const sim = calculateSimilarity(candidate, existing);
     if (sim >= threshold) {
       return true;
     }
+  }
+
+  // 3. Check structural formulaic duplication
+  if (isStructuralDuplicate(candidate, existingList)) {
+    return true;
   }
 
   return false;
@@ -144,7 +184,7 @@ export interface CandidateQuestion {
 export function filterDuplicates<T extends CandidateQuestion>(
   batch: T[],
   existingQuestions: string[],
-  threshold = 0.70
+  threshold = 0.68
 ): { uniqueQuestions: T[]; duplicatesFound: number } {
   const seenTexts: string[] = [...existingQuestions];
   const uniqueQuestions: T[] = [];
