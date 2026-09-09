@@ -26,7 +26,8 @@ import {
   X,
   SlidersHorizontal,
   Pencil,
-  Shuffle
+  Shuffle,
+  CopyCheck
 } from "lucide-react";
 
 interface SyllabusPackSummary {
@@ -267,6 +268,29 @@ export default function BankPage() {
     }
   };
 
+  const [deduplicating, setDeduplicating] = useState(false);
+  const handleDeduplicate = async () => {
+    if (!confirm("Scan for and remove redundant duplicate questions from the database? This keeps the best verified version and deletes exact duplicates.")) return;
+    setDeduplicating(true);
+    try {
+      const res = await fetch("/api/curriculum/deduplicate", { method: "POST" });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        alert(
+          `Deduplication Complete!\n\n${data.message}\nTotal Scanned: ${data.totalScanned}\nDuplicate Groups: ${data.duplicateGroups}\nDeleted Duplicates: ${data.deletedCount}\nRemaining Unique: ${data.retainedCount}`
+        );
+        fetchQuestions();
+      } else {
+        alert("Deduplication failed: " + (data.error || "Unknown error"));
+      }
+    } catch (err) {
+      console.error("Deduplication error:", err);
+      alert("Error running deduplication.");
+    } finally {
+      setDeduplicating(false);
+    }
+  };
+
   // Shortcut to Delete an Entire Generation Batch
   const handleConfirmDeleteBatch = async () => {
     if (!batchDeleteTarget) return;
@@ -482,6 +506,15 @@ export default function BankPage() {
             >
               <Shuffle className={`h-3.5 w-3.5 text-purple-400 ${shuffling ? "animate-spin" : ""}`} />
               {shuffling ? "Shuffling..." : "Balance MCQ Shuffle"}
+            </button>
+            <button
+              onClick={handleDeduplicate}
+              disabled={deduplicating}
+              className="flex items-center gap-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-3.5 py-2 text-xs font-bold text-emerald-300 hover:bg-emerald-500/20 hover:text-white transition-all shadow-xs disabled:opacity-50"
+              title="Scan and remove redundant duplicate questions"
+            >
+              <CopyCheck className={`h-3.5 w-3.5 text-emerald-400 ${deduplicating ? "animate-spin" : ""}`} />
+              {deduplicating ? "Cleaning..." : "Deduplicate & Clean"}
             </button>
             <button
               onClick={handleExportCSV}

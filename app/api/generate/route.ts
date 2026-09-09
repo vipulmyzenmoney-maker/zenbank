@@ -4,6 +4,7 @@ import Groq from "groq-sdk";
 import { groq, GENERATION_MODEL } from "@/lib/groq";
 import { generateCurriculumQuestions } from "@/lib/fallbackGenerator";
 import { shuffleMcqOptions } from "@/lib/shuffle";
+import { filterDuplicates } from "@/lib/deduplication";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,7 @@ async function generateQuestionsForTopic({
   geminiKey,
   activeGroqKey,
   groqClient,
+  existingQuestions = [],
 }: {
   topic: string;
   subject: string;
@@ -32,6 +34,7 @@ async function generateQuestionsForTopic({
   geminiKey?: string;
   activeGroqKey?: string;
   groqClient: Groq;
+  existingQuestions?: string[];
 }): Promise<TopicQuestion[]> {
   // Build subject-specific diversity categories for the prompt
   const lowerSubject = subject.toLowerCase();
@@ -70,15 +73,24 @@ async function generateQuestionsForTopic({
 5. Critical Thinking & Evaluation (comparing viewpoints, identifying errors, synthesizing information)`;
   }
 
+  const antiDuplicationDirective =
+    existingQuestions.length > 0
+      ? `\nCRITICAL ANTI-DUPLICATION RULE (ZERO REPETITION):
+The following questions ALREADY EXIST in our database for this topic. You MUST NOT duplicate, rephrase, copy, or make minor number/word swaps of any of these:
+${existingQuestions.slice(0, 20).map((q, idx) => `  ${idx + 1}. "${q}"`).join("\n")}
+
+Every single question you generate MUST introduce a completely NEW angle, fresh real-world scenario, distinct numbers, or alternative problem format!\n`
+      : "";
+
   const prompt = `You are an expert K-12 curriculum specialist and assessment designer.
-Generate exactly ${count} diverse, high-quality multiple-choice questions for:
+Generate exactly ${count} diverse, high-quality, completely unique multiple-choice questions for:
 - Grade Level: ${gradeLevel}
 - Subject: ${subject}
 - Topic: ${topic}
 
 CRITICAL REQUIREMENT — SUBJECT ACCURACY:
 You MUST generate questions strictly about "${subject}" on the topic "${topic}". Do NOT generate questions about any other subject. Every question must be directly and specifically about ${subject} content.
-
+${antiDuplicationDirective}
 CRITICAL REQUIREMENT — HIGH DIVERSITY & COMPREHENSIVE COVERAGE:
 Every single question of the ${count} questions MUST test a distinctly DIFFERENT concept, scenario, or angle of "${topic}". DO NOT repeat question formats or make simple variations.
 Distribute the ${count} questions across:
@@ -123,7 +135,6 @@ Return ONLY valid JSON in this exact format with no extra text (ensure correct a
   ]
 }`;
 
-
   let topicQuestions: TopicQuestion[] = [];
 
   // 1. Attempt generation with Google Gemini 2.0 Flash
@@ -138,7 +149,7 @@ Return ONLY valid JSON in this exact format with no extra text (ensure correct a
             contents: [{ parts: [{ text: prompt }] }],
             generationConfig: {
               response_mime_type: "application/json",
-              temperature: 0.3,
+              temperature: 0.75,
             },
           }),
         }
@@ -164,7 +175,7 @@ Return ONLY valid JSON in this exact format with no extra text (ensure correct a
       const completion = await groqClient.chat.completions.create({
         model: GENERATION_MODEL,
         messages: [{ role: "user", content: prompt }],
-        temperature: 0.3,
+        temperature: 0.75,
         max_tokens: 6000,
         response_format: { type: "json_object" },
       });
@@ -181,22 +192,32 @@ Return ONLY valid JSON in this exact format with no extra text (ensure correct a
     }
   }
 
-function sanitizeKidExplanation(raw: string): string {
-  if (!raw) return "";
-  return raw
-    .replace(/<think>[\s\S]*?<\/think>/gi, "")
-    .replace(/^(thinking process|reasoning|internal analysis|rationale):\s*/gi, "")
-    .replace(/(?:distractor|misconception)\s+[A-D]\b[^.\n]*[.\n]?/gi, "")
-    .trim();
-}
+  function sanitizeKidExplanation(raw: string): string {
+    if (!raw) return "";
+    return raw
+      .replace(/<think>[\s\S]*?<\/think>/gi, "")
+      .replace(/^(thinking process|reasoning|internal analysis|rationale):\s*/gi, "")
+      .replace(/(?:distractor|misconception)\s+[A-D]\b[^.\n]*[.\n]?/gi, "")
+      .trim();
+  }
 
-  // 3. If AI did not return questions or no key, use curriculum template engine
-  if (topicQuestions.length === 0) {
-    topicQuestions = generateCurriculumQuestions(topic, subject, gradeLevel, count);
+  // 3. Deduplicate AI-generated questions against existing DB questions and intra-batch
+  let validBatch: TopicQuestion[] = [];
+  if (topicQuestions.length > 0) {
+    const { uniqueQuestions } = filterDuplicates(topicQuestions, existingQuestions, 0.70);
+    validBatch = uniqueQuestions;
+  }
+
+  // 4. Backfill any missing questions if AI failed or returned duplicates
+  if (validBatch.length < count) {
+    const needed = count - validBatch.length;
+    const allSeen = [...existingQuestions, ...validBatch.map((q) => q.questionText)];
+    const backfills = generateCurriculumQuestions(topic, subject, gradeLevel, needed, allSeen);
+    validBatch = [...validBatch, ...backfills];
   }
 
   // Uniformly shuffle MCQ options across A, B, C, D and ensure explanations are sanitized
-  return topicQuestions.map((q) => {
+  return validBatch.map((q) => {
     const shuffled = shuffleMcqOptions(q.options, q.correctAnswer);
     return {
       ...q,
@@ -293,7 +314,19 @@ export async function POST(req: NextRequest) {
                 )
               );
 
-              // Formulate questions for this topic
+              // Fetch existing questions for this topic to guarantee 0 repetition
+              const existingRecords = await prisma.question.findMany({
+                where: {
+                  gradeLevel,
+                  subject,
+                  topic,
+                },
+                select: { questionText: true },
+                take: 25,
+              });
+              const existingQuestions = existingRecords.map((r) => r.questionText);
+
+              // Formulate questions for this topic with anti-duplication memory
               const topicQuestions = await generateQuestionsForTopic({
                 topic,
                 subject,
@@ -302,11 +335,27 @@ export async function POST(req: NextRequest) {
                 geminiKey,
                 activeGroqKey,
                 groqClient,
+                existingQuestions,
               });
 
-              // Save to database
+              // Save to database with pre-insert duplicate check
               for (const q of topicQuestions) {
                 try {
+                  const alreadyExists = await prisma.question.findFirst({
+                    where: {
+                      gradeLevel,
+                      subject,
+                      topic,
+                      questionText: q.questionText,
+                    },
+                    select: { id: true },
+                  });
+
+                  if (alreadyExists) {
+                    console.log(`Skipped existing duplicate question in DB: "${q.questionText.slice(0, 45)}..."`);
+                    continue;
+                  }
+
                   await prisma.question.create({
                     data: {
                       syllabusPackId: pack.id,
@@ -392,6 +441,17 @@ export async function POST(req: NextRequest) {
     let totalGenerated = 0;
     for (let i = 0; i < totalTopics; i++) {
       const topic = topics[i];
+      const existingRecords = await prisma.question.findMany({
+        where: {
+          gradeLevel,
+          subject,
+          topic,
+        },
+        select: { questionText: true },
+        take: 25,
+      });
+      const existingQuestions = existingRecords.map((r) => r.questionText);
+
       const topicQuestions = await generateQuestionsForTopic({
         topic,
         subject,
@@ -400,10 +460,26 @@ export async function POST(req: NextRequest) {
         geminiKey,
         activeGroqKey,
         groqClient,
+        existingQuestions,
       });
 
       for (const q of topicQuestions) {
         try {
+          const alreadyExists = await prisma.question.findFirst({
+            where: {
+              gradeLevel,
+              subject,
+              topic,
+              questionText: q.questionText,
+            },
+            select: { id: true },
+          });
+
+          if (alreadyExists) {
+            console.log(`Skipped existing duplicate question in DB: "${q.questionText.slice(0, 45)}..."`);
+            continue;
+          }
+
           await prisma.question.create({
             data: {
               syllabusPackId: pack.id,
