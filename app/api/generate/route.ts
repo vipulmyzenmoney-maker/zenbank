@@ -32,28 +32,64 @@ async function generateQuestionsForTopic({
   activeGroqKey?: string;
   groqClient: Groq;
 }): Promise<TopicQuestion[]> {
+  // Build subject-specific diversity categories for the prompt
+  const lowerSubject = subject.toLowerCase();
+  let diversityCategories: string;
+
+  if (lowerSubject.includes("math") || lowerSubject.includes("arithmetic") || lowerSubject.includes("algebra") || lowerSubject.includes("calculus")) {
+    diversityCategories = `1. Conceptual Understanding & Definitions (core mathematical principles, properties, reasoning why rules work)
+2. Procedural Problem Solving (step-by-step computation, multi-digit operations, standard algorithms)
+3. Real-World Applications & Multi-Step Word Problems (practical everyday scenarios, financial/measurement contexts)
+4. Visual, Spatial & Model Reasoning (interpreting number lines, area models, grids, geometric diagrams, charts)
+5. Error Analysis & Common Misconceptions ("Which step contains an error?", identifying flawed reasoning)`;
+  } else if (lowerSubject.includes("social") || lowerSubject.includes("history") || lowerSubject.includes("geography") || lowerSubject.includes("civics") || lowerSubject.includes("political") || lowerSubject.includes("economics")) {
+    diversityCategories = `1. Factual Knowledge & Key Events (important dates, people, places, landmark events, treaties, and movements)
+2. Conceptual Understanding (why events happened, cause-and-effect relationships, significance of historical developments)
+3. Map Skills & Geographic Reasoning (locations, physical features, climate zones, resource distribution, reading maps)
+4. Governance, Civics & Constitutional Awareness (forms of government, rights, duties, democratic institutions, laws)
+5. Critical Analysis & Source Interpretation (analyzing perspectives, comparing viewpoints, distinguishing fact from opinion)`;
+  } else if (lowerSubject.includes("science") || lowerSubject.includes("physics") || lowerSubject.includes("chemistry") || lowerSubject.includes("biology")) {
+    diversityCategories = `1. Conceptual Understanding & Definitions (core scientific principles, laws, properties, and terminology)
+2. Process & Experimental Reasoning (scientific method, hypothesis testing, lab procedures, controlled variables)
+3. Real-World Applications (practical scenarios, environmental impact, technology, health, everyday phenomena)
+4. Diagram & Data Interpretation (reading charts, graphs, diagrams, life cycles, anatomical structures, periodic table)
+5. Analysis & Critical Thinking (predicting outcomes, cause-effect reasoning, comparing scientific models)`;
+  } else if (lowerSubject.includes("english") || lowerSubject.includes("language") || lowerSubject.includes("reading") || lowerSubject.includes("literature") || lowerSubject.includes("writing")) {
+    diversityCategories = `1. Reading Comprehension & Main Idea (understanding passages, identifying themes, summarizing text)
+2. Vocabulary, Grammar & Word Usage (context clues, prefixes/suffixes, parts of speech, sentence structure)
+3. Literary Devices & Figurative Language (simile, metaphor, personification, alliteration, imagery, irony)
+4. Writing Skills & Text Structure (narrative, persuasive, expository structures, paragraph organization)
+5. Critical Analysis & Inference (author's purpose, point of view, drawing conclusions from text evidence)`;
+  } else {
+    // Generic fallback for any other subject
+    diversityCategories = `1. Factual Knowledge & Key Concepts (core facts, definitions, terminology, and foundational ideas of ${subject})
+2. Conceptual Understanding (deeper "why" and "how" reasoning, cause-and-effect, relationships between concepts)
+3. Real-World Applications & Scenarios (practical everyday connections, current events, relatable examples)
+4. Analysis & Interpretation (reading diagrams, charts, maps, images, or data related to ${subject})
+5. Critical Thinking & Evaluation (comparing viewpoints, identifying errors, synthesizing information)`;
+  }
+
   const prompt = `You are an expert K-12 curriculum specialist and assessment designer.
 Generate exactly ${count} diverse, high-quality multiple-choice questions for:
 - Grade Level: ${gradeLevel}
 - Subject: ${subject}
 - Topic: ${topic}
 
-CRITICAL REQUIREMENT - HIGH DIVERSITY & COMPREHENSIVE COVERAGE:
-Every single question of the ${count} questions MUST test a distinctly DIFFERENT concept, scenario, or angle of "${topic}". DO NOT repeat question formats or make simple number variations.
+CRITICAL REQUIREMENT — SUBJECT ACCURACY:
+You MUST generate questions strictly about "${subject}" on the topic "${topic}". Do NOT generate questions about any other subject. Every question must be directly and specifically about ${subject} content.
+
+CRITICAL REQUIREMENT — HIGH DIVERSITY & COMPREHENSIVE COVERAGE:
+Every single question of the ${count} questions MUST test a distinctly DIFFERENT concept, scenario, or angle of "${topic}". DO NOT repeat question formats or make simple variations.
 Distribute the ${count} questions across:
-1. Conceptual Understanding & Definitions (core mathematical/scientific principles, properties, reasoning why rules work)
-2. Procedural Problem Solving (step-by-step computation, multi-digit operations, standard algorithms)
-3. Real-World Applications & Multi-Step Word Problems (practical everyday scenarios, financial/measurement contexts)
-4. Visual, Spatial & Model Reasoning (interpreting number lines, area models, grids, geometric diagrams, charts)
-5. Error Analysis & Common Misconceptions ("Which step contains an error?", identifying flawed reasoning)
+${diversityCategories}
 
 Difficulty Distribution:
 - ~30% Easy (foundational recall and direct recognition)
-- ~40% Medium (application, two-step problem solving)
+- ~40% Medium (application, two-step reasoning)
 - ~30% Hard (multi-step synthesis, non-routine critical thinking)
 
 For each question, provide:
-1. A clear, challenging, and age-appropriate question text
+1. A clear, challenging, and age-appropriate question text that is specifically about ${subject}
 2. Exactly 4 options (A, B, C, D) with exactly one definitively correct answer and 3 realistic distractors reflecting common student errors
 3. The letter of the correct answer (randomize between A, B, C, D)
 4. A KID-FRIENDLY, EASY-TO-UNDERSTAND EXPLANATION (CRITICAL REQUIREMENT):
@@ -61,8 +97,8 @@ For each question, provide:
    - NEVER write internal AI thoughts, model reasoning processes, or test-maker commentary.
    - NEVER use adult or test-author jargon (DO NOT use words like "distractor", "misconception", "the model selected", "evaluates mastery", "option A is flawed").
    - Structure in 2 to 3 friendly steps:
-     • Step 1: Explain the main concept or rule in plain words (use relatable visuals or everyday objects like pizza slices, counting coins, or blocks).
-     • Step 2: Walk through the easy calculation or reasoning step-by-step.
+     • Step 1: Explain the main concept or rule in plain words.
+     • Step 2: Walk through the reasoning step-by-step.
      • 💡 Helpful Tip: A quick, memorable memory trick or rule of thumb for kids!
 5. Difficulty level ("easy", "medium", or "hard")
 6. A confidence score from 92-100
@@ -85,6 +121,7 @@ Return ONLY valid JSON in this exact format with no extra text:
     }
   ]
 }`;
+
 
   let topicQuestions: TopicQuestion[] = [];
 

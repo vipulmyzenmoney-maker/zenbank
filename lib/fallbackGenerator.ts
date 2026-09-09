@@ -320,34 +320,105 @@ export function generateCurriculumQuestions(
       ];
       correct = "B";
       explanation = c.exp;
+    } else if (lowerSubject.includes("social") || lowerSubject.includes("history") || lowerSubject.includes("geography") || lowerSubject.includes("civics") || lowerSubject.includes("political") || lowerSubject.includes("economics")) {
+      const socialQuestions = [
+        {
+          q: `Which of the following best describes the concept of "${cleanTopic}"?`,
+          correct: `A key concept in ${subject} that relates to society, governance, or historical development`,
+          w1: "A mathematical formula used in algebra",
+          w2: "A type of chemical reaction in a laboratory",
+          w3: "A programming language used in computer science",
+          exp: `"${cleanTopic}" is an important topic in ${subject}. It helps us understand how societies, governments, and historical events shape our world!`,
+        },
+        {
+          q: `Why is it important to study "${cleanTopic}" in ${subject}?`,
+          correct: "It helps us understand past events and how they shape our present and future",
+          w1: "It is only useful for passing exams",
+          w2: "It teaches us how to solve math problems",
+          w3: "It is not important at all",
+          exp: `Studying "${cleanTopic}" helps us learn from the past and become better citizens. Understanding history and society helps us make good decisions! 💡 Tip: Always connect what happened in the past to what's happening today.`,
+        },
+        {
+          q: `In the context of ${subject}, what type of knowledge does "${cleanTopic}" primarily involve?`,
+          correct: "Understanding people, places, events, and how societies function",
+          w1: "Memorizing multiplication tables and formulas",
+          w2: "Conducting chemistry experiments",
+          w3: "Writing computer programs",
+          exp: `${subject} is all about understanding human beings — how we live together, make rules, share resources, and remember important events. "${cleanTopic}" is part of this big picture!`,
+        },
+        {
+          q: `A student wants to learn more about "${cleanTopic}". Which resource would be MOST helpful?`,
+          correct: `A ${subject} textbook, historical documents, or maps related to the topic`,
+          w1: "A mathematics workbook with arithmetic drills",
+          w2: "A science lab manual for chemistry experiments",
+          w3: "A computer programming tutorial",
+          exp: `To learn about "${cleanTopic}", you should look for ${subject} textbooks, encyclopedias, historical documents, maps, and timelines. These sources have the best information! 💡 Tip: Libraries and museums are treasure troves for ${subject}!`,
+        },
+        {
+          q: `Which skill is MOST important when studying "${cleanTopic}" in ${subject}?`,
+          correct: "Critical thinking — analyzing causes, effects, and different perspectives",
+          w1: "Solving algebraic equations quickly",
+          w2: "Memorizing the periodic table of elements",
+          w3: "Running fast in physical education class",
+          exp: `When studying ${subject}, the most powerful skill is critical thinking! You need to ask "Why did this happen?", "What were the effects?", and "How do different people see this?" 💡 Tip: Always ask WHO, WHAT, WHEN, WHERE, WHY, and HOW!`,
+        },
+      ];
+      const ss = socialQuestions[(i - 1) % socialQuestions.length];
+      qText = ss.q;
+      opts = [
+        { id: "A", text: ss.w1, isCorrect: false },
+        { id: "B", text: ss.correct, isCorrect: true },
+        { id: "C", text: ss.w2, isCorrect: false },
+        { id: "D", text: ss.w3, isCorrect: false },
+      ];
+      correct = "B";
+      explanation = ss.exp;
     } else {
-      // Default Math arithmetic based on grade level
-      const a = i * 3 + 4;
-      const b = i * 2 + 3;
-      const sum = a + b;
-      const prod = a * b;
-
-      if (lowerGrade.includes("k") || lowerGrade.includes("1")) {
-        qText = `What is ${a} + ${b}?`;
-        opts = [
-          { id: "A", text: `${sum - 1}`, isCorrect: false },
-          { id: "B", text: `${sum}`, isCorrect: true },
-          { id: "C", text: `${sum + 2}`, isCorrect: false },
-          { id: "D", text: `${sum + 3}`, isCorrect: false },
-        ];
-        correct = "B";
-        explanation = `Add step-by-step: ${a} + ${b} = ${sum}.`;
-      } else {
-        qText = `What is ${a} × ${b}?`;
-        opts = [
-          { id: "A", text: `${prod - a}`, isCorrect: false },
-          { id: "B", text: `${prod}`, isCorrect: true },
-          { id: "C", text: `${prod + b}`, isCorrect: false },
-          { id: "D", text: `${prod + 10}`, isCorrect: false },
-        ];
-        correct = "B";
-        explanation = `Multiply: ${a} × ${b} = ${prod}.`;
-      }
+      // Generic subject-aware fallback (NOT defaulting to math)
+      const genericQuestions = [
+        {
+          q: `Which of the following is a key concept related to "${cleanTopic}" in ${subject}?`,
+          correct: `A fundamental principle or idea within ${subject}`,
+          w1: "An unrelated concept from a different subject",
+          w2: "A random guess with no factual basis",
+          w3: "Something that contradicts established knowledge in ${subject}",
+          exp: `"${cleanTopic}" is an important topic in ${subject}. Understanding the key concepts helps you build a strong foundation! 💡 Tip: Focus on the main idea first, then learn the details.`,
+        },
+        {
+          q: `Why is "${cleanTopic}" considered important in the study of ${subject}?`,
+          correct: "It is a foundational concept that connects to many other topics in the curriculum",
+          w1: "It is only tested on exams and has no real-world use",
+          w2: "It was invented recently and has no historical significance",
+          w3: "It is only important in one specific country",
+          exp: `"${cleanTopic}" matters because it helps you understand bigger ideas in ${subject}. Everything you learn connects together like puzzle pieces! 💡 Tip: Try to find connections between what you learn in class and the real world.`,
+        },
+        {
+          q: `A ${gradeLevel} student is preparing for a test on "${cleanTopic}". What study strategy would be MOST effective?`,
+          correct: "Review notes, create summaries, and practice explaining the topic in your own words",
+          w1: "Only read the textbook once without taking notes",
+          w2: "Skip the topic and hope it won't appear on the test",
+          w3: "Memorize random facts without understanding them",
+          exp: `The best way to study "${cleanTopic}" is to actively engage with the material. Write summaries, make flashcards, and try teaching it to someone else! 💡 Tip: If you can explain it simply, you truly understand it!`,
+        },
+        {
+          q: `Which of these best describes the scope of "${cleanTopic}" within ${subject}?`,
+          correct: `It covers specific knowledge, skills, and understanding within ${subject}`,
+          w1: "It only covers mathematical calculations",
+          w2: "It is unrelated to the ${subject} curriculum",
+          w3: "It is the same as every other topic in the subject",
+          exp: `"${cleanTopic}" has its own unique scope within ${subject}. It focuses on specific ideas and skills that are different from other topics, but they all work together! 💡 Tip: Think of each topic as a chapter in a big story.`,
+        },
+      ];
+      const gen = genericQuestions[(i - 1) % genericQuestions.length];
+      qText = gen.q;
+      opts = [
+        { id: "A", text: gen.w1, isCorrect: false },
+        { id: "B", text: gen.correct, isCorrect: true },
+        { id: "C", text: gen.w2, isCorrect: false },
+        { id: "D", text: gen.w3, isCorrect: false },
+      ];
+      correct = "B";
+      explanation = gen.exp;
     }
 
     questions.push({
