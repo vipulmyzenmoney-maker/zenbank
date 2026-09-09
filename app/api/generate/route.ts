@@ -231,7 +231,19 @@ Return ONLY valid JSON in this exact format with no extra text (ensure correct a
         if (text) {
           const parsed = JSON.parse(text);
           if (Array.isArray(parsed.questions) && parsed.questions.length > 0) {
-            topicQuestions = parsed.questions;
+            const letters = ["A", "B", "C", "D", "E"];
+            topicQuestions = parsed.questions.map((q: any) => ({
+              questionText: q.questionText || q.question || "",
+              options: (Array.isArray(q.options) ? q.options : []).map((opt: any, idx: number) =>
+                typeof opt === "string"
+                  ? { id: letters[idx] || `${idx + 1}`, text: opt, isCorrect: false }
+                  : { id: opt.id || letters[idx] || `${idx + 1}`, text: String(opt.text || opt), isCorrect: Boolean(opt.isCorrect) }
+              ),
+              correctAnswer: q.correctAnswer || "A",
+              explanation: q.explanation || "",
+              difficulty: q.difficulty || "medium",
+              confidence: q.confidence || 95,
+            }));
           }
         }
       }
@@ -241,9 +253,17 @@ Return ONLY valid JSON in this exact format with no extra text (ensure correct a
   }
 
   // 2. Attempt generation with Groq if Gemini wasn't used or returned empty
-  if (topicQuestions.length === 0 && activeGroqKey && activeGroqKey !== "your-groq-api-key-here") {
+  const hasGroq = Boolean(
+    (activeGroqKey && activeGroqKey !== "your-groq-api-key-here") || process.env.GROQ_API_KEY
+  );
+  if (topicQuestions.length === 0 && hasGroq) {
     try {
-      const completion = await groqClient.chat.completions.create({
+      const client =
+        activeGroqKey && activeGroqKey !== "your-groq-api-key-here"
+          ? new Groq({ apiKey: activeGroqKey })
+          : groqClient;
+
+      const completion = await client.chat.completions.create({
         model: GENERATION_MODEL,
         messages: [{ role: "user", content: prompt }],
         temperature: 0.75,
@@ -255,7 +275,19 @@ Return ONLY valid JSON in this exact format with no extra text (ensure correct a
       if (content) {
         const parsed = JSON.parse(content);
         if (Array.isArray(parsed.questions) && parsed.questions.length > 0) {
-          topicQuestions = parsed.questions;
+          const letters = ["A", "B", "C", "D", "E"];
+          topicQuestions = parsed.questions.map((q: any) => ({
+            questionText: q.questionText || q.question || "",
+            options: (Array.isArray(q.options) ? q.options : []).map((opt: any, idx: number) =>
+              typeof opt === "string"
+                ? { id: letters[idx] || `${idx + 1}`, text: opt, isCorrect: false }
+                : { id: opt.id || letters[idx] || `${idx + 1}`, text: String(opt.text || opt), isCorrect: Boolean(opt.isCorrect) }
+            ),
+            correctAnswer: q.correctAnswer || "A",
+            explanation: q.explanation || "",
+            difficulty: q.difficulty || "medium",
+            confidence: q.confidence || 95,
+          }));
         }
       }
     } catch (aiError) {

@@ -40,7 +40,7 @@ export function generateCurriculumQuestions(
   const lowerGrade = (gradeLevel || "").toLowerCase();
 
   const generatedQuestions: GeneratedQuestion[] = [];
-  const maxAttempts = count * 4;
+  const maxAttempts = count * 15;
   let attempts = 0;
 
   while (generatedQuestions.length < count && attempts < maxAttempts) {
@@ -59,7 +59,7 @@ export function generateCurriculumQuestions(
     // 1. FRACTIONS & DECIMALS
     // ==========================================
     if (lowerTopic.includes("fraction") || lowerTopic.includes("mixed number") || lowerTopic.includes("decimal")) {
-      const mode = (attempts + randInt(1, 10)) % 5;
+      const mode = (attempts + randInt(1, 20)) % 10;
       if (mode === 0) {
         // Unlike denominator addition
         const d1 = randChoice([2, 3, 4, 5]);
@@ -121,7 +121,7 @@ export function generateCurriculumQuestions(
         ];
         correct = "B";
         explanation = `Step 1: The denominator (bottom number) always tells how many equal parts the whole is partitioned into. 💡 Tip: "D" for Denominator, "D" for Down at the bottom!`;
-      } else {
+      } else if (mode === 4) {
         // Equivalent fractions
         const mult = randInt(3, 5);
         const top = randInt(2, 4);
@@ -136,6 +136,75 @@ export function generateCurriculumQuestions(
         ];
         correct = "B";
         explanation = `Step 1: Multiply both top and bottom by ${mult}: (${top} × ${mult}) / (${bot} × ${mult}) = ${eqStr}. 💡 Tip: Whatever you do to the top, you must do to the bottom!`;
+      } else if (mode === 5) {
+        // Spot the Mistake (Error Analysis)
+        const d1 = randChoice([3, 4, 5]);
+        const d2 = randChoice([2, 5, 6]);
+        const n1 = randInt(1, 2);
+        const n2 = randInt(1, 2);
+        qText = `${student} attempted to solve ${n1}/${d1} + ${n2}/${d2} and wrote ${n1 + n2}/${d1 + d2}. What fundamental error did ${student} make?`;
+        opts = [
+          { id: "A", text: "Multiplied the numerators instead of adding them", isCorrect: false },
+          { id: "B", text: "Added the denominators directly instead of converting to a common denominator", isCorrect: true },
+          { id: "C", text: "Simplified the fraction incorrectly at the end", isCorrect: false },
+          { id: "D", text: "Subtracted the fractions instead of adding", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = `Step 1: ⚠️ Trap Alert: You can NEVER simply add the denominators (${d1} + ${d2}). You MUST find a common denominator first before combining parts. 💡 Memory Trick: Denominators are the name of the piece; you don't add the names!`;
+      } else if (mode === 6) {
+        // Visual / Spatial Number Line
+        const parts = randChoice([6, 8, 10]);
+        const mark = randInt(2, parts - 2);
+        qText = `A number line from 0 to 1 is divided into ${parts} equal intervals. What fraction is represented by the point located at the ${mark}th tick mark past 0?`;
+        opts = [
+          { id: "A", text: `${parts}/${mark}`, isCorrect: false },
+          { id: "B", text: `${mark}/${parts}`, isCorrect: true },
+          { id: "C", text: `1/${parts}`, isCorrect: false },
+          { id: "D", text: `${mark + 1}/${parts + 1}`, isCorrect: false },
+        ];
+        correct = "B";
+        explanation = `Step 1: Each tick represents 1/${parts}. Moving ${mark} ticks past 0 lands at ${mark}/${parts}. 💡 Tip: The number of jumps is the numerator, the total divisions in one whole is the denominator!`;
+      } else if (mode === 7) {
+        // Multi-step Word Problem (Drink / Recipe)
+        const bottleSize = randChoice([1, 2]);
+        const drankA = "1/4";
+        const drankB = "1/3";
+        qText = `${student} had a full water bottle. ${student} drank ${drankA} of it during morning recess and ${drankB} during lunch. What fraction of the bottle did ${student} drink in total?`;
+        opts = [
+          { id: "A", text: "2/7 of the bottle", isCorrect: false },
+          { id: "B", text: "7/12 of the bottle", isCorrect: true },
+          { id: "C", text: "5/12 of the bottle", isCorrect: false },
+          { id: "D", text: "1/12 of the bottle", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = `Step 1: Find common denominator for 4 and 3 (which is 12). Step 2: 1/4 = 3/12 and 1/3 = 4/12. 3/12 + 4/12 = 7/12. 💡 Tip: Always convert to like units before adding!`;
+      } else if (mode === 8) {
+        // Unlike denominator subtraction
+        const d1 = 6;
+        const d2 = 4;
+        const n1 = 5;
+        const n2 = 1;
+        // 5/6 - 1/4 = 10/12 - 3/12 = 7/12
+        qText = `Evaluate and simplify: 5/6 - 1/4`;
+        opts = [
+          { id: "A", text: "4/2 = 2", isCorrect: false },
+          { id: "B", text: "7/12", isCorrect: true },
+          { id: "C", text: "4/12 = 1/3", isCorrect: false },
+          { id: "D", text: "1/2", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = `Step 1: Least common multiple of 6 and 4 is 12. Step 2: 5/6 = 10/12, and 1/4 = 3/12. 10/12 - 3/12 = 7/12. 💡 Tip: Check your LCM to keep numbers manageable!`;
+      } else {
+        // Comparing / Reasoning challenge
+        qText = `Which statement correctly compares the fractions 3/4 and 5/8?`;
+        opts = [
+          { id: "A", text: "3/4 < 5/8 because 3 is less than 5", isCorrect: false },
+          { id: "B", text: "3/4 > 5/8 because 3/4 is equivalent to 6/8, and 6/8 > 5/8", isCorrect: true },
+          { id: "C", text: "3/4 = 5/8 because both are greater than one half", isCorrect: false },
+          { id: "D", text: "5/8 > 3/4 because the denominator 8 is larger than 4", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = `Step 1: Convert 3/4 to eighths: (3 × 2) / (4 × 2) = 6/8. Step 2: Compare numerators: 6/8 > 5/8. ⚠️ Trap Alert: A bigger denominator actually means smaller slice sizes!`;
       }
 
     // ==========================================

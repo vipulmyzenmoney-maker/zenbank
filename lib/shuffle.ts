@@ -9,20 +9,31 @@ export interface McqOption {
  * Reassigns IDs to "A", "B", "C", "D" and returns the updated options and new correctAnswer letter.
  */
 export function shuffleMcqOptions(
-  rawOptions: { id?: string; text: string; isCorrect?: boolean }[],
+  rawOptions: any[],
   targetCorrectAnswerIdOrText?: string
 ): { options: McqOption[]; correctAnswer: string } {
   if (!rawOptions || rawOptions.length === 0) {
     return { options: [], correctAnswer: "A" };
   }
 
+  const defaultLetters = ["A", "B", "C", "D", "E", "F"];
+
   // 1. Identify which option is actually correct
   let foundCorrect = false;
-  const normalized = rawOptions.map((opt) => {
+  const normalized = rawOptions.map((rawOpt, idx) => {
+    const opt =
+      typeof rawOpt === "string"
+        ? { id: defaultLetters[idx] || String(idx + 1), text: rawOpt, isCorrect: false }
+        : {
+            id: rawOpt.id || defaultLetters[idx] || String(idx + 1),
+            text: rawOpt.text !== undefined ? String(rawOpt.text) : String(rawOpt),
+            isCorrect: Boolean(rawOpt.isCorrect),
+          };
+
     const isThisCorrect =
       opt.isCorrect === true ||
       (targetCorrectAnswerIdOrText &&
-        (opt.id?.toUpperCase() === targetCorrectAnswerIdOrText?.toUpperCase() ||
+        (opt.id?.toUpperCase() === targetCorrectAnswerIdOrText?.trim().toUpperCase() ||
           opt.text?.trim().toLowerCase() === targetCorrectAnswerIdOrText?.trim().toLowerCase()));
 
     if (isThisCorrect && !foundCorrect) {
