@@ -14,8 +14,21 @@ export async function OPTIONS() {
   return new NextResponse(null, { status: 200, headers: corsHeaders });
 }
 
+function getTopicRelevance(questionText: string, topic: string): number {
+  const normQ = questionText.toLowerCase();
+  const normT = topic.toLowerCase();
+  const words = normT.split(/[^a-z0-9]+/).filter((w) => w.length > 3);
+  let score = 0;
+  for (const w of words) {
+    if (normQ.includes(w)) score += 5;
+  }
+  return score;
+}
+
 export async function POST(req: NextRequest) {
   try {
+    const crossTopic = req.nextUrl.searchParams.get("crossTopic") === "true";
+
     const allQuestions = await prisma.question.findMany({
       select: {
         id: true,
@@ -29,12 +42,16 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Group questions by normalized text within the same grade, subject, and topic
+    // Group questions by normalized text
+    // If crossTopic is true, group across topics within the same grade and subject.
+    // Otherwise group strictly within the same (grade, subject, topic).
     const groups = new Map<string, typeof allQuestions>();
 
     for (const q of allQuestions) {
       const normText = normalizeQuestionText(q.questionText);
-      const groupKey = `${q.gradeLevel.trim().toLowerCase()}::${q.subject.trim().toLowerCase()}::${q.topic.trim().toLowerCase()}::${normText}`;
+      const groupKey = crossTopic
+        ? `${q.gradeLevel.trim().toLowerCase()}::${normText}`
+        : `${q.gradeLevel.trim().toLowerCase()}::${q.subject.trim().toLowerCase()}::${q.topic.trim().toLowerCase()}::${normText}`;
 
       if (!groups.has(groupKey)) {
         groups.set(groupKey, []);
@@ -48,11 +65,21 @@ export async function POST(req: NextRequest) {
     for (const [key, items] of groups.entries()) {
       if (items.length > 1) {
         duplicateGroupsCount++;
-        // Sort: verified first, then highest confidence, then earliest created (lowest id)
+        // Sort items to retain the best record
         items.sort((a, b) => {
+          // Priority 1: Semantic relevance to the topic
+          const relA = getTopicRelevance(a.questionText, a.topic);
+          const relB = getTopicRelevance(b.questionText, b.topic);
+          if (relA !== relB) return relB - relA;
+
+          // Priority 2: Verified status
           if (a.status === "verified" && b.status !== "verified") return -1;
           if (b.status === "verified" && a.status !== "verified") return 1;
-          if (b.confidence !== a.confidence) return b.confidence - a.confidence;
+
+          // Priority 3: Confidence score
+          if (a.confidence !== b.confidence) return b.confidence - a.confidence;
+
+          // Priority 4: Earliest created
           return Number(a.id - b.id);
         });
 
@@ -66,7 +93,7 @@ export async function POST(req: NextRequest) {
 
     let deletedCount = 0;
     if (idsToDelete.length > 0) {
-      // 1. Delete any associated question_analytics first to avoid FK violations
+      // 1. Delete associated question_analytics first to avoid FK violations
       try {
         await prisma.questionAnalytics.deleteMany({
           where: { questionId: { in: idsToDelete } },
@@ -85,7 +112,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        message: `Successfully resolved ${duplicateGroupsCount} duplicate groups and removed ${deletedCount} redundant question rows.`,
+        message: `Successfully resolved ${duplicateGroupsCount} duplicate groups and removed ${deletedCount} redundant question rows (crossTopic: ${crossTopic}).`,
         totalScanned: allQuestions.length,
         duplicateGroups: duplicateGroupsCount,
         deletedCount,
