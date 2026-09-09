@@ -40,8 +40,25 @@ model Question {
 
   syllabusPack   SyllabusPack? @relation(fields: [syllabusPackId], references: [id], onDelete: SetNull)
 
+  analytics      QuestionAnalytics?
+
   @@index([status])
   @@index([gradeLevel, subject, topic])
   @@index([gradeLevel, status])
   @@map("questions")
+}
+
+model QuestionAnalytics {
+  questionId       BigInt    @id @map("question_id")
+  timesServed      Int       @default(0) @map("times_served")
+  timesCorrect     Int       @default(0) @map("times_correct")
+  timesIncorrect   Int       @default(0) @map("times_incorrect")
+  accuracyRate     Decimal   @default(0.00) @map("accuracy_rate") @db.Decimal(5, 2)
+  avgTimeSeconds   Decimal   @default(0.00) @map("avg_time_seconds") @db.Decimal(6, 2)
+  isAutoFlagged    Boolean   @default(false) @map("is_auto_flagged")
+  lastServedAt     DateTime? @map("last_served_at") @db.Timestamptz(6)
+
+  question         Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("question_analytics")
 }
