@@ -454,7 +454,7 @@ export async function POST(req: NextRequest) {
                   topic: { equals: topic, mode: "insensitive" },
                 },
                 select: { questionText: true },
-                take: 50,
+                take: 300,
               });
               const existingQuestions = existingRecords.map((r) => r.questionText);
               // Combine DB existing questions with all questions saved in this generation session
@@ -645,7 +645,7 @@ export async function POST(req: NextRequest) {
           topic: { equals: topic, mode: "insensitive" },
         },
         select: { questionText: true },
-        take: 50,
+        take: 300,
       });
       const existingQuestions = existingRecords.map((r) => r.questionText);
       const savedInSessionTexts = [...existingQuestions, ...sessionPackQuestions];
