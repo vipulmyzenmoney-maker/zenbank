@@ -177,17 +177,13 @@ For each question, provide:
 1. Clear, engaging, and grade-appropriate question text specifically about "${topic}" in ${subject}
 2. Exactly 4 options (A, B, C, D) with exactly one definitively correct answer and 3 realistic distractors reflecting common student misconceptions
 3. The letter of the correct answer: MUST be generously and evenly distributed across A, B, C, and D across the set (~25% each). DO NOT bias toward B or any single letter!
-4. A "STUDY COACH" KID-FRIENDLY EXPLANATION (CRITICAL REQUIREMENT):
-   - MUST be written directly to a ${pedagogy.tierName} student in warm, encouraging language that a child can understand.
-   - Structure in 3 to 4 clear steps:
-     • Step 1: 📖 The Core Rule (explain the key concept in simple words).
-     • Step 2: ✏️ Step-by-Step Walkthrough to the correct answer.
-     • ⚠️ Trap Alert: Explicitly explain WHY common wrong choices are traps (e.g. "If you chose C, you probably added the denominators directly! Remember to find a common denominator first!").
-     • 💡 Memory Trick: A catchy memory hack or rule of thumb for kids!
+4. A "STUDY COACH" KID-FRIENDLY EXPLANATION:
+   - Written directly to a ${pedagogy.tierName} student in clear, friendly language.
+   - Concise 2-3 sentence format: "Step 1: [Core concept]. Step 2: [Why the correct answer works]. 💡 Tip: [Quick memory hint]."
 5. Difficulty level ("easy", "medium", or "hard")
 6. A confidence score from 92-100
 
-Return ONLY valid JSON in this exact format with no extra text (ensure correct answers are evenly spread across A, B, C, D):
+Return ONLY valid JSON in this exact format with no extra text:
 {
   "questions": [
     {
@@ -199,7 +195,7 @@ Return ONLY valid JSON in this exact format with no extra text (ensure correct a
         {"id": "D", "text": "...", "isCorrect": false}
       ],
       "correctAnswer": "A",
-      "explanation": "Step 1: ... Step 2: ... ⚠️ Trap Alert: ... 💡 Memory Trick: ...",
+      "explanation": "Step 1: ... Step 2: ... 💡 Tip: ...",
       "difficulty": "medium",
       "confidence": 96
     }
@@ -262,8 +258,8 @@ Return ONLY valid JSON in this exact format with no extra text (ensure correct a
         ? new Groq({ apiKey: activeGroqKey })
         : groqClient;
 
-    // Allocate safe output tokens (350 tokens per question is ample for MCQ + options + explanation)
-    const maxOutputTokens = Math.min(Math.max(count * 350, 1000), 2500);
+    // Allocate safe output tokens (accommodates reasoning tokens + JSON completion)
+    const maxOutputTokens = Math.min(Math.max(count * 500, 1800), 3800);
 
     const parseGroqResponse = (content: string | null | undefined): TopicQuestion[] => {
       if (!content) return [];
