@@ -204,7 +204,7 @@ Difficulty Distribution:
 
 For each question, provide:
 1. Clear, engaging, and grade-appropriate question text specifically about "${topic}" in ${subject}
-2. Exactly 4 options (A, B, C, D) with exactly one definitively correct answer and 3 realistic distractors reflecting common student misconceptions
+2. CRITICAL MCQ OPTION CONSTRAINT: EXACTLY 4 options (A, B, C, D) with exactly one definitively correct answer and 3 realistic distractors reflecting common student misconceptions. UNDER NO CIRCUMSTANCES should you ever return 2 options (True/False or binary) or 3 options!
 3. The letter of the correct answer: MUST be generously and evenly distributed across A, B, C, and D across the set (~25% each). DO NOT bias toward B or any single letter!
 4. A "STUDY COACH" KID-FRIENDLY EXPLANATION:
    - Written directly to a ${pedagogy.tierName} student in clear, friendly language.
@@ -250,19 +250,20 @@ Return ONLY valid JSON in this exact format with no extra text:
       try {
         const parsed = JSON.parse(content);
         if (Array.isArray(parsed.questions) && parsed.questions.length > 0) {
-          const letters = ["A", "B", "C", "D", "E"];
-          return parsed.questions.map((q: any) => ({
-            questionText: q.questionText || q.question || "",
-            options: (Array.isArray(q.options) ? q.options : []).map((opt: any, idx: number) =>
-              typeof opt === "string"
-                ? { id: letters[idx] || `${idx + 1}`, text: opt, isCorrect: false }
-                : { id: opt.id || letters[idx] || `${idx + 1}`, text: String(opt.text || opt), isCorrect: Boolean(opt.isCorrect) }
-            ),
-            correctAnswer: q.correctAnswer || "A",
-            explanation: q.explanation || "",
-            difficulty: q.difficulty || "medium",
-            confidence: q.confidence || 95,
-          }));
+          return parsed.questions
+            .filter((q: any) => q && (q.questionText || q.question))
+            .map((q: any) => {
+              const rawOpts = Array.isArray(q.options) ? q.options : [];
+              const shuffled = shuffleMcqOptions(rawOpts, q.correctAnswer);
+              return {
+                questionText: q.questionText || q.question || "",
+                options: shuffled.options,
+                correctAnswer: shuffled.correctAnswer,
+                explanation: q.explanation || "",
+                difficulty: q.difficulty || "medium",
+                confidence: q.confidence || 95,
+              };
+            });
         }
       } catch (e) {}
       return [];
@@ -337,12 +338,15 @@ Return ONLY valid JSON in this exact format with no extra text:
     validBatch = uniqueQuestions;
   }
 
-  // If deficit exists in Groq mode, query Groq once more for remaining questions (never automatic fallback)
-  if (validBatch.length < count && hasGroq) {
+  // If deficit exists in Groq mode, query Groq up to 2 times for remaining questions (never automatic fallback)
+  let deficitAttempts = 0;
+  while (validBatch.length < count && hasGroq && deficitAttempts < 2) {
+    deficitAttempts++;
     const needed = count - validBatch.length;
     const allSeen = [...existingQuestions, ...validBatch.map((q) => q.questionText)];
     try {
       const deficitPrompt = `Generate exactly ${needed} additional unique multiple-choice question(s) for ${topic} in ${subject} (${gradeLevel}).
+CRITICAL MCQ OPTION RULE: Each question MUST have EXACTLY 4 OPTIONS: A, B, C, and D (1 correct and 3 distinct wrong options). NEVER RETURN 2 OR 3 OPTIONS!
 DO NOT DUPLICATE ANY OF THESE: ${allSeen.slice(0, 10).map((q, idx) => `${idx + 1}. "${q.slice(0, 90)}"`).join("; ")}
 Return ONLY valid JSON: {"questions": [{"questionText":"...","options":[{"id":"A","text":"...","isCorrect":true},{"id":"B","text":"...","isCorrect":false},{"id":"C","text":"...","isCorrect":false},{"id":"D","text":"...","isCorrect":false}],"correctAnswer":"A","explanation":"Step 1: ... Step 2: ... 💡 Tip: ...","difficulty":"medium","confidence":95}]}`;
       const client = activeGroqKey && activeGroqKey !== "your-groq-api-key-here" ? new Groq({ apiKey: activeGroqKey }) : groqClient;
@@ -355,30 +359,32 @@ Return ONLY valid JSON: {"questions": [{"questionText":"...","options":[{"id":"A
       });
       const parsed = JSON.parse(deficitRes.choices[0]?.message?.content || "{}");
       if (Array.isArray(parsed.questions)) {
-        const letters = ["A", "B", "C", "D", "E"];
-        const extra: TopicQuestion[] = parsed.questions.map((q: any) => ({
-          questionText: q.questionText || q.question || "",
-          options: (Array.isArray(q.options) ? q.options : []).map((opt: any, idx: number) =>
-            typeof opt === "string"
-              ? { id: letters[idx] || `${idx + 1}`, text: opt, isCorrect: false }
-              : { id: opt.id || letters[idx] || `${idx + 1}`, text: String(opt.text || opt), isCorrect: Boolean(opt.isCorrect) }
-          ),
-          correctAnswer: q.correctAnswer || "A",
-          explanation: q.explanation || "",
-          difficulty: q.difficulty || "medium",
-          confidence: q.confidence || 95,
-        }));
+        const extra: TopicQuestion[] = parsed.questions
+          .filter((q: any) => q && (q.questionText || q.question))
+          .map((q: any) => {
+            const rawOpts = Array.isArray(q.options) ? q.options : [];
+            const shuffled = shuffleMcqOptions(rawOpts, q.correctAnswer);
+            return {
+              questionText: q.questionText || q.question || "",
+              options: shuffled.options,
+              correctAnswer: shuffled.correctAnswer,
+              explanation: q.explanation || "",
+              difficulty: q.difficulty || "medium",
+              confidence: q.confidence || 95,
+            };
+          });
         const { uniqueQuestions: uniqueExtras } = filterDuplicates(extra, allSeen, 0.70);
         validBatch = [...validBatch, ...uniqueExtras];
       }
     } catch (deficitErr) {
       console.warn("Groq deficit backfill error:", deficitErr);
+      break;
     }
   }
 
   // Uniformly shuffle MCQ options across A, B, C, D and ensure explanations are sanitized
   return validBatch.map((q) => {
-    const shuffled = shuffleMcqOptions(q.options, q.correctAnswer);
+    const shuffled = q.options?.length === 4 ? q : shuffleMcqOptions(q.options, q.correctAnswer);
     return {
       ...q,
       options: shuffled.options,
@@ -557,11 +563,16 @@ export async function POST(req: NextRequest) {
                     continue;
                   }
 
+                  const safeOptions =
+                    Array.isArray(q.options) && q.options.length === 4
+                      ? q.options
+                      : shuffleMcqOptions(q.options || [], q.correctAnswer).options;
+
                   await prisma.question.create({
                     data: {
                       syllabusPackId: pack.id,
                       questionText: q.questionText,
-                      options: q.options,
+                      options: safeOptions as any,
                       correctAnswer: q.correctAnswer,
                       explanation: q.explanation,
                       gradeLevel,
@@ -581,6 +592,57 @@ export async function POST(req: NextRequest) {
                 }
               }
 
+              // Backfill in Groq mode if duplicates were skipped and target count not reached
+              if (engine === "groq" && topicInserted < count) {
+                const needed = count - topicInserted;
+                console.log(`Topic "${topic}" Groq backfilling ${needed} question(s) to reach target count of ${count}...`);
+                try {
+                  const retryQuestions = await generateQuestionsForTopic({
+                    topic,
+                    subject,
+                    gradeLevel,
+                    count: needed,
+                    geminiKey,
+                    activeGroqKey,
+                    groqClient,
+                    existingQuestions: savedInSessionTexts,
+                    engine: "groq",
+                  });
+
+                  for (const q of retryQuestions) {
+                    if (topicInserted >= count) break;
+                    if (isDuplicate(q.questionText, savedInSessionTexts, 0.65)) continue;
+
+                    const safeOpts =
+                      Array.isArray(q.options) && q.options.length === 4
+                        ? q.options
+                        : shuffleMcqOptions(q.options || [], q.correctAnswer).options;
+
+                    await prisma.question.create({
+                      data: {
+                        syllabusPackId: pack.id,
+                        questionText: q.questionText,
+                        options: safeOpts as any,
+                        correctAnswer: q.correctAnswer,
+                        explanation: q.explanation,
+                        gradeLevel,
+                        subject,
+                        topic,
+                        difficulty: q.difficulty || "medium",
+                        confidence: q.confidence || 95,
+                        status: "draft",
+                      },
+                    });
+                    savedInSessionTexts.push(q.questionText);
+                    sessionPackQuestions.push(q.questionText);
+                    topicInserted++;
+                    totalGenerated++;
+                  }
+                } catch (retryErr) {
+                  console.warn("Groq topic backfill error:", retryErr);
+                }
+              }
+
               // Backfill ONLY if engine === "curriculum" (never automatic when Groq is chosen)
               if (engine === "curriculum" && topicInserted < count) {
                 const needed = count - topicInserted;
@@ -597,12 +659,17 @@ export async function POST(req: NextRequest) {
                   if (topicInserted >= count) break;
                   if (isDuplicate(q.questionText, savedInSessionTexts, 0.65)) continue;
 
+                  const safeOpts =
+                    Array.isArray(q.options) && q.options.length === 4
+                      ? q.options
+                      : shuffleMcqOptions(q.options || [], q.correctAnswer).options;
+
                   try {
                     await prisma.question.create({
                       data: {
                         syllabusPackId: pack.id,
                         questionText: q.questionText,
-                        options: q.options,
+                        options: safeOpts as any,
                         correctAnswer: q.correctAnswer,
                         explanation: q.explanation,
                         gradeLevel,
@@ -745,11 +812,16 @@ export async function POST(req: NextRequest) {
             continue;
           }
 
+          const safeOptions =
+            Array.isArray(q.options) && q.options.length === 4
+              ? q.options
+              : shuffleMcqOptions(q.options || [], q.correctAnswer).options;
+
           await prisma.question.create({
             data: {
               syllabusPackId: pack.id,
               questionText: q.questionText,
-              options: q.options,
+              options: safeOptions as any,
               correctAnswer: q.correctAnswer,
               explanation: q.explanation,
               gradeLevel,
@@ -769,6 +841,57 @@ export async function POST(req: NextRequest) {
         }
       }
 
+      // Backfill in Groq mode if duplicates were skipped and target count not reached
+      if (engine === "groq" && topicInserted < count) {
+        const needed = count - topicInserted;
+        console.log(`Topic "${topic}" Groq backfilling ${needed} question(s) to reach target count of ${count}...`);
+        try {
+          const retryQuestions = await generateQuestionsForTopic({
+            topic,
+            subject,
+            gradeLevel,
+            count: needed,
+            geminiKey,
+            activeGroqKey,
+            groqClient,
+            existingQuestions: savedInSessionTexts,
+            engine: "groq",
+          });
+
+          for (const q of retryQuestions) {
+            if (topicInserted >= count) break;
+            if (isDuplicate(q.questionText, savedInSessionTexts, 0.65)) continue;
+
+            const safeOpts =
+              Array.isArray(q.options) && q.options.length === 4
+                ? q.options
+                : shuffleMcqOptions(q.options || [], q.correctAnswer).options;
+
+            await prisma.question.create({
+              data: {
+                syllabusPackId: pack.id,
+                questionText: q.questionText,
+                options: safeOpts as any,
+                correctAnswer: q.correctAnswer,
+                explanation: q.explanation,
+                gradeLevel,
+                subject,
+                topic,
+                difficulty: q.difficulty || "medium",
+                confidence: q.confidence || 95,
+                status: "draft",
+              },
+            });
+            savedInSessionTexts.push(q.questionText);
+            sessionPackQuestions.push(q.questionText);
+            topicInserted++;
+            totalGenerated++;
+          }
+        } catch (retryErr) {
+          console.warn("Groq topic backfill error:", retryErr);
+        }
+      }
+
       // Backfill ONLY if engine === "curriculum" (never automatic when Groq is chosen)
       if (engine === "curriculum" && topicInserted < count) {
         const needed = count - topicInserted;
@@ -784,12 +907,17 @@ export async function POST(req: NextRequest) {
           if (topicInserted >= count) break;
           if (isDuplicate(q.questionText, savedInSessionTexts, 0.65)) continue;
 
+          const safeOpts =
+            Array.isArray(q.options) && q.options.length === 4
+              ? q.options
+              : shuffleMcqOptions(q.options || [], q.correctAnswer).options;
+
           try {
             await prisma.question.create({
               data: {
                 syllabusPackId: pack.id,
                 questionText: q.questionText,
-                options: q.options,
+                options: safeOpts as any,
                 correctAnswer: q.correctAnswer,
                 explanation: q.explanation,
                 gradeLevel,
