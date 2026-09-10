@@ -39,6 +39,33 @@ export function generateCurriculumQuestions(
   const lowerSubject = subject.toLowerCase();
   const lowerGrade = (gradeLevel || "").toLowerCase();
 
+  const isSocialStudies =
+    lowerSubject.includes("social") ||
+    lowerSubject.includes("history") ||
+    lowerSubject.includes("civic") ||
+    lowerSubject.includes("government") ||
+    lowerSubject.includes("geography");
+
+  const isScience =
+    lowerSubject.includes("science") ||
+    lowerSubject.includes("biology") ||
+    lowerSubject.includes("chemistry") ||
+    lowerSubject.includes("physics");
+
+  const isReading =
+    lowerSubject.includes("reading") ||
+    lowerSubject.includes("english") ||
+    lowerSubject.includes("language") ||
+    lowerSubject.includes("literature") ||
+    lowerSubject.includes("writing");
+
+  const isMath =
+    lowerSubject.includes("math") ||
+    lowerSubject.includes("algebra") ||
+    lowerSubject.includes("geometry") ||
+    lowerSubject.includes("arithmetic") ||
+    (!isSocialStudies && !isScience && !isReading);
+
   const generatedQuestions: GeneratedQuestion[] = [];
   const maxAttempts = count * 15;
   let attempts = 0;
@@ -58,7 +85,7 @@ export function generateCurriculumQuestions(
     // ==========================================
     // 1. FRACTIONS & DECIMALS
     // ==========================================
-    if (lowerTopic.includes("fraction") || lowerTopic.includes("mixed number") || lowerTopic.includes("decimal")) {
+    if (isMath && (lowerTopic.includes("fraction") || lowerTopic.includes("mixed number") || lowerTopic.includes("decimal"))) {
       const mode = (attempts + randInt(1, 20)) % 10;
       if (mode === 0) {
         // Unlike denominator addition
@@ -211,13 +238,14 @@ export function generateCurriculumQuestions(
     // 2. GEOMETRY, ANGLES, PERIMETER & 3D SHAPES
     // ==========================================
     } else if (
-      lowerTopic.includes("shape") ||
-      lowerTopic.includes("geometry") ||
-      lowerTopic.includes("angle") ||
-      lowerTopic.includes("triangle") ||
-      lowerTopic.includes("perimeter") ||
-      lowerTopic.includes("volume") ||
-      lowerTopic.includes("prism")
+      isMath &&
+      (lowerTopic.includes("shape") ||
+        lowerTopic.includes("geometry") ||
+        lowerTopic.includes("angle") ||
+        lowerTopic.includes("triangle") ||
+        lowerTopic.includes("perimeter") ||
+        lowerTopic.includes("volume") ||
+        lowerTopic.includes("prism"))
     ) {
       const mode = (attempts + randInt(1, 10)) % 6;
       if (mode === 0) {
@@ -313,7 +341,7 @@ export function generateCurriculumQuestions(
     // ==========================================
     // 3. COORDINATE PLANE & GRAPHING
     // ==========================================
-    } else if (lowerTopic.includes("coordinate") || lowerTopic.includes("graph") || lowerTopic.includes("plane")) {
+    } else if (isMath && (lowerTopic.includes("coordinate") || lowerTopic.includes("cartesian") || /\bgraphing\b|\bcoordinate plane\b|\bquadrant\b/.test(lowerTopic))) {
       const mode = (attempts + randInt(1, 10)) % 4;
       if (mode === 0) {
         const x = randInt(2, 9);
@@ -364,7 +392,7 @@ export function generateCurriculumQuestions(
     // ==========================================
     // 4. PEMDAS & ORDER OF OPERATIONS
     // ==========================================
-    } else if (lowerTopic.includes("pemdas") || lowerTopic.includes("order of operation") || lowerTopic.includes("numerical pattern") || lowerTopic.includes("equation")) {
+    } else if (isMath && (lowerTopic.includes("pemdas") || lowerTopic.includes("order of operation") || lowerTopic.includes("numerical pattern") || lowerTopic.includes("equation"))) {
       const a = randInt(3, 8);
       const b = randInt(2, 5);
       const c = randInt(3, 6);
@@ -384,7 +412,7 @@ export function generateCurriculumQuestions(
     // ==========================================
     // 5. MEASUREMENT, DATA, MEAN & RANGE
     // ==========================================
-    } else if (lowerTopic.includes("mean") || lowerTopic.includes("median") || lowerTopic.includes("range") || lowerTopic.includes("measure") || lowerTopic.includes("convert") || lowerTopic.includes("inch") || lowerTopic.includes("meter")) {
+    } else if (isMath && (lowerTopic.includes("mean") || lowerTopic.includes("median") || lowerTopic.includes("range") || lowerTopic.includes("measure") || lowerTopic.includes("convert") || lowerTopic.includes("inch") || lowerTopic.includes("meter"))) {
       const mode = (attempts + randInt(1, 10)) % 4;
       if (mode === 0) {
         // Measurement conversion
