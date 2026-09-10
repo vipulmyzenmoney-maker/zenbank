@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import Groq from "groq-sdk";
-import { groq, GENERATION_MODEL } from "@/lib/groq";
+import { groq, PRIMARY_GENERATION_MODEL, SECONDARY_GENERATION_MODEL } from "@/lib/groq";
 import { generateCurriculumQuestions } from "@/lib/fallbackGenerator";
 import { shuffleMcqOptions } from "@/lib/shuffle";
 import { filterDuplicates, isDuplicate, normalizeQuestionText } from "@/lib/deduplication";
@@ -126,7 +126,7 @@ async function generateQuestionsForTopic({
     existingQuestions.length > 0
       ? `\nCRITICAL ANTI-DUPLICATION RULE (ZERO REPETITION):
 The following questions ALREADY EXIST in our database for this topic. You MUST NOT duplicate, rephrase, copy, or make minor number/word swaps of any of these:
-${existingQuestions.slice(0, 25).map((q, idx) => `  ${idx + 1}. "${q}"`).join("\n")}
+${existingQuestions.slice(0, 10).map((q, idx) => `  ${idx + 1}. "${q.slice(0, 110)}"`).join("\n")}
 
 Every single question you generate MUST introduce a completely NEW angle, fresh real-world scenario, distinct numbers, or alternative problem format!\n`
       : "";
@@ -257,26 +257,21 @@ Return ONLY valid JSON in this exact format with no extra text (ensure correct a
     (activeGroqKey && activeGroqKey !== "your-groq-api-key-here") || process.env.GROQ_API_KEY
   );
   if (topicQuestions.length === 0 && hasGroq) {
-    try {
-      const client =
-        activeGroqKey && activeGroqKey !== "your-groq-api-key-here"
-          ? new Groq({ apiKey: activeGroqKey })
-          : groqClient;
+    const client =
+      activeGroqKey && activeGroqKey !== "your-groq-api-key-here"
+        ? new Groq({ apiKey: activeGroqKey })
+        : groqClient;
 
-      const completion = await client.chat.completions.create({
-        model: GENERATION_MODEL,
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.75,
-        max_tokens: 6000,
-        response_format: { type: "json_object" },
-      });
+    // Allocate safe output tokens (350 tokens per question is ample for MCQ + options + explanation)
+    const maxOutputTokens = Math.min(Math.max(count * 350, 1000), 2500);
 
-      const content = completion.choices[0]?.message?.content;
-      if (content) {
+    const parseGroqResponse = (content: string | null | undefined): TopicQuestion[] => {
+      if (!content) return [];
+      try {
         const parsed = JSON.parse(content);
         if (Array.isArray(parsed.questions) && parsed.questions.length > 0) {
           const letters = ["A", "B", "C", "D", "E"];
-          topicQuestions = parsed.questions.map((q: any) => ({
+          return parsed.questions.map((q: any) => ({
             questionText: q.questionText || q.question || "",
             options: (Array.isArray(q.options) ? q.options : []).map((opt: any, idx: number) =>
               typeof opt === "string"
@@ -289,9 +284,43 @@ Return ONLY valid JSON in this exact format with no extra text (ensure correct a
             confidence: q.confidence || 95,
           }));
         }
+      } catch (e) {}
+      return [];
+    };
+
+    // Primary Groq Model Attempt (openai/gpt-oss-120b)
+    try {
+      const completion = await client.chat.completions.create({
+        model: PRIMARY_GENERATION_MODEL,
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.75,
+        max_tokens: maxOutputTokens,
+        response_format: { type: "json_object" },
+      });
+      topicQuestions = parseGroqResponse(completion.choices[0]?.message?.content);
+      if (topicQuestions.length > 0) {
+        console.log(`Successfully generated ${topicQuestions.length} questions for "${topic}" via ${PRIMARY_GENERATION_MODEL}`);
       }
-    } catch (aiError) {
-      console.warn(`Groq generation failed for topic "${topic}", using curriculum fallback:`, aiError);
+    } catch (primaryErr: any) {
+      console.warn(`Groq primary model (${PRIMARY_GENERATION_MODEL}) failed for topic "${topic}": ${primaryErr?.message || primaryErr}. Trying secondary model (${SECONDARY_GENERATION_MODEL})...`);
+      
+      // Secondary Groq Model Attempt (openai/gpt-oss-20b) with brief pause
+      try {
+        await new Promise((r) => setTimeout(r, 800));
+        const fallbackCompletion = await client.chat.completions.create({
+          model: SECONDARY_GENERATION_MODEL,
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.75,
+          max_tokens: maxOutputTokens,
+          response_format: { type: "json_object" },
+        });
+        topicQuestions = parseGroqResponse(fallbackCompletion.choices[0]?.message?.content);
+        if (topicQuestions.length > 0) {
+          console.log(`Successfully generated ${topicQuestions.length} questions for "${topic}" via secondary ${SECONDARY_GENERATION_MODEL}`);
+        }
+      } catch (secondaryErr: any) {
+        console.warn(`Groq secondary model (${SECONDARY_GENERATION_MODEL}) also failed for topic "${topic}": ${secondaryErr?.message || secondaryErr}. Proceeding to curriculum fallback.`);
+      }
     }
   }
 
@@ -370,7 +399,7 @@ export async function POST(req: NextRequest) {
         : groq;
 
     const totalTopics = (topics as string[]).length;
-    const totalExpected = totalTopics * count;
+    let totalExpected = totalTopics * count;
 
     // STREAMING MODE: Send live progress events per topic
     if (stream) {
@@ -393,6 +422,7 @@ export async function POST(req: NextRequest) {
             );
 
             let totalGenerated = 0;
+            const sessionPackQuestions: string[] = [];
 
             for (let i = 0; i < totalTopics; i++) {
               if (req.signal?.aborted) {
@@ -412,7 +442,7 @@ export async function POST(req: NextRequest) {
                     totalTopics,
                     totalGenerated,
                     totalExpected,
-                    percent: Math.round((totalGenerated / totalExpected) * 100),
+                    percent: Math.min(100, Math.round((totalGenerated / totalExpected) * 100)),
                   }) + "\n"
                 )
               );
@@ -431,7 +461,8 @@ export async function POST(req: NextRequest) {
                 take: 50,
               });
               const existingQuestions = existingRecords.map((r) => r.questionText);
-              const savedInSessionTexts = [...existingQuestions];
+              // Combine DB existing questions with all questions saved in this generation session
+              const savedInSessionTexts = [...existingQuestions, ...sessionPackQuestions];
 
               // Formulate questions for this topic with anti-duplication memory
               const topicQuestions = await generateQuestionsForTopic({
@@ -442,14 +473,17 @@ export async function POST(req: NextRequest) {
                 geminiKey,
                 activeGroqKey,
                 groqClient,
-                existingQuestions,
+                existingQuestions: savedInSessionTexts,
               });
+
+              let topicInserted = 0;
 
               // Save to database with pre-insert duplicate check
               for (const q of topicQuestions) {
+                if (topicInserted >= count) break;
                 try {
                   // Check semantic & structural duplicates against existing + session questions
-                  if (isDuplicate(q.questionText, savedInSessionTexts, 0.68)) {
+                  if (isDuplicate(q.questionText, savedInSessionTexts, 0.65)) {
                     console.log(`Skipped duplicate question in batch: "${q.questionText.slice(0, 45)}..."`);
                     continue;
                   }
@@ -485,11 +519,59 @@ export async function POST(req: NextRequest) {
                     },
                   });
                   savedInSessionTexts.push(q.questionText);
+                  sessionPackQuestions.push(q.questionText);
+                  topicInserted++;
                   totalGenerated++;
                 } catch (saveError) {
                   console.warn("DB question save error:", saveError);
-                  totalGenerated++;
                 }
+              }
+
+              // Backfill if duplicates were skipped and we didn't reach requested count
+              if (topicInserted < count) {
+                const needed = count - topicInserted;
+                console.log(`Topic "${topic}" backfilling ${needed} question(s) to achieve target count of ${count}`);
+                const backfillList = generateCurriculumQuestions(
+                  topic,
+                  subject,
+                  gradeLevel,
+                  needed + 3,
+                  savedInSessionTexts
+                );
+
+                for (const q of backfillList) {
+                  if (topicInserted >= count) break;
+                  if (isDuplicate(q.questionText, savedInSessionTexts, 0.65)) continue;
+
+                  try {
+                    await prisma.question.create({
+                      data: {
+                        syllabusPackId: pack.id,
+                        questionText: q.questionText,
+                        options: q.options,
+                        correctAnswer: q.correctAnswer,
+                        explanation: q.explanation,
+                        gradeLevel,
+                        subject,
+                        topic,
+                        difficulty: q.difficulty || "medium",
+                        confidence: q.confidence || 95,
+                        status: "draft",
+                      },
+                    });
+                    savedInSessionTexts.push(q.questionText);
+                    sessionPackQuestions.push(q.questionText);
+                    topicInserted++;
+                    totalGenerated++;
+                  } catch (bfErr) {
+                    console.warn("Backfill DB save error:", bfErr);
+                  }
+                }
+              }
+
+              // If still underfilled, adjust totalExpected so percentage stays honest & reaching 100%
+              if (topicInserted < count) {
+                totalExpected = Math.max(totalGenerated, totalExpected - (count - topicInserted));
               }
 
               // Notify client that this topic is complete
@@ -500,17 +582,17 @@ export async function POST(req: NextRequest) {
                     topic,
                     topicIndex: i + 1,
                     totalTopics,
-                    questionsAdded: topicQuestions.length,
+                    questionsAdded: topicInserted,
                     totalGenerated,
                     totalExpected,
-                    percent: Math.round((totalGenerated / totalExpected) * 100),
+                    percent: Math.min(100, Math.round((totalGenerated / totalExpected) * 100)),
                   }) + "\n"
                 )
               );
 
-              // Small 400ms buffer between topics to keep token rate limits smooth
+              // 1000ms buffer between topics to keep token rate limits smooth and prevent OTPM spikes
               if (totalTopics > 1 && i < totalTopics - 1) {
-                await new Promise((resolve) => setTimeout(resolve, 400));
+                await new Promise((resolve) => setTimeout(resolve, 1000));
               }
             }
 
@@ -553,6 +635,8 @@ export async function POST(req: NextRequest) {
 
     // NON-STREAMING FALLBACK
     let totalGenerated = 0;
+    const sessionPackQuestions: string[] = [];
+
     for (let i = 0; i < totalTopics; i++) {
       const topic = topics[i];
       const gradeVariants = getGradeVariants(gradeLevel);
@@ -568,7 +652,7 @@ export async function POST(req: NextRequest) {
         take: 50,
       });
       const existingQuestions = existingRecords.map((r) => r.questionText);
-      const savedInSessionTexts = [...existingQuestions];
+      const savedInSessionTexts = [...existingQuestions, ...sessionPackQuestions];
 
       const topicQuestions = await generateQuestionsForTopic({
         topic,
@@ -578,12 +662,15 @@ export async function POST(req: NextRequest) {
         geminiKey,
         activeGroqKey,
         groqClient,
-        existingQuestions,
+        existingQuestions: savedInSessionTexts,
       });
 
+      let topicInserted = 0;
+
       for (const q of topicQuestions) {
+        if (topicInserted >= count) break;
         try {
-          if (isDuplicate(q.questionText, savedInSessionTexts, 0.68)) {
+          if (isDuplicate(q.questionText, savedInSessionTexts, 0.65)) {
             console.log(`Skipped duplicate question in batch: "${q.questionText.slice(0, 45)}..."`);
             continue;
           }
@@ -619,15 +706,57 @@ export async function POST(req: NextRequest) {
             },
           });
           savedInSessionTexts.push(q.questionText);
+          sessionPackQuestions.push(q.questionText);
+          topicInserted++;
           totalGenerated++;
         } catch (saveError) {
           console.warn("DB question save error:", saveError);
-          totalGenerated++;
+        }
+      }
+
+      // Backfill if duplicates were skipped and we didn't reach requested count
+      if (topicInserted < count) {
+        const needed = count - topicInserted;
+        const backfillList = generateCurriculumQuestions(
+          topic,
+          subject,
+          gradeLevel,
+          needed + 3,
+          savedInSessionTexts
+        );
+
+        for (const q of backfillList) {
+          if (topicInserted >= count) break;
+          if (isDuplicate(q.questionText, savedInSessionTexts, 0.65)) continue;
+
+          try {
+            await prisma.question.create({
+              data: {
+                syllabusPackId: pack.id,
+                questionText: q.questionText,
+                options: q.options,
+                correctAnswer: q.correctAnswer,
+                explanation: q.explanation,
+                gradeLevel,
+                subject,
+                topic,
+                difficulty: q.difficulty || "medium",
+                confidence: q.confidence || 95,
+                status: "draft",
+              },
+            });
+            savedInSessionTexts.push(q.questionText);
+            sessionPackQuestions.push(q.questionText);
+            topicInserted++;
+            totalGenerated++;
+          } catch (bfErr) {
+            console.warn("Backfill DB save error:", bfErr);
+          }
         }
       }
 
       if (totalTopics > 1 && i < totalTopics - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 400));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }
 

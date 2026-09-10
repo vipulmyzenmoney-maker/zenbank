@@ -445,7 +445,7 @@ export function generateCurriculumQuestions(
     // 6. SCIENCE (ECOSYSTEMS, MATTER, EARTH, ENERGY)
     // ==========================================
     } else if (lowerSubject.includes("science") || lowerTopic.includes("ecosystem") || lowerTopic.includes("earth") || lowerTopic.includes("matter") || lowerTopic.includes("energy")) {
-      const mode = (attempts + randInt(1, 10)) % 5;
+      const mode = (attempts + randInt(1, 20)) % 14;
       if (mode === 0) {
         qText = "In a forest ecosystem, which of the following organisms acts as a PRODUCER by transforming sunlight into food?";
         opts = [
@@ -486,7 +486,7 @@ export function generateCurriculumQuestions(
         ];
         correct = "B";
         explanation = "Step 1: In a controlled experiment, keeping all other variables constant ensures that the independent variable is the true cause of the result. 💡 Tip: Fair tests change only ONE factor at a time!";
-      } else {
+      } else if (mode === 4) {
         qText = "What primary role do DECOMPOSERS (like fungi, mushrooms, and soil bacteria) perform in nature?";
         opts = [
           { id: "A", text: "They hunt other animals for meat", isCorrect: false },
@@ -496,13 +496,103 @@ export function generateCurriculumQuestions(
         ];
         correct = "B";
         explanation = "Step 1: Decomposers break down dead plant and animal matter. Step 2: This returns vital nutrients to soil so new plants can grow. 💡 Tip: Decomposers are nature's ultimate recyclers!";
+      } else if (mode === 5) {
+        qText = "Which energy transformation takes place when a solar panel powers an electric fan?";
+        opts = [
+          { id: "A", text: "Nuclear energy transforms directly into sound energy", isCorrect: false },
+          { id: "B", text: "Light (radiant) energy transforms into electrical energy, then into mechanical (kinetic) energy", isCorrect: true },
+          { id: "C", text: "Chemical energy transforms into gravitational energy", isCorrect: false },
+          { id: "D", text: "Thermal energy creates new atoms", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: The solar cell absorbs radiant light photons and produces electrical current. Step 2: The motor converts electricity into mechanical rotation. 💡 Tip: Energy cannot be created or destroyed, only transformed!";
+      } else if (mode === 6) {
+        qText = "During the water cycle, what term describes water vapor cooling and changing from a gas back into liquid droplets to form clouds?";
+        opts = [
+          { id: "A", text: "Evaporation", isCorrect: false },
+          { id: "B", text: "Condensation", isCorrect: true },
+          { id: "C", text: "Precipitation", isCorrect: false },
+          { id: "D", text: "Transpiration", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Evaporation turns liquid into gas. Step 2: Condensation cools gas back into tiny liquid drops that cluster into clouds. 💡 Tip: Think of cold dew condensing on a cold glass in summer!";
+      } else if (mode === 7) {
+        qText = "Two forces act on a wooden block: 10 Newtons pushing right and 10 Newtons pushing left. What is the net force and movement of the block?";
+        opts = [
+          { id: "A", text: "20 Newtons right; the block accelerates rapidly", isCorrect: false },
+          { id: "B", text: "0 Newtons; the forces are balanced so the block does not accelerate", isCorrect: true },
+          { id: "C", text: "10 Newtons upward; the block floats", isCorrect: false },
+          { id: "D", text: "5 Newtons left; friction overcomes all forces", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Equal and opposite forces cancel out: 10 N - 10 N = 0 N. Step 2: A net force of zero means motion does not change. 💡 Tip: Balanced forces = zero acceleration!";
+      } else if (mode === 8) {
+        qText = "Which type of rock is formed when layers of sediment, sand, and mineral fragments are compressed and cemented over millions of years?";
+        opts = [
+          { id: "A", text: "Igneous rock (hardened lava)", isCorrect: false },
+          { id: "B", text: "Sedimentary rock (e.g., sandstone, limestone, shale)", isCorrect: true },
+          { id: "C", text: "Metamorphic rock (altered by extreme heat and pressure)", isCorrect: false },
+          { id: "D", text: "Volcanic obsidian glass", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Weathering and erosion break down rocks. Step 2: Deposition, compaction, and cementation form sedimentary rock layers. 💡 Tip: Look for fossils—they are almost always preserved in sedimentary rock!";
+      } else if (mode === 9) {
+        qText = "How do camouflage and thick insulating blubber help an Arctic seal survive in its polar biome?";
+        opts = [
+          { id: "A", text: "They allow the animal to photosynthesize energy from snow", isCorrect: false },
+          { id: "B", text: "They provide physical adaptations that conserve body heat and conceal the seal from predators", isCorrect: true },
+          { id: "C", text: "They eliminate the seal's need to drink or eat food", isCorrect: false },
+          { id: "D", text: "They change the climate of the surrounding arctic waters", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Blubber traps body heat in freezing temperatures. Step 2: Camouflage hides the animal against snow and ice. 💡 Tip: Physical adaptations are body traits that aid survival!";
+      } else if (mode === 10) {
+        qText = "Which of the following is considered a RENEWABLE natural energy resource?";
+        opts = [
+          { id: "A", text: "Coal burned in power plants", isCorrect: false },
+          { id: "B", text: "Wind harnessed through modern turbines", isCorrect: true },
+          { id: "C", text: "Crude petroleum oil drilled from underground", isCorrect: false },
+          { id: "D", text: "Uranium extracted from mines", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Renewable resources naturally replenish on a human timescale (wind, solar, hydro). Fossil fuels take millions of years to form. 💡 Tip: Wind and sunlight never run out!";
+      } else if (mode === 11) {
+        qText = "What causes the predictable cycle of day and night on planet Earth?";
+        opts = [
+          { id: "A", text: "The moon moving directly between the Earth and Sun", isCorrect: false },
+          { id: "B", text: "The rotation of Earth on its own central axis once every 24 hours", isCorrect: true },
+          { id: "C", text: "The revolution of Earth in its year-long orbit around the Sun", isCorrect: false },
+          { id: "D", text: "The Sun turning its light off and on periodically", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Rotation = spinning on its axis (takes 24 hours, creates day/night). Step 2: Revolution = orbiting the Sun (takes 365 days, creates seasons). 💡 Tip: Spin = Day; Orbit = Year!";
+      } else if (mode === 12) {
+        qText = "When iron nails are left outside in moist air, they react with oxygen to form reddish-brown rust. This process is an example of...";
+        opts = [
+          { id: "A", text: "A reversible physical change in shape only", isCorrect: false },
+          { id: "B", text: "A chemical reaction forming an entirely new substance (iron oxide)", isCorrect: true },
+          { id: "C", text: "Evaporation of iron atoms into a gas", isCorrect: false },
+          { id: "D", text: "Static electricity discharge", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Rusting creates a completely new compound (iron oxide) with different chemical properties. 💡 Tip: Chemical changes create new substances; physical changes only change state or appearance!";
+      } else {
+        qText = `Why do scientists use physical or digital computer models when studying "${cleanTopic}"?`;
+        opts = [
+          { id: "A", text: "To replace all laboratory experiments permanently", isCorrect: false },
+          { id: "B", text: "To visualize, analyze, and test systems that are too massive, microscopic, dangerous, or slow to study directly", isCorrect: true },
+          { id: "C", text: "Because models are guaranteed to be 100% free of uncertainty", isCorrect: false },
+          { id: "D", text: "To prevent other scientists from verifying their hypotheses", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Scientific models represent complex systems (like solar systems, atoms, or weather) so we can run simulations and test predictions. 💡 Tip: Models help us see the unseeable!";
       }
 
     // ==========================================
     // 7. SOCIAL STUDIES & CIVICS
     // ==========================================
     } else if (lowerSubject.includes("social") || lowerSubject.includes("history") || lowerSubject.includes("geography") || lowerSubject.includes("civic")) {
-      const mode = (attempts + randInt(1, 10)) % 4;
+      const mode = (attempts + randInt(1, 20)) % 16;
       if (mode === 0) {
         qText = `Which of the following is considered a PRIMARY SOURCE when researching "${cleanTopic}"?`;
         opts = [
@@ -514,42 +604,162 @@ export function generateCurriculumQuestions(
         correct = "B";
         explanation = `Step 1: Primary sources are direct, firsthand evidence created during the actual time of the event. 💡 Tip: Primary = Firsthand witness; Secondary = Secondhand retelling!`;
       } else if (mode === 1) {
-        qText = `Why do democratic communities establish written laws and rules related to "${cleanTopic}"?`;
+        qText = `Why do democratic communities establish written constitutions and rule of law regarding "${cleanTopic}"?`;
         opts = [
-          { id: "A", text: "To give all power to a single individual", isCorrect: false },
-          { id: "B", text: "To protect individual rights, ensure public safety, and resolve disputes peacefully", isCorrect: true },
-          { id: "C", text: "To prevent citizens from communicating with each other", isCorrect: false },
-          { id: "D", text: "Because rules cannot be changed once written", isCorrect: false },
+          { id: "A", text: "To give unlimited power to a single ruler without oversight", isCorrect: false },
+          { id: "B", text: "To protect individual rights, establish clear limits on government, and ensure justice for all citizens", isCorrect: true },
+          { id: "C", text: "To eliminate all public debate and community elections", isCorrect: false },
+          { id: "D", text: "Because legal codes can never be amended or updated", isCorrect: false },
         ];
         correct = "B";
-        explanation = "Step 1: The rule of law exists to protect equal rights, maintain order, and ensure justice for everyone. 💡 Tip: Laws protect both freedom and safety!";
+        explanation = "Step 1: Constitutions create the fundamental framework for government, balancing public order with individual liberties. 💡 Tip: The Rule of Law applies equally to everyone, including leaders!";
       } else if (mode === 2) {
         qText = `When studying "${cleanTopic}", analyzing CAUSE AND EFFECT helps students understand...`;
         opts = [
           { id: "A", text: "Only the exact dates on a calendar", isCorrect: false },
-          { id: "B", text: "Why historical events occurred and the consequences they had on people's lives", isCorrect: true },
-          { id: "C", text: "How to solve arithmetic equations", isCorrect: false },
+          { id: "B", text: "Why historical events occurred and how their consequences shaped society and future generations", isCorrect: true },
+          { id: "C", text: "How to solve algebraic equations", isCorrect: false },
           { id: "D", text: "The spelling of geographic names only", isCorrect: false },
         ];
         correct = "B";
-        explanation = "Step 1: Cause is why something happened; effect is what resulted from it. 💡 Tip: Always ask: 'What led to this, and what happened next?'";
-      } else {
-        qText = `Which geographic tool would be MOST effective for analyzing the physical elevation, rivers, and terrain of a region?`;
+        explanation = "Step 1: Cause explains why an event began; effect examines the long-term impact on communities. 💡 Tip: Always ask: 'What sparked this, and what changed as a result?'";
+      } else if (mode === 3) {
+        qText = "Which geographic tool would be MOST effective for analyzing the physical elevation, mountains, rivers, and terrain of a region?";
         opts = [
-          { id: "A", text: "A political map showing state boundaries", isCorrect: false },
-          { id: "B", text: "A topographic or physical map", isCorrect: true },
-          { id: "C", text: "A line graph of rainfall by month", isCorrect: false },
-          { id: "D", text: "A dictionary index", isCorrect: false },
+          { id: "A", text: "A political map showing voting districts and boundary lines", isCorrect: false },
+          { id: "B", text: "A topographic or physical elevation map", isCorrect: true },
+          { id: "C", text: "A bar graph showing annual city tax revenue", isCorrect: false },
+          { id: "D", text: "A dictionary index of state capitals", isCorrect: false },
         ];
         correct = "B";
-        explanation = "Step 1: Topographic and physical maps show landforms, mountains, elevation contours, and bodies of water. 💡 Tip: Physical maps show natural features!";
+        explanation = "Step 1: Topographic maps use contour lines and color shading to display natural physical landforms and elevations. 💡 Tip: Physical maps show the land; political maps show boundaries made by people!";
+      } else if (mode === 4) {
+        qText = "In a constitutional democracy with three branches of government, what is the core purpose of 'CHECKS AND BALANCES'?";
+        opts = [
+          { id: "A", text: "To ensure that one branch holds supreme authority over the others", isCorrect: false },
+          { id: "B", text: "To prevent any single branch from abusing power by allowing each branch to oversee and limit the others", isCorrect: true },
+          { id: "C", text: "To calculate annual bank deposits for public schools", isCorrect: false },
+          { id: "D", text: "To replace elections with permanent judicial appointments", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: The Legislative (makes laws), Executive (enforces laws), and Judicial (interprets laws) branches check each other so no monarch or dictator emerges. 💡 Tip: Divided power protects citizen liberty!";
+      } else if (mode === 5) {
+        qText = "In economics, what fundamental concept explains why people, businesses, and nations must make choices about how to allocate limited resources?";
+        opts = [
+          { id: "A", text: "Unlimited abundance of all natural materials", isCorrect: false },
+          { id: "B", text: "Scarcity (wants and needs exceed available resources)", isCorrect: true },
+          { id: "C", text: "Price ceilings that never fluctuate", isCorrect: false },
+          { id: "D", text: "Barter systems that forbid currency", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Scarcity means resources (time, money, land) are limited, while human desires are virtually unlimited. 💡 Tip: Every choice has an 'opportunity cost'—the next best thing you give up!";
+      } else if (mode === 6) {
+        qText = "Which of the following is considered an essential CIVIC RESPONSIBILITY of citizens in a democratic republic?";
+        opts = [
+          { id: "A", text: "Holding public office for life without term limits", isCorrect: false },
+          { id: "B", text: "Staying informed, participating in elections (voting), and serving on juries when summoned", isCorrect: true },
+          { id: "C", text: "Refusing to pay local municipal taxes", isCorrect: false },
+          { id: "D", text: "Only obeying laws that you personally agree with", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Civic responsibilities ensure that government remains accountable to the people. 💡 Tip: Rights are what you receive; responsibilities are how you contribute to your community!";
+      } else if (mode === 7) {
+        qText = "How did major river valleys (such as the Nile, Tigris-Euphrates, and Indus) encourage the development of the earliest human civilizations?";
+        opts = [
+          { id: "A", text: "They made building defensive castles completely unnecessary", isCorrect: false },
+          { id: "B", text: "They provided fertile silt for agriculture, fresh water for drinking, and natural routes for travel and trade", isCorrect: true },
+          { id: "C", text: "They prevented all migration from neighboring regions", isCorrect: false },
+          { id: "D", text: "They experienced freezing blizzards that preserved harvested crops", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Annual river flooding deposited nutrient-rich silt, enabling farmers to produce food surpluses that supported towns and cities. 💡 Tip: Water and fertile soil are the seeds of early civilization!";
+      } else if (mode === 8) {
+        qText = "When historians evaluate a written account of a historical conflict, why is it vital to identify the author's POINT OF VIEW or possible BIAS?";
+        opts = [
+          { id: "A", text: "To prove that all historical writings are completely false", isCorrect: false },
+          { id: "B", text: "To understand the writer's motivations, background, and whether their perspective influenced what facts they included or omitted", isCorrect: true },
+          { id: "C", text: "So you can rewrite the document using modern slang", isCorrect: false },
+          { id: "D", text: "Because only eyewitnesses who won the conflict are allowed to write history", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Every writer has a background and worldview that shapes how they interpret events. Comparing multiple perspectives reveals the fuller truth. 💡 Tip: Good historians cross-examine sources like detectives!";
+      } else if (mode === 9) {
+        qText = "What term describes the exchange and spreading of goods, ideas, technologies, and religious beliefs between different cultures along historical trade routes?";
+        opts = [
+          { id: "A", text: "Cultural isolation", isCorrect: false },
+          { id: "B", text: "Cultural diffusion", isCorrect: true },
+          { id: "C", text: "Geographic stagnation", isCorrect: false },
+          { id: "D", text: "Monopoly control", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: When merchants and travelers journeyed along routes like the Silk Road, they traded spices, silk, and paper, sharing knowledge and languages. 💡 Tip: Diffusion = spread from one culture to another!";
+      } else if (mode === 10) {
+        qText = "In a free-market economy, what typically happens to the price of a popular seasonal good if consumer demand rises sharply while supply remains scarce?";
+        opts = [
+          { id: "A", text: "The market price remains identical forever", isCorrect: false },
+          { id: "B", text: "The market price tends to increase because buyers compete for limited units", isCorrect: true },
+          { id: "C", text: "The market price drops to zero immediately", isCorrect: false },
+          { id: "D", text: "The government forbids anyone from selling the item", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: High demand + low supply = higher prices (scarcity premium). Step 2: Low demand + excess supply = falling prices. 💡 Tip: The price balances supply with demand!";
+      } else if (mode === 11) {
+        qText = `When organizing a historical study of "${cleanTopic}", why do historians arrange key milestones on a CHRONOLOGICAL TIMELINE?`;
+        opts = [
+          { id: "A", text: "To fit as many random words on one poster as possible", isCorrect: false },
+          { id: "B", text: "To analyze the sequence of events over time and understand how earlier developments influenced later outcomes", isCorrect: true },
+          { id: "C", text: "To prove that nothing ever changed in human history", isCorrect: false },
+          { id: "D", text: "Because events in history happen in reverse alphabetical order", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Chronology tracks events from earliest to most recent, revealing historical patterns and cause-effect chains. 💡 Tip: Chronos = Time; Logic = Order!";
+      } else if (mode === 12) {
+        qText = "Which level of government in the United States typically manages local community services such as fire departments, police patrols, city parks, and trash collection?";
+        opts = [
+          { id: "A", text: "The Federal United Nations treaty council", isCorrect: false },
+          { id: "B", text: "Local municipal / city or county government", isCorrect: true },
+          { id: "C", text: "The national Supreme Court", isCorrect: false },
+          { id: "D", text: "Foreign diplomatic ambassadors", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Federal handles national defense and foreign treaties; State manages highways and licensing; Local handles community neighborhood services. 💡 Tip: Local government is closest to your front door!";
+      } else if (mode === 13) {
+        qText = "How did the invention of the steam engine and mechanized factories during the Industrial Revolution change where the majority of people lived and worked?";
+        opts = [
+          { id: "A", text: "People abandoned cities to return to subsistence farming", isCorrect: false },
+          { id: "B", text: "Massive populations migrated from rural farming villages into rapidly growing urban manufacturing centers (urbanization)", isCorrect: true },
+          { id: "C", text: "Transportation between distant regions ceased completely", isCorrect: false },
+          { id: "D", text: "All manufacturing was shifted back into individual home workshops", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Steam-powered machinery centralized production in factories located near rail and waterways, driving urbanization. 💡 Tip: Industrialization transformed agrarian life into urban society!";
+      } else if (mode === 14) {
+        qText = "Which constitutional protection ensures that an individual accused of a crime has the right to a fair, speedy, and public trial by an impartial jury?";
+        opts = [
+          { id: "A", text: "The system of royal decrees", isCorrect: false },
+          { id: "B", text: "Due process of law protected in the Bill of Rights (Sixth Amendment)", isCorrect: true },
+          { id: "C", text: "Executive privilege of state governors", isCorrect: false },
+          { id: "D", text: "Unconditional martial law", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Due process guarantees legal fairness, representation by counsel, and impartial jury evaluation before any liberty or property is restricted. 💡 Tip: Due process ensures justice before judgment!";
+      } else {
+        qText = `When examining historical artifacts or archaeological relics connected to "${cleanTopic}", what can researchers determine about ancient communities?`;
+        opts = [
+          { id: "A", text: "Only the exact names of every citizen who ever lived", isCorrect: false },
+          { id: "B", text: "Their technological capabilities, daily tools, trading networks, and religious or artistic traditions", isCorrect: true },
+          { id: "C", text: "That ancient civilizations had identical technologies to modern smartphone eras", isCorrect: false },
+          { id: "D", text: "Nothing factual because physical objects cannot provide historical clues", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Pottery, tools, architecture, and burial sites provide tangible clues about how people lived, ate, and traded long before written records. 💡 Tip: Artifacts are the physical clues left behind by history!";
       }
 
     // ==========================================
     // 8. READING & LANGUAGE ARTS
     // ==========================================
     } else if (lowerSubject.includes("reading") || lowerSubject.includes("english") || lowerSubject.includes("language")) {
-      const mode = (attempts + randInt(1, 10)) % 4;
+      const mode = (attempts + randInt(1, 20)) % 12;
       if (mode === 0) {
         qText = "Read the sentence: 'The stars were diamond jewels scattered across the dark night velvet.' What figurative language device is used here?";
         opts = [
@@ -561,92 +771,242 @@ export function generateCurriculumQuestions(
         correct = "B";
         explanation = "Step 1: The sentence directly states the stars WERE jewels and the sky was velvet without using 'like' or 'as'. That makes it a metaphor! 💡 Tip: Metaphors say one thing IS another!";
       } else if (mode === 1) {
-        qText = "When an author describes a character's actions and speech instead of directly telling the reader how they feel, the reader must make an...";
+        qText = "When an author describes a character's actions and trembling speech instead of explicitly stating that they are frightened, what reading strategy must the student use?";
         opts = [
-          { id: "A", text: "Index", isCorrect: false },
-          { id: "B", text: "Inference (logical conclusion based on evidence + background knowledge)", isCorrect: true },
-          { id: "C", text: "Alliteration", isCorrect: false },
-          { id: "D", text: "Antonym", isCorrect: false },
+          { id: "A", text: "Consulting an alphabetized table of contents", isCorrect: false },
+          { id: "B", text: "Making an inference by combining text evidence with personal background knowledge", isCorrect: true },
+          { id: "C", text: "Memorizing all spelling words phonetically", isCorrect: false },
+          { id: "D", text: "Skimming only the first sentence of the book", isCorrect: false },
         ];
         correct = "B";
-        explanation = "Step 1: Inferring means reading between the lines using clues from the text and your own thinking. 💡 Tip: Text Clues + What You Know = Inference!";
+        explanation = "Step 1: Inferring means reading between the lines using clues from the text plus your own understanding. 💡 Tip: Text Clues + What You Know = Inference!";
       } else if (mode === 2) {
-        qText = "What is the primary function of a PREFIX in the English language?";
+        qText = "What is the primary function of a PREFIX (such as 'un-', 're-', or 'mis-') when attached to a base root word?";
         opts = [
-          { id: "A", text: "It ends a paragraph with punctuation", isCorrect: false },
-          { id: "B", text: "It attaches to the beginning of a root word to modify its meaning (e.g., un-, re-, pre-)", isCorrect: true },
-          { id: "C", text: "It changes a noun into a vowel", isCorrect: false },
-          { id: "D", text: "It is only used in poetry rhyming", isCorrect: false },
+          { id: "A", text: "It ends a paragraph with appropriate punctuation marks", isCorrect: false },
+          { id: "B", text: "It attaches to the beginning of a root word to alter or reverse its fundamental meaning", isCorrect: true },
+          { id: "C", text: "It transforms a noun into a vowel sound", isCorrect: false },
+          { id: "D", text: "It is only used when writing rhyming poetry", isCorrect: false },
         ];
         correct = "B";
-        explanation = "Step 1: 'Pre' means before. Prefixes go before the root word (like 're-write' or 'un-happy'). 💡 Tip: Pre = Before, Fix = Attach!";
-      } else {
-        qText = "Which text structure organizes events in the exact sequence in which they occurred over time?";
+        explanation = "Step 1: 'Pre' means before. Attaching 'un-' to 'wrap' creates 'unwrap' (the opposite). 💡 Tip: Pre = Before, Fix = Attach!";
+      } else if (mode === 3) {
+        qText = "Which text structure organizes informational writing by explaining why something occurred and what resulted from that event?";
         opts = [
-          { id: "A", text: "Problem and Solution", isCorrect: false },
-          { id: "B", text: "Chronological / Sequential order", isCorrect: true },
+          { id: "A", text: "Problem and Solution only", isCorrect: false },
+          { id: "B", text: "Cause and Effect", isCorrect: true },
           { id: "C", text: "Compare and Contrast", isCorrect: false },
-          { id: "D", text: "Cause and Effect only", isCorrect: false },
+          { id: "D", text: "Spatial / Descriptive layout only", isCorrect: false },
         ];
         correct = "B";
-        explanation = "Step 1: Chronological order arranges events along a timeline from earliest to latest. 💡 Tip: Look for clue words: First, Next, Later, Finally!";
+        explanation = "Step 1: Cause is the catalyst; effect is the outcome or consequence. Look for transitional signal words: 'therefore', 'as a result', 'because'. 💡 Tip: Why it happened = Cause; What happened = Effect!";
+      } else if (mode === 4) {
+        qText = "What is the MAIN IDEA of an informational text, and how does it differ from supporting details?";
+        opts = [
+          { id: "A", text: "The main idea is a single random minor fact mentioned in paragraph three", isCorrect: false },
+          { id: "B", text: "The main idea is the primary overarching point the author wants readers to understand, supported by specific evidence", isCorrect: true },
+          { id: "C", text: "The main idea is always identical to the dictionary definition of the title", isCorrect: false },
+          { id: "D", text: "There is no difference between a main idea and a supporting detail", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: The main idea is the big umbrella concept. Supporting details are facts, statistics, and examples that hold that umbrella up! 💡 Tip: Main Idea = The point; Details = The proof!";
+      } else if (mode === 5) {
+        qText = "From which POINT OF VIEW is a story narrated when the speaker uses pronouns like 'I', 'me', 'my', and 'we'?";
+        opts = [
+          { id: "A", text: "Third-Person Omniscient", isCorrect: false },
+          { id: "B", text: "First-Person Point of View", isCorrect: true },
+          { id: "C", text: "Second-Person Instruction ('you')", isCorrect: false },
+          { id: "D", text: "Third-Person Objective", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: First person is told from the narrator's personal perspective using 'I' and 'we'. 💡 Tip: 1st person = I am in the story; 3rd person = He, she, or they are in the story!";
+      } else if (mode === 6) {
+        qText = "Read the phrase: 'Her backpack weighed ten thousand pounds on the first day of school!' What literary device is being used for dramatic effect?";
+        opts = [
+          { id: "A", text: "Understatement", isCorrect: false },
+          { id: "B", text: "Hyperbole (deliberate, extreme exaggeration)", isCorrect: true },
+          { id: "C", text: "Personification", isCorrect: false },
+          { id: "D", text: "Literal mathematical measurement", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: A backpack cannot literally weigh 10,000 lbs; the author is intentionally exaggerating to emphasize how heavy it felt. That is hyperbole! 💡 Tip: Hyperbole = Hyper-exaggeration!";
+      } else if (mode === 7) {
+        qText = "When readers encounter an unfamiliar vocabulary word in a complex paragraph, what are 'CONTEXT CLUES'?";
+        opts = [
+          { id: "A", text: "The page numbers and header titles at the top of the book", isCorrect: false },
+          { id: "B", text: "Surrounding words, synonyms, antonyms, or explanations in nearby sentences that hint at the word's meaning", isCorrect: true },
+          { id: "C", text: "Only the illustrations drawn on the book cover", isCorrect: false },
+          { id: "D", text: "The author's biography on the back jacket", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Authors often leave clues in the surrounding sentence—such as restatements or contrast words—to reveal meaning. 💡 Tip: Look at the sentence before and after the mystery word!";
+      } else if (mode === 8) {
+        qText = "What distinguishes an AUTHOR'S PURPOSE when writing a persuasive essay versus an informative textbook chapter?";
+        opts = [
+          { id: "A", text: "A persuasive essay only uses rhymes, while a textbook uses capital letters", isCorrect: false },
+          { id: "B", text: "A persuasive essay aims to convince the reader to adopt a viewpoint, whereas an informative text aims to educate using objective facts", isCorrect: true },
+          { id: "C", text: "There is no difference; all texts share the identical purpose", isCorrect: false },
+          { id: "D", text: "Persuasive essays never include reasons or arguments", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Remember 'PIE': Persuade (convince), Inform (teach facts), Entertain (amuse or tell a story). 💡 Tip: Check if the author is arguing a side or presenting neutral facts!";
+      } else if (mode === 9) {
+        qText = "In literature, what is the THEME of a fictional story or fable?";
+        opts = [
+          { id: "A", text: "The physical city or country where the characters reside", isCorrect: false },
+          { id: "B", text: "The underlying universal lesson, moral, or message about human life conveyed through the story", isCorrect: true },
+          { id: "C", text: "The list of characters in order of appearance", isCorrect: false },
+          { id: "D", text: "The font size chosen by the printer", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: The theme is the deeper insight (e.g., 'Courage overcomes fear' or 'Honesty builds trust') that applies beyond the characters. 💡 Tip: Theme = The 'Me'ssage of the story!";
+      } else if (mode === 10) {
+        qText = "Read the sentence: 'The angry thunderstorm screamed outside our shuttered windows.' What literary technique gives human qualities to non-human things?";
+        opts = [
+          { id: "A", text: "Alliteration", isCorrect: false },
+          { id: "B", text: "Personification", isCorrect: true },
+          { id: "C", text: "Oxymoron", isCorrect: false },
+          { id: "D", text: "Irony", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Storms cannot literally feel anger or scream; giving human emotions and actions to weather is personification. 💡 Tip: 'Person'ification turns things into persons!";
+      } else {
+        qText = "Which non-fiction text feature is located at the back of a reference book and lists specific topics, names, and keywords alphabetically with their corresponding page numbers?";
+        opts = [
+          { id: "A", text: "Table of Contents", isCorrect: false },
+          { id: "B", text: "Index", isCorrect: true },
+          { id: "C", text: "Dedication Page", isCorrect: false },
+          { id: "D", text: "Title Copyright Header", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: An index appears at the very back, alphabetizing exact terms with page numbers. The Table of Contents is at the front and shows chapters in order. 💡 Tip: Index = Alphabetical lookup at the back!";
       }
 
     // ==========================================
     // 9. GENERAL HIGH-DIVERSITY COGNITIVE ENGINE
     // ==========================================
     } else {
-      const mode = (attempts + randInt(1, 10)) % 5;
+      const mode = (attempts + randInt(1, 20)) % 12;
       if (mode === 0) {
-        qText = `Which statement describes a foundational concept of "${cleanTopic}" within ${subject}?`;
+        qText = `When analyzing "${cleanTopic}" in ${subject}, what is the foundational principle that guides accurate problem-solving?`;
         opts = [
-          { id: "A", text: `It applies only to unrelated topics in advanced graduate studies`, isCorrect: false },
-          { id: "B", text: `It provides essential principles and problem-solving tools used throughout ${subject}`, isCorrect: true },
-          { id: "C", text: `It contradicts the standard facts taught in ${gradeLevel}`, isCorrect: false },
-          { id: "D", text: `It has no connection to practical real-world scenarios`, isCorrect: false },
+          { id: "A", text: "Assuming that standard rules change randomly each day", isCorrect: false },
+          { id: "B", text: `Understanding the core concepts, identifying known conditions, and applying verified systematic rules of ${subject}`, isCorrect: true },
+          { id: "C", text: "Guessing the first option that appears without reviewing evidence", isCorrect: false },
+          { id: "D", text: "Discarding all factual data that requires calculation", isCorrect: false },
         ];
         correct = "B";
-        explanation = `Step 1: Understanding "${cleanTopic}" builds a solid foundation for mastering ${subject}. 💡 Tip: Master the core idea first, then explore the details!`;
+        explanation = `Step 1: Mastery of "${cleanTopic}" begins with solid grasp of fundamentals and methodical reasoning. 💡 Tip: Break complex problems into smaller, manageable steps!`;
       } else if (mode === 1) {
-        qText = `A ${gradeLevel} student is analyzing a problem involving "${cleanTopic}". What is the MOST effective first step?`;
+        qText = `A ${gradeLevel} student is investigating a scenario involving "${cleanTopic}". What is the MOST effective first step in approaching the challenge?`;
         opts = [
-          { id: "A", text: "Select a random answer immediately without reading the prompt", isCorrect: false },
-          { id: "B", text: "Identify the known facts, clarify what question is being asked, and determine which strategy applies", isCorrect: true },
-          { id: "C", text: "Skip all instructions and write down unrelated equations", isCorrect: false },
-          { id: "D", text: "Assume the problem cannot be solved", isCorrect: false },
+          { id: "A", text: "Jump immediately to a conclusion without reading the details", isCorrect: false },
+          { id: "B", text: "Clarify what question must be answered, isolate the given information, and determine which method or tool applies", isCorrect: true },
+          { id: "C", text: "Assume the problem is impossible to solve with the given information", isCorrect: false },
+          { id: "D", text: "Copy an answer from an unrelated problem", isCorrect: false },
         ];
         correct = "B";
-        explanation = `Step 1: Careful problem analysis starts with identifying the knowns and the goal before applying a solution method. 💡 Tip: Understand the question before calculating!`;
+        explanation = `Step 1: Successful problem-solvers always define the goal and organize their knowns before computing. 💡 Tip: Understand the goal before starting the work!`;
       } else if (mode === 2) {
-        qText = `How does knowledge of "${cleanTopic}" apply to everyday real-world situations?`;
+        qText = `How does deep understanding of "${cleanTopic}" connect directly to practical, real-world applications?`;
         opts = [
-          { id: "A", text: "It is only useful when taking an exam", isCorrect: false },
-          { id: "B", text: `It helps individuals make informed decisions, interpret information, and solve practical challenges in ${subject}`, isCorrect: true },
-          { id: "C", text: "It is only used by computers and has no human application", isCorrect: false },
-          { id: "D", text: "It only applies to historical events that happened centuries ago", isCorrect: false },
+          { id: "A", text: "It is strictly theoretical and has zero application outside a classroom", isCorrect: false },
+          { id: "B", text: `It enables individuals to make evidence-based decisions, interpret real-world patterns, and design effective solutions in ${subject}`, isCorrect: true },
+          { id: "C", text: "It is solely used to memorize trivia for quick quizzes", isCorrect: false },
+          { id: "D", text: "It only applies to historical centuries with no relevance today", isCorrect: false },
         ];
         correct = "B";
-        explanation = `Step 1: Concepts like "${cleanTopic}" are designed to help us understand and navigate the world around us. 💡 Tip: Look for connections between your lessons and your daily life!`;
+        explanation = `Step 1: The concepts in "${cleanTopic}" provide thinking models that professionals and citizens use daily. 💡 Tip: Knowledge becomes powerful when applied to real life!`;
       } else if (mode === 3) {
-        qText = `Which skill is MOST essential for demonstrating mastery of "${cleanTopic}" in ${subject}?`;
+        qText = `Which habit of mind is MOST critical for demonstrating true mastery of "${cleanTopic}"?`;
         opts = [
-          { id: "A", text: "Memorizing answers without understanding the underlying steps", isCorrect: false },
-          { id: "B", text: "Explaining the reasoning step-by-step and applying concepts to new, unfamiliar situations", isCorrect: true },
-          { id: "C", text: "Guessing based on the shortest answer option", isCorrect: false },
-          { id: "D", text: "Ignoring vocabulary definitions", isCorrect: false },
+          { id: "A", text: "Memorizing surface steps without understanding why they work", isCorrect: false },
+          { id: "B", text: "Being able to explain your reasoning clearly and adapt principles to new, unfamiliar problem contexts", isCorrect: true },
+          { id: "C", text: "Relying strictly on rapid guessing", isCorrect: false },
+          { id: "D", text: "Ignoring vocabulary definitions and notation standards", isCorrect: false },
         ];
         correct = "B";
-        explanation = `Step 1: True mastery means being able to explain 'why' a method works and applying it to new contexts. 💡 Tip: If you can teach it to a friend, you truly know it!`;
+        explanation = `Step 1: Conceptual clarity allows you to transfer knowledge to new situations. 💡 Tip: If you can teach the concept in your own words, you truly own it!`;
+      } else if (mode === 4) {
+        qText = `When evaluating conflicting information or arguments related to "${cleanTopic}", how should a student verify accuracy?`;
+        opts = [
+          { id: "A", text: "Believe whichever claim has the most dramatic headline", isCorrect: false },
+          { id: "B", text: "Cross-examine the evidence against credible primary data, logical consistency, and established principles of ${subject}", isCorrect: true },
+          { id: "C", text: "Select whichever statement was written most recently without checking facts", isCorrect: false },
+          { id: "D", text: "Rely exclusively on personal preference without proof", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Critical thinkers evaluate sources, test logic, and weigh evidence before accepting claims. 💡 Tip: Sound evidence is the anchor of truth!";
+      } else if (mode === 5) {
+        qText = `In ${subject}, what is a common pitfall or misconception students encounter when working with "${cleanTopic}"?`;
+        opts = [
+          { id: "A", text: "Taking the time to double-check their completed work", isCorrect: false },
+          { id: "B", text: "Overlooking key constraints, confusing similar terminology, or rushing without verifying the units or conditions", isCorrect: true },
+          { id: "C", text: "Drawing diagrams to visualize the problem structure", isCorrect: false },
+          { id: "D", text: "Consulting established reference formulas", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = `Step 1: Paying attention to specific constraints and units prevents easy mistakes. 💡 Tip: Reread the question after solving to ensure your answer matches what was asked!`;
+      } else if (mode === 6) {
+        qText = `How can a student determine whether their solution or explanation for "${cleanTopic}" is reasonable?`;
+        opts = [
+          { id: "A", text: "Assume any generated number must be correct without inspection", isCorrect: false },
+          { id: "B", text: "Check whether the result fits the expected scale, satisfies all prompt constraints, and makes logical sense in context", isCorrect: true },
+          { id: "C", text: "Make sure the answer matches an unrelated problem from yesterday", isCorrect: false },
+          { id: "D", text: "Only check if the answer is an even number", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Estimation and sanity checking provide a safety net against computational or conceptual blunders. 💡 Tip: Ask yourself: 'Does this answer make sense in the real world?'";
+      } else if (mode === 7) {
+        qText = `When communicating findings or solutions regarding "${cleanTopic}", what makes an explanation most convincing?`;
+        opts = [
+          { id: "A", text: "Using emotional language without citing examples", isCorrect: false },
+          { id: "B", text: "Providing a clear sequence of steps backed by factual evidence, precise terminology, and logical justification", isCorrect: true },
+          { id: "C", text: "Keeping the explanation completely secret from peers", isCorrect: false },
+          { id: "D", text: "Using vague generalities without specific details", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Clear communication combines precise vocabulary with step-by-step evidence. 💡 Tip: Show your work and justify your thinking clearly!";
+      } else if (mode === 8) {
+        qText = `If one of the central conditions or variables in "${cleanTopic}" is altered, what should a student do to predict the outcome?`;
+        opts = [
+          { id: "A", text: "Assume the outcome will remain completely identical no matter what changes", isCorrect: false },
+          { id: "B", text: "Trace how the altered condition impacts each interconnected component of the system or calculation", isCorrect: true },
+          { id: "C", text: "Ignore the change because variables do not affect outcomes", isCorrect: false },
+          { id: "D", text: "Choose an outcome by coin flip", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Systems thinking involves tracking cause-and-effect relationships when conditions change. 💡 Tip: Trace the chain reaction one link at a time!";
+      } else if (mode === 9) {
+        qText = `What is the benefit of comparing two different valid approaches to solving a problem in "${cleanTopic}"?`;
+        opts = [
+          { id: "A", text: "It causes confusion and should never be attempted", isCorrect: false },
+          { id: "B", text: "It deepens conceptual flexibility, highlights efficiency trade-offs, and verifies the accuracy of the result", isCorrect: true },
+          { id: "C", text: "It proves that one approach must always be illegal", isCorrect: false },
+          { id: "D", text: "It triples the amount of time needed for simple tasks", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Seeing multiple paths to a solution confirms the answer and builds mathematical/conceptual versatility. 💡 Tip: Different paths can lead to the same summit!";
+      } else if (mode === 10) {
+        qText = `Which tool or strategy is most helpful when synthesizing multiple pieces of information about "${cleanTopic}"?`;
+        opts = [
+          { id: "A", text: "Ignoring all data that contradicts your first guess", isCorrect: false },
+          { id: "B", text: "Organizing information into a visual graphic organizer, comparison chart, or step-by-step outline", isCorrect: true },
+          { id: "C", text: "Relying purely on memory without taking any notes", isCorrect: false },
+          { id: "D", text: "Deleting half the data points at random", isCorrect: false },
+        ];
+        correct = "B";
+        explanation = "Step 1: Graphic organizers and structured notes allow you to see connections between ideas clearly. 💡 Tip: Visual structure brings mental clarity!";
       } else {
-        qText = `When evaluating claims or data related to "${cleanTopic}", what should a student look for to verify accuracy?`;
+        qText = `How does continuous reflection on "${cleanTopic}" support ongoing academic growth in ${subject}?`;
         opts = [
-          { id: "A", text: "Whether the statement is popular on social media", isCorrect: false },
-          { id: "B", text: "Reliable evidence, verified source data, and logical consistency", isCorrect: true },
-          { id: "C", text: "The length of the paragraph only", isCorrect: false },
-          { id: "D", text: "Only opinions from people who agree with you", isCorrect: false },
+          { id: "A", text: "It guarantees that no further practice is ever required", isCorrect: false },
+          { id: "B", text: "It helps identify strengths, clarify lingering questions, and build confidence for tackling advanced material", isCorrect: true },
+          { id: "C", text: "It causes previously mastered skills to be forgotten", isCorrect: false },
+          { id: "D", text: "It has no relationship to learning progress", isCorrect: false },
         ];
         correct = "B";
-        explanation = "Step 1: Critical thinking requires evaluating factual evidence and checking reputable sources. 💡 Tip: Evidence is the anchor of truth in every subject!";
+        explanation = `Step 1: Metacognition—thinking about how you learn—turns practice into lasting mastery. 💡 Tip: Reflect on what worked and what you learned from every problem!`;
       }
     }
 
