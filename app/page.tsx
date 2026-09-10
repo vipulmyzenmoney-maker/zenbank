@@ -31,6 +31,11 @@ interface GenerationProgress {
   totalGenerated: number;
   totalExpected: number;
   percent: number;
+  cooldown?: {
+    seconds: number;
+    attempt: number;
+    message: string;
+  } | null;
 }
 
 interface ParsedSyllabusState {
@@ -63,6 +68,7 @@ export default function GeneratorPage() {
   const [customSubject, setCustomSubject] = useState("Math");
   
   // Generator Execution state
+  const [engineMode, setEngineMode] = useState<"groq" | "curriculum">("groq");
   const [questionCount, setQuestionCount] = useState(10);
   const [generating, setGenerating] = useState(false);
   const [generatingTitle, setGeneratingTitle] = useState("");
@@ -303,7 +309,7 @@ export default function GeneratorPage() {
           "Content-Type": "application/json",
           ...(storedKey ? { "x-api-key": storedKey } : {}),
         },
-        body: JSON.stringify({ ...payload, apiKey: storedKey }),
+        body: JSON.stringify({ ...payload, engine: engineMode, apiKey: storedKey }),
         signal: controller.signal,
       });
 
@@ -341,7 +347,21 @@ export default function GeneratorPage() {
                   totalGenerated: 0,
                   totalExpected: event.totalExpected || totalExpected,
                   percent: 0,
+                  cooldown: null,
                 });
+              } else if (event.type === "cooldown") {
+                setProgress((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        cooldown: {
+                          seconds: event.seconds,
+                          attempt: event.attempt,
+                          message: event.message,
+                        },
+                      }
+                    : null
+                );
               } else if (event.type === "topic_start") {
                 setProgress((prev) => ({
                   currentTopic: event.topic,
@@ -352,6 +372,7 @@ export default function GeneratorPage() {
                   totalGenerated: event.totalGenerated,
                   totalExpected: event.totalExpected,
                   percent: event.percent ?? (prev?.percent || 0),
+                  cooldown: null,
                 }));
               } else if (event.type === "topic_done") {
                 setProgress((prev) => ({
@@ -363,11 +384,12 @@ export default function GeneratorPage() {
                   totalGenerated: event.totalGenerated,
                   totalExpected: event.totalExpected,
                   percent: event.percent,
+                  cooldown: null,
                 }));
               } else if (event.type === "complete") {
                 finalPackId = event.packId || finalPackId;
                 finalCount = event.totalGenerated || event.count || finalCount;
-                setProgress((prev) => (prev ? { ...prev, percent: 100, totalGenerated: finalCount } : null));
+                setProgress((prev) => (prev ? { ...prev, percent: 100, totalGenerated: finalCount, cooldown: null } : null));
               } else if (event.type === "error") {
                 console.error("Server stream error:", event.error);
               }
@@ -496,23 +518,57 @@ export default function GeneratorPage() {
             </button>
           </div>
 
-          {/* Question Count Selector */}
-          <div className="flex items-center gap-2 px-2">
-            <span className="text-xs font-bold text-slate-400">Questions / Topic:</span>
-            <div className="flex flex-wrap gap-1">
-              {[5, 10, 15, 20, 25, 30].map((num) => (
+          {/* Engine Mode & Question Count Selector Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-800/80 pt-3 px-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-400">Generation Engine:</span>
+              <div className="inline-flex rounded-xl bg-slate-900/90 p-1 border border-slate-800">
                 <button
-                  key={num}
-                  onClick={() => setQuestionCount(num)}
-                  className={`rounded-lg px-2.5 py-1 text-xs font-bold transition-all ${
-                    questionCount === num
+                  type="button"
+                  onClick={() => setEngineMode("groq")}
+                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-bold transition-all ${
+                    engineMode === "groq"
                       ? "bg-emerald-500 text-slate-950 font-black shadow-xs"
-                      : "bg-slate-800 text-slate-400 hover:text-white"
+                      : "text-slate-400 hover:text-white"
                   }`}
+                  title="Uses Groq open-source LLM (openai/gpt-oss-120b) with auto-cooldown retry. Never uses offline fallback."
                 >
-                  {num}
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Groq AI (gpt-oss-120b)
                 </button>
-              ))}
+                <button
+                  type="button"
+                  onClick={() => setEngineMode("curriculum")}
+                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-bold transition-all ${
+                    engineMode === "curriculum"
+                      ? "bg-amber-500 text-slate-950 font-black shadow-xs"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                  title="Built-in Curriculum Engine for offline / emergency generation only."
+                >
+                  <Zap className="h-3.5 w-3.5" />
+                  Built-in Engine (Emergency)
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-400">Questions / Topic:</span>
+              <div className="flex flex-wrap gap-1">
+                {[5, 10, 15, 20, 25, 30].map((num) => (
+                  <button
+                    key={num}
+                    onClick={() => setQuestionCount(num)}
+                    className={`rounded-lg px-2.5 py-1 text-xs font-bold transition-all ${
+                      questionCount === num
+                        ? "bg-emerald-500 text-slate-950 font-black shadow-xs"
+                        : "bg-slate-800 text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -528,8 +584,12 @@ export default function GeneratorPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 border border-emerald-500/20">
-                      Live AI Engine
+                    <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider border ${
+                      engineMode === "groq"
+                        ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                        : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                    }`}>
+                      {engineMode === "groq" ? "Groq AI (gpt-oss-120b)" : "Curriculum Engine (Emergency)"}
                     </span>
                     <span className="text-xs text-slate-400">
                       {progress?.totalTopics
@@ -586,6 +646,26 @@ export default function GeneratorPage() {
                 </span>
               </div>
             </div>
+
+            {/* Rate-Limit Cooldown Alert Banner */}
+            {progress?.cooldown && (
+              <div className="mt-4 flex items-start sm:items-center gap-3 rounded-2xl border border-amber-500/50 bg-amber-500/10 p-4 text-amber-300 animate-pulse shadow-lg shadow-amber-950/30">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400">
+                  <Clock className="h-5 w-5 animate-spin" />
+                </div>
+                <div className="flex-1 text-xs">
+                  <div className="font-extrabold text-amber-200 text-sm flex items-center gap-2">
+                    <span>⏳ Groq Token Rate-Limit Cooldown Active</span>
+                    <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-amber-400/20 border border-amber-400/30">
+                      Attempt {progress.cooldown.attempt} / 4
+                    </span>
+                  </div>
+                  <div className="text-amber-300/90 mt-1 leading-relaxed">
+                    Cooling down token bucket for <span className="font-bold underline text-amber-200">{progress.cooldown.seconds} seconds</span> before retrying Groq AI. Question generation will resume automatically with Groq AI (no automatic fallback).
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Real-Time Topic Breakdown Checklist */}
             {progress?.topics && progress.topics.length > 0 && (

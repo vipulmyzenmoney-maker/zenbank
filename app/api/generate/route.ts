@@ -86,6 +86,8 @@ async function generateQuestionsForTopic({
   activeGroqKey,
   groqClient,
   existingQuestions = [],
+  engine = "groq",
+  onCooldown,
 }: {
   topic: string;
   subject: string;
@@ -95,7 +97,34 @@ async function generateQuestionsForTopic({
   activeGroqKey?: string;
   groqClient: Groq;
   existingQuestions?: string[];
+  engine?: "groq" | "curriculum";
+  onCooldown?: (seconds: number, attempt: number, message: string) => void;
 }): Promise<TopicQuestion[]> {
+  function sanitizeKidExplanation(raw: string): string {
+    if (!raw) return "";
+    return raw
+      .replace(/<think>[\s\S]*?<\/think>/gi, "")
+      .replace(/^(thinking process|reasoning|internal analysis|rationale):\s*/gi, "")
+      .replace(/(?:distractor|misconception)\s+[A-D]\b[^.\n]*[.\n]?/gi, "")
+      .trim();
+  }
+
+  // OPTION A: Explicitly Selected Built-In Curriculum Engine
+  if (engine === "curriculum") {
+    console.log(`Using built-in curriculum engine for topic "${topic}" (explicitly selected).`);
+    const curriculumQuestions = generateCurriculumQuestions(topic, subject, gradeLevel, count, existingQuestions);
+    return curriculumQuestions.map((q) => {
+      const shuffled = shuffleMcqOptions(q.options, q.correctAnswer);
+      return {
+        ...q,
+        options: shuffled.options,
+        correctAnswer: shuffled.correctAnswer,
+        explanation: sanitizeKidExplanation(q.explanation),
+      };
+    });
+  }
+
+  // OPTION B: Groq AI Generation with Cooldown Management
   const pedagogy = getGradePedagogy(gradeLevel);
   const lowerSubject = subject.toLowerCase();
   let subjectFocus = "";
@@ -204,61 +233,16 @@ Return ONLY valid JSON in this exact format with no extra text:
 
   let topicQuestions: TopicQuestion[] = [];
 
-  // 1. Attempt generation with Google Gemini 2.0 Flash
-  if (geminiKey) {
-    try {
-      const geminiRes = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: {
-              response_mime_type: "application/json",
-              temperature: 0.75,
-            },
-          }),
-        }
-      );
-      if (geminiRes.ok) {
-        const data = await geminiRes.json();
-        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) {
-          const parsed = JSON.parse(text);
-          if (Array.isArray(parsed.questions) && parsed.questions.length > 0) {
-            const letters = ["A", "B", "C", "D", "E"];
-            topicQuestions = parsed.questions.map((q: any) => ({
-              questionText: q.questionText || q.question || "",
-              options: (Array.isArray(q.options) ? q.options : []).map((opt: any, idx: number) =>
-                typeof opt === "string"
-                  ? { id: letters[idx] || `${idx + 1}`, text: opt, isCorrect: false }
-                  : { id: opt.id || letters[idx] || `${idx + 1}`, text: String(opt.text || opt), isCorrect: Boolean(opt.isCorrect) }
-              ),
-              correctAnswer: q.correctAnswer || "A",
-              explanation: q.explanation || "",
-              difficulty: q.difficulty || "medium",
-              confidence: q.confidence || 95,
-            }));
-          }
-        }
-      }
-    } catch (geminiError) {
-      console.warn(`Gemini generation failed for topic "${topic}":`, geminiError);
-    }
-  }
-
-  // 2. Attempt generation with Groq if Gemini wasn't used or returned empty
   const hasGroq = Boolean(
     (activeGroqKey && activeGroqKey !== "your-groq-api-key-here") || process.env.GROQ_API_KEY
   );
-  if (topicQuestions.length === 0 && hasGroq) {
+
+  if (hasGroq) {
     const client =
       activeGroqKey && activeGroqKey !== "your-groq-api-key-here"
         ? new Groq({ apiKey: activeGroqKey })
         : groqClient;
 
-    // Allocate safe output tokens (accommodates reasoning tokens + JSON completion)
     const maxOutputTokens = Math.min(Math.max(count * 500, 1800), 3800);
 
     const parseGroqResponse = (content: string | null | undefined): TopicQuestion[] => {
@@ -284,64 +268,112 @@ Return ONLY valid JSON in this exact format with no extra text:
       return [];
     };
 
-    // Primary Groq Model Attempt (openai/gpt-oss-120b)
+    // Robust Groq Caller with Cooldown Management
+    const callGroqWithCooldown = async (
+      modelName: string,
+      maxRetries = 4
+    ): Promise<TopicQuestion[]> => {
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          const completion = await client.chat.completions.create({
+            model: modelName,
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.75,
+            max_tokens: maxOutputTokens,
+            response_format: { type: "json_object" },
+          });
+          const questions = parseGroqResponse(completion.choices[0]?.message?.content);
+          if (questions.length > 0) {
+            return questions;
+          }
+        } catch (err: any) {
+          const isRateLimit =
+            err?.status === 429 ||
+            err?.message?.includes("429") ||
+            err?.message?.includes("rate_limit") ||
+            err?.message?.includes("tokens") ||
+            err?.message?.includes("OTPM");
+
+          if (isRateLimit && attempt < maxRetries) {
+            // Groq resets quickly: cooldown 4s, 8s, 12s, 16s
+            const cooldownSec = 2 + attempt * 4;
+            const msg = `Groq token limit reached. Cooling down for ${cooldownSec}s (attempt ${attempt}/${maxRetries}) before retrying Groq...`;
+            console.warn(msg);
+            if (onCooldown) {
+              onCooldown(cooldownSec, attempt, msg);
+            }
+            await new Promise((resolve) => setTimeout(resolve, cooldownSec * 1000));
+            continue;
+          }
+          throw err;
+        }
+      }
+      return [];
+    };
+
+    // 1. Attempt Primary Groq Model (openai/gpt-oss-120b) with cooldown
     try {
-      const completion = await client.chat.completions.create({
-        model: PRIMARY_GENERATION_MODEL,
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.75,
-        max_tokens: maxOutputTokens,
-        response_format: { type: "json_object" },
-      });
-      topicQuestions = parseGroqResponse(completion.choices[0]?.message?.content);
+      topicQuestions = await callGroqWithCooldown(PRIMARY_GENERATION_MODEL, 4);
       if (topicQuestions.length > 0) {
         console.log(`Successfully generated ${topicQuestions.length} questions for "${topic}" via ${PRIMARY_GENERATION_MODEL}`);
       }
     } catch (primaryErr: any) {
-      console.warn(`Groq primary model (${PRIMARY_GENERATION_MODEL}) failed for topic "${topic}": ${primaryErr?.message || primaryErr}. Trying secondary model (${SECONDARY_GENERATION_MODEL})...`);
-      
-      // Secondary Groq Model Attempt (openai/gpt-oss-20b) with brief pause
+      console.warn(`Groq primary (${PRIMARY_GENERATION_MODEL}) failed for "${topic}": ${primaryErr?.message || primaryErr}. Trying secondary model (${SECONDARY_GENERATION_MODEL}) with cooldown...`);
       try {
-        await new Promise((r) => setTimeout(r, 800));
-        const fallbackCompletion = await client.chat.completions.create({
-          model: SECONDARY_GENERATION_MODEL,
-          messages: [{ role: "user", content: prompt }],
-          temperature: 0.75,
-          max_tokens: maxOutputTokens,
-          response_format: { type: "json_object" },
-        });
-        topicQuestions = parseGroqResponse(fallbackCompletion.choices[0]?.message?.content);
+        topicQuestions = await callGroqWithCooldown(SECONDARY_GENERATION_MODEL, 3);
         if (topicQuestions.length > 0) {
           console.log(`Successfully generated ${topicQuestions.length} questions for "${topic}" via secondary ${SECONDARY_GENERATION_MODEL}`);
         }
       } catch (secondaryErr: any) {
-        console.warn(`Groq secondary model (${SECONDARY_GENERATION_MODEL}) also failed for topic "${topic}": ${secondaryErr?.message || secondaryErr}. Proceeding to curriculum fallback.`);
+        console.error(`Groq secondary (${SECONDARY_GENERATION_MODEL}) also failed for "${topic}":`, secondaryErr?.message || secondaryErr);
       }
     }
   }
 
-  function sanitizeKidExplanation(raw: string): string {
-    if (!raw) return "";
-    return raw
-      .replace(/<think>[\s\S]*?<\/think>/gi, "")
-      .replace(/^(thinking process|reasoning|internal analysis|rationale):\s*/gi, "")
-      .replace(/(?:distractor|misconception)\s+[A-D]\b[^.\n]*[.\n]?/gi, "")
-      .trim();
-  }
-
-  // 3. Deduplicate AI-generated questions against existing DB questions and intra-batch
+  // Deduplicate Groq questions against existing DB questions
   let validBatch: TopicQuestion[] = [];
   if (topicQuestions.length > 0) {
     const { uniqueQuestions } = filterDuplicates(topicQuestions, existingQuestions, 0.70);
     validBatch = uniqueQuestions;
   }
 
-  // 4. Backfill any missing questions if AI failed or returned duplicates
-  if (validBatch.length < count) {
+  // If deficit exists in Groq mode, query Groq once more for remaining questions (never automatic fallback)
+  if (validBatch.length < count && hasGroq) {
     const needed = count - validBatch.length;
     const allSeen = [...existingQuestions, ...validBatch.map((q) => q.questionText)];
-    const backfills = generateCurriculumQuestions(topic, subject, gradeLevel, needed, allSeen);
-    validBatch = [...validBatch, ...backfills];
+    try {
+      const deficitPrompt = `Generate exactly ${needed} additional unique multiple-choice question(s) for ${topic} in ${subject} (${gradeLevel}).
+DO NOT DUPLICATE ANY OF THESE: ${allSeen.slice(0, 10).map((q, idx) => `${idx + 1}. "${q.slice(0, 90)}"`).join("; ")}
+Return ONLY valid JSON: {"questions": [{"questionText":"...","options":[{"id":"A","text":"...","isCorrect":true},{"id":"B","text":"...","isCorrect":false},{"id":"C","text":"...","isCorrect":false},{"id":"D","text":"...","isCorrect":false}],"correctAnswer":"A","explanation":"Step 1: ... Step 2: ... 💡 Tip: ...","difficulty":"medium","confidence":95}]}`;
+      const client = activeGroqKey && activeGroqKey !== "your-groq-api-key-here" ? new Groq({ apiKey: activeGroqKey }) : groqClient;
+      const deficitRes = await client.chat.completions.create({
+        model: PRIMARY_GENERATION_MODEL,
+        messages: [{ role: "user", content: deficitPrompt }],
+        temperature: 0.75,
+        max_tokens: Math.min(Math.max(needed * 500, 1200), 2500),
+        response_format: { type: "json_object" },
+      });
+      const parsed = JSON.parse(deficitRes.choices[0]?.message?.content || "{}");
+      if (Array.isArray(parsed.questions)) {
+        const letters = ["A", "B", "C", "D", "E"];
+        const extra: TopicQuestion[] = parsed.questions.map((q: any) => ({
+          questionText: q.questionText || q.question || "",
+          options: (Array.isArray(q.options) ? q.options : []).map((opt: any, idx: number) =>
+            typeof opt === "string"
+              ? { id: letters[idx] || `${idx + 1}`, text: opt, isCorrect: false }
+              : { id: opt.id || letters[idx] || `${idx + 1}`, text: String(opt.text || opt), isCorrect: Boolean(opt.isCorrect) }
+          ),
+          correctAnswer: q.correctAnswer || "A",
+          explanation: q.explanation || "",
+          difficulty: q.difficulty || "medium",
+          confidence: q.confidence || 95,
+        }));
+        const { uniqueQuestions: uniqueExtras } = filterDuplicates(extra, allSeen, 0.70);
+        validBatch = [...validBatch, ...uniqueExtras];
+      }
+    } catch (deficitErr) {
+      console.warn("Groq deficit backfill error:", deficitErr);
+    }
   }
 
   // Uniformly shuffle MCQ options across A, B, C, D and ensure explanations are sanitized
@@ -359,7 +391,16 @@ Return ONLY valid JSON in this exact format with no extra text:
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { title, gradeLevel, subject, topics, count = 10, apiKey, stream = true } = body;
+    const {
+      title,
+      gradeLevel,
+      subject,
+      topics,
+      count = 10,
+      apiKey,
+      stream = true,
+      engine = "groq",
+    } = body;
 
     if (!title || !gradeLevel || !subject || !topics?.length) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -470,6 +511,23 @@ export async function POST(req: NextRequest) {
                 activeGroqKey,
                 groqClient,
                 existingQuestions: savedInSessionTexts,
+                engine: engine as "groq" | "curriculum",
+                onCooldown: (seconds, attempt, message) => {
+                  controller.enqueue(
+                    encoder.encode(
+                      JSON.stringify({
+                        type: "cooldown",
+                        topic,
+                        topicIndex: i + 1,
+                        totalTopics,
+                        seconds,
+                        attempt,
+                        message,
+                        percent: Math.min(100, Math.round((totalGenerated / totalExpected) * 100)),
+                      }) + "\n"
+                    )
+                  );
+                },
               });
 
               let topicInserted = 0;
@@ -523,10 +581,10 @@ export async function POST(req: NextRequest) {
                 }
               }
 
-              // Backfill if duplicates were skipped and we didn't reach requested count
-              if (topicInserted < count) {
+              // Backfill ONLY if engine === "curriculum" (never automatic when Groq is chosen)
+              if (engine === "curriculum" && topicInserted < count) {
                 const needed = count - topicInserted;
-                console.log(`Topic "${topic}" backfilling ${needed} question(s) to achieve target count of ${count}`);
+                console.log(`Topic "${topic}" backfilling ${needed} question(s) via curriculum engine`);
                 const backfillList = generateCurriculumQuestions(
                   topic,
                   subject,
@@ -565,7 +623,7 @@ export async function POST(req: NextRequest) {
                 }
               }
 
-              // If still underfilled, adjust totalExpected so percentage stays honest & reaching 100%
+              // If still underfilled, adjust totalExpected so percentage stays honest & reaches 100%
               if (topicInserted < count) {
                 totalExpected = Math.max(totalGenerated, totalExpected - (count - topicInserted));
               }
@@ -659,6 +717,7 @@ export async function POST(req: NextRequest) {
         activeGroqKey,
         groqClient,
         existingQuestions: savedInSessionTexts,
+        engine: engine as "groq" | "curriculum",
       });
 
       let topicInserted = 0;
@@ -710,8 +769,8 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // Backfill if duplicates were skipped and we didn't reach requested count
-      if (topicInserted < count) {
+      // Backfill ONLY if engine === "curriculum" (never automatic when Groq is chosen)
+      if (engine === "curriculum" && topicInserted < count) {
         const needed = count - topicInserted;
         const backfillList = generateCurriculumQuestions(
           topic,
