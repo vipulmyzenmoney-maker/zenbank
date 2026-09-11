@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: zenbank-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: zenbank
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - zenbank_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d zenbank"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  zenbank:
+    container_name: zen-bank
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${ZENBANK_PORT:-3001}:8080"
+    environment:
+      PORT: 8080
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/zenbank?schema=public
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      MYZENLEARNING_URL: ${MYZENLEARNING_URL:-http://localhost:3000}
+      NEXT_PUBLIC_MYZENLEARNING_URL: ${NEXT_PUBLIC_MYZENLEARNING_URL:-http://localhost:3000}
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  zenbank_pgdata:
+    driver: local
