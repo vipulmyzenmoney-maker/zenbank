@@ -52,6 +52,7 @@ interface QuestionItem {
   difficulty: string;
   confidence: number;
   status: string;
+  flagReason?: string | null;
   verifiedBy?: string | null;
   verifiedAt?: string | null;
 }
@@ -976,6 +977,17 @@ export default function BankPage() {
                           <tr className="bg-slate-950/80 border-b border-slate-800 animate-in fade-in">
                             <td colSpan={8} className="p-4 sm:p-5">
                               <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-4 space-y-3">
+                                {/* Student Complaint Banner */}
+                                {q.flagReason && (
+                                  <div className="rounded-xl border border-red-500/40 bg-red-500/15 p-3 text-xs">
+                                    <div className="flex items-center gap-1.5 font-bold text-red-300">
+                                      <Flag className="h-3.5 w-3.5 text-red-400" />
+                                      <span>REPORTED COMPLAINT / REASON:</span>
+                                    </div>
+                                    <p className="mt-1 text-red-100 font-medium">{q.flagReason}</p>
+                                  </div>
+                                )}
+
                                 <div className="text-xs sm:text-sm font-bold text-white">
                                   {q.questionText}
                                 </div>

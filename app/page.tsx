@@ -15,12 +15,48 @@ import {
   X,
   Plus,
   ChevronRight,
+  ChevronDown,
   BookOpen,
   Check,
   Clock,
+  Pencil,
 } from "lucide-react";
 import { CURRICULUM_PRESETS } from "@/lib/presets";
 import { getStoredApiKey } from "@/components/ApiKeyModal";
+
+const STANDARD_GRADES = [
+  "Kindergarten",
+  "1st Grade",
+  "2nd Grade",
+  "3rd Grade",
+  "4th Grade",
+  "5th Grade",
+  "6th Grade",
+  "7th Grade",
+  "8th Grade",
+  "9th Grade",
+  "10th Grade",
+  "11th Grade",
+  "12th Grade",
+  "Middle School",
+  "High School",
+  "SAT/ACT",
+  "College",
+];
+
+const STANDARD_SUBJECTS = [
+  "Math",
+  "Reading",
+  "Science",
+  "Social Studies",
+  "History",
+  "Coding",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "English",
+  "Economics",
+];
 
 interface GenerationProgress {
   currentTopic: string;
@@ -66,6 +102,31 @@ export default function GeneratorPage() {
   const [customTitle, setCustomTitle] = useState("");
   const [customGrade, setCustomGrade] = useState("5th Grade");
   const [customSubject, setCustomSubject] = useState("Math");
+  
+  // Editable grade and subject modes for parsed syllabus
+  const [isCustomGradeMode, setIsCustomGradeMode] = useState(false);
+  const [isCustomSubjectMode, setIsCustomSubjectMode] = useState(false);
+  const [editingTopicIndex, setEditingTopicIndex] = useState<number | null>(null);
+  const [editingTopicValue, setEditingTopicValue] = useState<string>("");
+
+  const handleStartTopicEdit = (index: number, currentText: string) => {
+    setEditingTopicIndex(index);
+    setEditingTopicValue(currentText);
+  };
+
+  const handleSaveTopicEdit = (index: number) => {
+    if (!parsedSyllabus || !editingTopicValue.trim()) {
+      setEditingTopicIndex(null);
+      return;
+    }
+    const updated = [...parsedSyllabus.topics];
+    updated[index] = editingTopicValue.trim();
+    setParsedSyllabus({
+      ...parsedSyllabus,
+      topics: updated,
+    });
+    setEditingTopicIndex(null);
+  };
   
   // Generator Execution state
   const [engineMode, setEngineMode] = useState<"groq" | "curriculum">("groq");
@@ -945,36 +1006,159 @@ export default function GeneratorPage() {
 
                 {/* Hero Discovery Metrics */}
                 <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  {/* Subject Metric */}
-                  <div className="rounded-2xl border border-emerald-500/20 bg-slate-950/70 p-4">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                      <BookOpen className="h-3.5 w-3.5 text-emerald-400" />
-                      Detected Subject
-                    </span>
-                    <p className="mt-1.5 text-lg font-black text-white">
-                      {parsedSyllabus.subject}
+                  {/* Subject Metric - Directly Editable */}
+                  <div className="rounded-2xl border border-emerald-500/30 bg-slate-950/80 p-4 transition-all hover:border-emerald-500/50">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                        <BookOpen className="h-3.5 w-3.5 text-emerald-400" />
+                        Target Subject
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setIsCustomSubjectMode(!isCustomSubjectMode)}
+                        className="text-[10px] font-bold text-emerald-400 hover:text-emerald-300 underline underline-offset-2 transition-colors"
+                      >
+                        {isCustomSubjectMode ? "Choose Standard" : "Custom"}
+                      </button>
+                    </div>
+
+                    <div className="mt-2">
+                      {isCustomSubjectMode ? (
+                        <input
+                          type="text"
+                          value={parsedSyllabus.subject}
+                          onChange={(e) =>
+                            setParsedSyllabus({
+                              ...parsedSyllabus,
+                              subject: e.target.value,
+                            })
+                          }
+                          placeholder="e.g. Science, World History"
+                          className="w-full rounded-xl border border-emerald-500/50 bg-slate-900 px-3 py-1.5 text-sm font-extrabold text-white focus:border-emerald-400 focus:outline-none"
+                        />
+                      ) : (
+                        <div className="relative">
+                          <select
+                            value={parsedSyllabus.subject}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === "__custom__") {
+                                setIsCustomSubjectMode(true);
+                              } else {
+                                setParsedSyllabus({
+                                  ...parsedSyllabus,
+                                  subject: val,
+                                });
+                              }
+                            }}
+                            className="w-full rounded-xl border border-slate-700 bg-slate-900/90 px-3 py-1.5 text-sm font-extrabold text-emerald-300 focus:border-emerald-400 focus:outline-none cursor-pointer transition-all hover:border-slate-600 appearance-none pr-8"
+                          >
+                            {!STANDARD_SUBJECTS.includes(parsedSyllabus.subject) && (
+                              <option value={parsedSyllabus.subject}>
+                                {parsedSyllabus.subject} (Detected)
+                              </option>
+                            )}
+                            {STANDARD_SUBJECTS.map((s) => (
+                              <option key={s} value={s} className="bg-slate-900 text-white font-medium">
+                                {s}
+                              </option>
+                            ))}
+                            <option value="__custom__" className="bg-slate-900 text-emerald-400 font-bold">
+                              ✏️ Enter custom subject...
+                            </option>
+                          </select>
+                          <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                        </div>
+                      )}
+                    </div>
+                    <p className="mt-1.5 text-[10px] text-slate-400">
+                      Click to change subject
                     </p>
                   </div>
 
-                  {/* Grade Level Metric */}
-                  <div className="rounded-2xl border border-emerald-500/20 bg-slate-950/70 p-4">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                      <Zap className="h-3.5 w-3.5 text-teal-400" />
-                      Target Grade
-                    </span>
-                    <p className="mt-1.5 text-lg font-black text-white">
-                      {parsedSyllabus.gradeLevel}
+                  {/* Grade Level Metric - Directly Editable (Addresses User Request) */}
+                  <div className="rounded-2xl border border-teal-500/30 bg-slate-950/80 p-4 transition-all hover:border-teal-500/50 ring-1 ring-teal-500/20">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                        <Zap className="h-3.5 w-3.5 text-teal-400" />
+                        Target Grade
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setIsCustomGradeMode(!isCustomGradeMode)}
+                        className="text-[10px] font-bold text-teal-400 hover:text-teal-300 underline underline-offset-2 transition-colors"
+                      >
+                        {isCustomGradeMode ? "Choose Standard" : "Custom"}
+                      </button>
+                    </div>
+
+                    <div className="mt-2">
+                      {isCustomGradeMode ? (
+                        <input
+                          type="text"
+                          value={parsedSyllabus.gradeLevel}
+                          onChange={(e) =>
+                            setParsedSyllabus({
+                              ...parsedSyllabus,
+                              gradeLevel: e.target.value,
+                            })
+                          }
+                          placeholder="e.g. 5th Grade, Middle School"
+                          className="w-full rounded-xl border border-teal-500/50 bg-slate-900 px-3 py-1.5 text-sm font-extrabold text-white focus:border-teal-400 focus:outline-none"
+                        />
+                      ) : (
+                        <div className="relative">
+                          <select
+                            value={parsedSyllabus.gradeLevel}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === "__custom__") {
+                                setIsCustomGradeMode(true);
+                              } else {
+                                setParsedSyllabus({
+                                  ...parsedSyllabus,
+                                  gradeLevel: val,
+                                });
+                              }
+                            }}
+                            className="w-full rounded-xl border border-slate-700 bg-slate-900/90 px-3 py-1.5 text-sm font-extrabold text-teal-300 focus:border-teal-400 focus:outline-none cursor-pointer transition-all hover:border-slate-600 appearance-none pr-8"
+                          >
+                            {!STANDARD_GRADES.includes(parsedSyllabus.gradeLevel) && (
+                              <option value={parsedSyllabus.gradeLevel}>
+                                {parsedSyllabus.gradeLevel} (Detected)
+                              </option>
+                            )}
+                            {STANDARD_GRADES.map((g) => (
+                              <option key={g} value={g} className="bg-slate-900 text-white font-medium">
+                                {g}
+                              </option>
+                            ))}
+                            <option value="__custom__" className="bg-slate-900 text-teal-400 font-bold">
+                              ✏️ Enter custom grade...
+                            </option>
+                          </select>
+                          <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                        </div>
+                      )}
+                    </div>
+                    <p className="mt-1.5 text-[10px] text-teal-400/90 font-medium">
+                      Select or change grade for questions
                     </p>
                   </div>
 
                   {/* Topics Count Metric */}
-                  <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-4">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                      <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
-                      Topics Detected
-                    </span>
-                    <p className="mt-1.5 text-lg font-black text-emerald-300">
-                      {parsedSyllabus.topics.length} Topics Found
+                  <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-4 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                        <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+                        Topics Detected
+                      </span>
+                      <p className="mt-2 text-xl font-black text-emerald-300">
+                        {parsedSyllabus.topics.length} Topics Found
+                      </p>
+                    </div>
+                    <p className="text-[10px] text-emerald-400/80">
+                      Add, edit, or remove topics below
                     </p>
                   </div>
                 </div>
@@ -994,7 +1178,7 @@ export default function GeneratorPage() {
                       Topics Found in Image ({parsedSyllabus.topics.length})
                     </h3>
                     <span className="text-xs font-medium text-slate-400">
-                      Review, reorder, or remove before generating
+                      Review, edit, or remove before generating
                     </span>
                   </div>
 
@@ -1004,21 +1188,64 @@ export default function GeneratorPage() {
                         key={i}
                         className="flex items-center justify-between gap-3 rounded-xl border border-slate-800 bg-slate-950/80 px-4 py-3 transition-all hover:border-emerald-500/40"
                       >
-                        <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
                           <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-500/20 text-xs font-black text-emerald-300">
                             {i + 1}
                           </span>
-                          <span className="text-xs sm:text-sm font-bold text-white truncate">
-                            {topic}
-                          </span>
+                          {editingTopicIndex === i ? (
+                            <div className="flex items-center gap-2 flex-1 mr-2">
+                              <input
+                                type="text"
+                                value={editingTopicValue}
+                                onChange={(e) => setEditingTopicValue(e.target.value)}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") handleSaveTopicEdit(i);
+                                  if (e.key === "Escape") setEditingTopicIndex(null);
+                                }}
+                                autoFocus
+                                className="flex-1 rounded-lg border border-emerald-500/60 bg-slate-900 px-2.5 py-1 text-xs sm:text-sm font-bold text-white focus:outline-none"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleSaveTopicEdit(i)}
+                                className="rounded-lg bg-emerald-500 px-2.5 py-1 text-xs font-bold text-slate-950 hover:bg-emerald-400 transition-colors"
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setEditingTopicIndex(null)}
+                                className="rounded-lg bg-slate-800 px-2.5 py-1 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          ) : (
+                            <span className="text-xs sm:text-sm font-bold text-white truncate flex-1">
+                              {topic}
+                            </span>
+                          )}
                         </div>
-                        <button
-                          onClick={() => handleRemoveTopic(i)}
-                          title="Remove this topic"
-                          className="rounded-lg p-1 text-slate-500 hover:bg-rose-500/10 hover:text-rose-400 transition-all"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
+                        <div className="flex items-center gap-1 shrink-0">
+                          {editingTopicIndex !== i && (
+                            <button
+                              type="button"
+                              onClick={() => handleStartTopicEdit(i, topic)}
+                              title="Edit topic text"
+                              className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-emerald-400 transition-all"
+                            >
+                              <Pencil className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveTopic(i)}
+                            title="Remove this topic"
+                            className="rounded-lg p-1.5 text-slate-500 hover:bg-rose-500/10 hover:text-rose-400 transition-all"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>

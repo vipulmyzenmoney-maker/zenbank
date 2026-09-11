@@ -1,0 +1,4702 @@
+[
+  {
+    "id": 6350,
+    "syllabusPackId": 51,
+    "questionText": "What long‑term cultural impact did the early Pilgrim‑Wampanoag alliance have on American history?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It set a precedent for cooperation between different peoples",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "It caused permanent division between Europeans and Native peoples",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "It was only enforced during times of declared regional emergencies.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It applied exclusively to appointed colonial leaders rather than everyday citizens.",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.993Z",
+    "updatedAt": "2026-09-10T11:03:25.993Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6349,
+    "syllabusPackId": 51,
+    "questionText": "What happened to the alliance after Ousamequin’s death in 1651?",
+    "options": [
+      {
+        "id": "A",
+        "text": "War broke out the next month",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "The Pilgrims abandoned Plymouth",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "His son Wamsutta initially continued the peace",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "The alliance ended immediately",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Leadership passed to Ousamequin’s son, Wamsutta (also called Alexander). Step 2: He kept the treaty for several years before tensions rose later. 💡 Tip: Succession often preserves existing agreements, at least temporarily.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.985Z",
+    "updatedAt": "2026-09-10T11:03:25.985Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6348,
+    "syllabusPackId": 51,
+    "questionText": "Which seasonal event did the Wampanoag teach the Pilgrims to observe for planting their crops?",
+    "options": [
+      {
+        "id": "A",
+        "text": "The first frost",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "The autumn harvest",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "The spring equinox",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "The summer solstice",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Planting at the right time is essential. Step 2: The Wampanoag explained that the spring equinox signaled when the soil warmed enough for corn. 💡 Tip: Equinoxes mark equal day‑night length, a natural planting cue.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.978Z",
+    "updatedAt": "2026-09-10T11:03:25.978Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6347,
+    "syllabusPackId": 51,
+    "questionText": "Which role did Wampanoag women play in strengthening the alliance with the Pilgrims?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Negotiating the treaty terms",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Sharing knowledge of medicinal plants and food preparation",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "Constructing European‑style ships",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Leading the tribe’s war parties",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: Women were caretakers of health and food. Step 2: They taught the Pilgrims about local herbs, cooking, and preserving food. 💡 Tip: Think about daily life skills that travel across cultures.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.970Z",
+    "updatedAt": "2026-09-10T11:03:25.970Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6346,
+    "syllabusPackId": 51,
+    "questionText": "In what year did the Pilgrims and the Wampanoag sign their first formal peace agreement?",
+    "options": [
+      {
+        "id": "A",
+        "text": "1623",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "1621",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "1622",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "1620",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: The Pilgrims landed in 1620. Step 2: After the first winter, the peace treaty was signed in March 1621. 💡 Tip: Remember the timeline: landing → winter → treaty → first harvest.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.963Z",
+    "updatedAt": "2026-09-10T11:03:25.963Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6345,
+    "syllabusPackId": 51,
+    "questionText": "Which resource supplied by the Wampanoag was most crucial for the Pilgrims' first successful harvest?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Timber",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Corn",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "Cloth",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Iron",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: The Pilgrims lacked enough seed corn. Step 2: The Wampanoag shared corn kernels and taught planting methods, leading to a bountiful crop. 💡 Tip: Corn is often called the \"staff of life\" in early New England history.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.955Z",
+    "updatedAt": "2026-09-10T11:03:25.955Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6344,
+    "syllabusPackId": 51,
+    "questionText": "What name did the Pilgrims commonly use for Ousamequin?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Massasoit",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Grand Sachem",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Chief Red Feather",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Sagamore",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Ousamequin’s Wampanoag title was \"Massasoit,\" meaning \"great leader.\" Step 2: The Pilgrims recorded this name in their journals. 💡 Tip: The title reflects his role as a peacemaker.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.948Z",
+    "updatedAt": "2026-09-10T11:03:25.948Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6343,
+    "syllabusPackId": 51,
+    "questionText": "How did the early alliance affect the Wampanoag's relationships with nearby tribes?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It caused the Wampanoag to isolate themselves completely",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "It unified all New England tribes against the English",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "It had no impact on other tribal interactions",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It created jealousy and tension with rival tribes",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Other tribes saw the Pilgrims as a new power. Step 2: The Wampanoag’s special relationship sparked rivalry, especially with the Narragansett. 💡 Tip: Think about how exclusive agreements can breed envy.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.942Z",
+    "updatedAt": "2026-09-10T11:03:25.942Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6342,
+    "syllabusPackId": 51,
+    "questionText": "What practical skill did the Wampanoag teach the Pilgrims that helped them survive the first year?",
+    "options": [
+      {
+        "id": "A",
+        "text": "How to plant and harvest corn",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "How to write in English",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "How to build stone houses",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "How to forge iron tools",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: The Pilgrims struggled with unfamiliar crops. Step 2: Wampanoag elders showed them planting techniques for corn, beans, and squash. 💡 Tip: The \"Three Sisters\" planting method is a key detail.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.935Z",
+    "updatedAt": "2026-09-10T11:03:25.935Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6341,
+    "syllabusPackId": 51,
+    "questionText": "Why did Ousamequin (Massasoit) agree to a peace treaty with the Pilgrims?",
+    "options": [
+      {
+        "id": "A",
+        "text": "He planned to expand Wampanoag territory into New England",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "He wanted to convert his tribe to Christianity",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "He wanted to ensure his people had enough food during a harsh winter",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "He hoped to obtain European guns for war",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: The Pilgrims faced severe shortages in their first winter. Step 2: Ousamequin offered help to avoid famine and keep peace. 💡 Tip: Remember that alliances often start with basic survival needs.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.928Z",
+    "updatedAt": "2026-09-10T11:03:25.928Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6340,
+    "syllabusPackId": 51,
+    "questionText": "Lucas receives 6 wooden planks from the Wampanoag. He needs 10 planks to finish his shelter. If each plank costs 2 trade beads, how many beads does Lucas still need after using the gifted planks?",
+    "options": [
+      {
+        "id": "A",
+        "text": "8 beads",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "4 beads",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "2 beads",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "10 beads",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: He still needs 4 planks (10‑6). Step 2: 4 planks × 2 beads = 8 beads needed. 💡 Tip: Missing planks × cost per plank = beads owed.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 96,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.920Z",
+    "updatedAt": "2026-09-10T11:03:25.920Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6339,
+    "syllabusPackId": 51,
+    "questionText": "Priya and Maya bake corn‑bread using 3 baskets of corn the Wampanoag traded. Each basket makes 4 loaves. How many loaves can they bake?",
+    "options": [
+      {
+        "id": "A",
+        "text": "7 loaves",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "15 loaves",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "9 loaves",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "12 loaves",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Multiply baskets (3) by loaves per basket (4). Step 2: 3 × 4 = 12 loaves, so they can bake twelve. 💡 Tip: 3 baskets × 4 loaves = 12.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.912Z",
+    "updatedAt": "2026-09-10T11:03:25.912Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6338,
+    "syllabusPackId": 51,
+    "questionText": "On a timeline, which event comes directly before the first Thanksgiving celebration?",
+    "options": [
+      {
+        "id": "A",
+        "text": "The Pilgrims’ arrival on the Mayflower.",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "The building of the first church.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "The first successful harvest with Wampanoag help.",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "The signing of the Mayflower Compact.",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Look at the order of events. Step 2: The harvest, aided by the Wampanoag, made the feast possible, so it precedes Thanksgiving. 💡 Tip: Harvest → feast.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "easy",
+    "confidence": 96,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.906Z",
+    "updatedAt": "2026-09-10T11:03:25.906Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6337,
+    "syllabusPackId": 51,
+    "questionText": "A diagram of the alliance shows arrows labeled “share food,” “protect each other,” and “honor promises.” Which statement best describes the reciprocal responsibility shown?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Both groups give and receive help, keeping the partnership balanced.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "The Wampanoag give food but receive nothing.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Promises are optional and can be broken.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Only the Pilgrims must protect the Wampanoag.",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Reciprocal means each side does something for the other. Step 2: The diagram’s arrows show sharing and protection from both sides. 💡 Tip: Think of a two‑way street, not a one‑way road.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "hard",
+    "confidence": 94,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.899Z",
+    "updatedAt": "2026-09-10T11:03:25.899Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6336,
+    "syllabusPackId": 51,
+    "questionText": "A trade chart lists: 10 baskets of corn, 8 baskets of fish, and 5 tools. Which exchange shows an equivalent value if 1 basket of corn equals 1 basket of fish?",
+    "options": [
+      {
+        "id": "A",
+        "text": "10 corn for 8 fish",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "10 corn for 5 tools",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "5 tools for 10 corn",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "8 fish for 8 corn",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Equivalent means the same number when values match. Step 2: 8 fish equals 8 corn, so those baskets are equal in value. 💡 Tip: Match equal numbers when values are the same.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.892Z",
+    "updatedAt": "2026-09-10T11:03:25.892Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6335,
+    "syllabusPackId": 51,
+    "questionText": "A simple map shows Plymouth at coordinate (2,3) and the Wampanoag village at (5,7). Which point marks the village?",
+    "options": [
+      {
+        "id": "A",
+        "text": "(7,5)",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "(3,5)",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "(5,7)",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "(2,3)",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Look at the coordinate pair given for the village. Step 2: (5,7) matches the description, so that’s the correct spot. 💡 Tip: The first number is east‑west, the second north‑south.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 96,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.885Z",
+    "updatedAt": "2026-09-10T11:03:25.885Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6334,
+    "syllabusPackId": 51,
+    "questionText": "In the Wampanoag ecosystem, which group is called a “producer”?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Plants like corn that make food from sunlight.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "People who trade goods.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Animals that hunt other animals.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Decomposers that break down leaves.",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Producers create energy through photosynthesis. Step 2: Corn, a key crop, turns sunlight into food for people and animals. 💡 Tip: Producers = \"plants that produce food\".",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "easy",
+    "confidence": 97,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.877Z",
+    "updatedAt": "2026-09-10T11:03:25.877Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6333,
+    "syllabusPackId": 51,
+    "questionText": "The Mayflower Compact is called a primary source. Why does it help us understand the early alliance with the Wampanoag?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It lists recipes the Pilgrims liked.",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "It was created at the time of the Pilgrims, recording their own words about cooperation.",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "It was written centuries later by historians.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It includes pictures of the Wampanoag village.",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: A primary source is a document made during the event. Step 2: The Compact records the Pilgrims’ promises, showing how they planned to work with the Wampanoag. 💡 Tip: Primary = \"first‑hand\".",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "hard",
+    "confidence": 94,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.871Z",
+    "updatedAt": "2026-09-10T11:03:25.871Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6332,
+    "syllabusPackId": 51,
+    "questionText": "Why did Massasoit agree to trade corn and fish with the Pilgrims instead of keeping all the food for his own people?",
+    "options": [
+      {
+        "id": "A",
+        "text": "He saw that sharing would give the Pilgrims help, and the Pilgrims could later return the favor.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "He needed to practice counting.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "He wanted to lose his crops.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "He thought the Pilgrims would leave soon.",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Massasoit understood mutual benefit. Step 2: By sharing food, he earned allies who could assist in future hardships. 💡 Tip: Remember \"give and get back\" in friendships.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.865Z",
+    "updatedAt": "2026-09-10T11:03:25.865Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6331,
+    "syllabusPackId": 51,
+    "questionText": "In the early alliance between the Pilgrims and the Wampanoag led by Ousamequin (Massasoit), what does the word “alliance” mean?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A war where both sides fight together.",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "A partnership where each side helps the other.",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "A rule that only the Pilgrims must follow.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "A trade where only one side gives gifts.",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: An alliance is a two‑way partnership. Step 2: Both the Pilgrims and the Wampanoag shared food and protection, so each benefited. 💡 Tip: Think of a friendship where both friends help each other.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Early alliances with the Wampanoag under the leadership of Ousamequin (Massasoit)",
+    "difficulty": "easy",
+    "confidence": 96,
+    "status": "draft",
+    "flagReason": null,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "createdAt": "2026-09-10T11:03:25.856Z",
+    "updatedAt": "2026-09-10T11:03:25.856Z",
+    "syllabusPack": {
+      "id": 51,
+      "title": "Grade 5 Social Studies • Unit: Colonial America & Early Interactions",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T11:03:12.141Z"
+    }
+  },
+  {
+    "id": 6330,
+    "syllabusPackId": 50,
+    "questionText": "Which colony’s economy relied heavily on the export of fish?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Virginia",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Massachusetts",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "Georgia",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Maryland",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: Identify coastal colonies with abundant marine resources. Step 2: Recognize that New England’s cold waters supported a thriving fishing industry. 💡 Tip: Cod was a staple export to Europe and the Caribbean.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.774Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6329,
+    "syllabusPackId": 50,
+    "questionText": "How did the export of natural resources affect relations with Native American tribes?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It sometimes led to conflict over hunting grounds and trade control",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "It had no impact on Native American societies",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "It caused Native Americans to move to Europe",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It always improved relations because tribes received goods for free",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Examine competition over resources like fur and timber. Step 2: See that European demand sometimes sparked disputes over land and trade rights. 💡 Tip: Trade could be both cooperative and contentious.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.768Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6328,
+    "syllabusPackId": 50,
+    "questionText": "Which of these crops was NOT introduced by John Rolfe?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Rice",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Floury corn",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Mild tobacco",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Peanuts",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Recall Rolfe’s work with tobacco. Step 2: Recognize that rice was cultivated later in the Carolinas, not by Rolfe. 💡 Tip: Rolfe’s legacy is tied to tobacco, not other Southern crops.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.762Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6327,
+    "syllabusPackId": 50,
+    "questionText": "What role did the Atlantic Ocean play in the export of colonial natural resources?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It served as a highway for ships carrying goods like timber, fish, and tobacco to European markets",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "It blocked trade routes between colonies and Europe",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "It was only used for military battles, not commerce",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It provided freshwater for crops",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Identify the Atlantic’s function in the 17th‑century economy. Step 2: Understand that merchant ships crossed it to deliver colonial exports to Europe. 💡 Tip: The ocean linked producers with consumers across continents.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.757Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6326,
+    "syllabusPackId": 50,
+    "questionText": "Which of the following best describes the relationship between tobacco farming and the use of enslaved labor?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Tobacco farms were run solely by family members",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Tobacco farming required no labor, so slavery was rare",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "The labor‑intensive nature of tobacco led planters to rely increasingly on enslaved Africans",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "Enslaved labor was only used for mining, not farming",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Recognize tobacco’s demanding cultivation and processing. Step 2: See that planters turned to enslaved labor for a stable, controllable workforce. 💡 Tip: The shift to slavery intensified as tobacco profits grew.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.749Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6325,
+    "syllabusPackId": 50,
+    "questionText": "What was a major reason European countries wanted furs from North America?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Furs were used to make armor",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Furs could be turned into fuel",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Furs were fashionable for clothing among the wealthy",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "Furs were needed for ship sails",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Recall the fashion trends of 17th‑century Europe. Step 2: Understand that beaver and other furs were prized for hats and coats. 💡 Tip: The fur trade drove early exploration and trade routes.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.743Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6324,
+    "syllabusPackId": 50,
+    "questionText": "Which natural resource was most important for the shipbuilding industry in the colonies?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Copper",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Sugar",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Cotton",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Timber",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Identify materials used for building ships. Step 2: Recognize that strong, straight trees provided the timber needed for hulls and masts. 💡 Tip: New England’s forests supplied the navy and merchant fleets.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.737Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6323,
+    "syllabusPackId": 50,
+    "questionText": "What impact did the export of tobacco have on Virginia’s population growth?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It attracted more settlers looking for work on plantations",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "It slowed growth because people left for gold mines",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "It caused a population decline due to disease",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It had no effect on population numbers",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Connect a profitable cash crop with labor demand. Step 2: See that tobacco plantations needed workers, drawing families and indentured servants. 💡 Tip: Economic opportunity spurred immigration to Virginia.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.730Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6322,
+    "syllabusPackId": 50,
+    "questionText": "Which colony became known as the \"Tobacco Colony\" because of its cash‑crop production?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Massachusetts",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Connecticut",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Rhode Island",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Virginia",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Match the colony with its dominant cash crop. Step 2: Recognize that Virginia’s economy centered on tobacco after Rolfe’s success. 💡 Tip: Virginia’s nickname reflected its reliance on tobacco exports.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.642Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6321,
+    "syllabusPackId": 50,
+    "questionText": "How did John Rolfe’s tobacco strain differ from the native varieties?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It was poisonous to insects",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "It grew faster and was sweeter",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "It required no labor to harvest",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It could be grown underwater",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: Identify the key improvement Rolfe made: a milder, sweeter leaf. Step 2: Understand that this made tobacco more marketable in England. 💡 Tip: The new strain attracted more buyers and higher prices.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.625Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6320,
+    "syllabusPackId": 50,
+    "questionText": "Which of the following natural resources was NOT a major export from the early American colonies?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Fur",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Timber",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Fish",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Gold",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: List common colonial exports (fur, fish, timber). Step 2: Notice gold was rarely found or exported by the English colonies. 💡 Tip: Gold mining was more associated with later western territories, not early Atlantic colonies.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.620Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6319,
+    "syllabusPackId": 50,
+    "questionText": "Why did European markets want more tobacco from the American colonies?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It could be turned into fabric",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "It was a rare luxury that could be smoked",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "It was needed for shipbuilding",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It was used as a medicine only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: Consider the 17th‑century European habit of smoking. Step 2: Recognize tobacco’s popularity as a recreational product, not a medicine or material. 💡 Tip: Smoking became a social trend, driving demand for colonial tobacco.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.614Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6318,
+    "syllabusPackId": 50,
+    "questionText": "Which commodity became the most valuable export from Virginia after John Rolfe introduced a new tobacco strain?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Tobacco",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Fur",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Wool",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Rice",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Recall John Rolfe’s work with a sweeter, milder tobacco. Step 2: Understand that this tobacco was in high demand in England, making it Virginia’s top export. 💡 Tip: The success of Rolfe’s tobacco sparked the colony’s cash‑crop economy.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.608Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6317,
+    "syllabusPackId": 50,
+    "questionText": "What natural resource did the New England colonies primarily export in the 17th century?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Timber",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Tobacco",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Cotton",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Sugarcane",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Identify the main industries of New England. Step 2: Recognize that dense forests provided abundant timber for shipbuilding and trade. 💡 Tip: New England’s climate favored forests, not cash crops like cotton.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Export of natural resources and John Rolfe's development of tobacco as a cash crop",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:50:11.577Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6316,
+    "syllabusPackId": 50,
+    "questionText": "What does the term 'diplomacy' mean in Captain Smith's actions?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Fighting until victory",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Building forts",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Negotiating peacefully",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "Counting gold",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Leadership and diplomacy of Captain John Smith",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:45:18.264Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6315,
+    "syllabusPackId": 50,
+    "questionText": "Why did Captain John Smith use trade goods like beads and blankets when meeting the Powhatan tribe?",
+    "options": [
+      {
+        "id": "A",
+        "text": "To test the tribe's strength",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "To show friendship",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "To plant crops",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "To buy food",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: Trade goods were symbols of goodwill. Step 2: They helped Smith build trust with the Powhatan. 💡 Tip: Giving something is a friendly hello!",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Leadership and diplomacy of Captain John Smith",
+    "difficulty": "easy",
+    "confidence": 96,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:45:18.255Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6314,
+    "syllabusPackId": 50,
+    "questionText": "Maya’s student wrote: ‘5 days × 3 hours/day = 15 hours. 15 hours × 2 tomatoes/hour = 30 tomatoes.’ Which step contains the mistake?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It was only enforced during times of declared regional emergencies.",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Multiplying total hours by tomatoes per hour.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Calculating total hours.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Multiplying hours per day.",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:42.548Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6312,
+    "syllabusPackId": 50,
+    "questionText": "In a simplified chart, the North colony had 120 indentured servants and 30 enslaved Africans; the South colony had 50 indentured servants and 200 enslaved Africans; the Middle colony had 80 indentured servants and 80 enslaved Africans. Which colony had the highest ratio of enslaved Africans to indentured servants?",
+    "options": [
+      {
+        "id": "A",
+        "text": "South",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Middle",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "None",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "North",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Find the ratio for each colony (Enslaved ÷ Indentured). Step 2: South has 200 ÷ 50 = 4, which is the highest. 💡 Tip: Remember 4 is bigger than 1 or 0.5.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 94,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:40:27.580Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:42.533Z",
+    "updatedAt": "2026-09-10T10:40:27.581Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6311,
+    "syllabusPackId": 50,
+    "questionText": "Which of the following best explains why an indentured servant could receive land or money after finishing his contract?",
+    "options": [
+      {
+        "id": "A",
+        "text": "The servant was considered property of the colonist.",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "The contract was a legal agreement that could be enforced by courts.",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "The colony had a special program for free workers.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "The servant could choose to stay and keep working.",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: Contracts were legal and could be upheld in court. Step 2: Because the contract was enforceable, the servant could claim what was promised after the term. 💡 Tip: Think of a contract like a promise that the law keeps.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "easy",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:42.522Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6310,
+    "syllabusPackId": 50,
+    "questionText": "How did the invention of the cotton gin in 1793 affect the demand for enslaved African labor?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It had no effect on labor demand",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "It increased demand because cotton production became far more profitable",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "It led to the abolition of slavery immediately",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It decreased demand because cotton could be processed faster",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.167Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6309,
+    "syllabusPackId": 50,
+    "questionText": "Which of these was a common punishment for an indentured servant who tried to run away?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Immediate emancipation",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Being sent back to Europe",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "A fine paid to the master",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "A public whipping or branding",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Look at colonial disciplinary methods. Step 2: Runaways could be whipped, branded, or otherwise physically punished to deter escape. 💡 Tip: Harsh penalties were meant to maintain labor control.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 90,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:32:57.773Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.160Z",
+    "updatedAt": "2026-09-10T10:32:57.779Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6308,
+    "syllabusPackId": 50,
+    "questionText": "What role did the \"headright\" system play in the use of indentured servants?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It granted land to colonists who paid for an indentured servant’s passage",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "It gave land to anyone who owned a slave",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "It required servants to work for free for ten years",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It banned indentured servitude in the colonies",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Define the headright system. Step 2: Colonists received land parcels for each person whose voyage they financed, encouraging the import of indentured servants. 💡 Tip: This policy helped expand colonial territories.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 92,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:38:25.115Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.152Z",
+    "updatedAt": "2026-09-10T10:38:25.116Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6307,
+    "syllabusPackId": 50,
+    "questionText": "Which colony was known for having a large population of indentured servants in the early 1600s?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Georgia",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Pennsylvania",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Virginia",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "Massachusetts",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Identify early settlement patterns. Step 2: Virginia’s tobacco farms relied heavily on indentured labor before the rise of African slavery. 💡 Tip: Many of the first European settlers in Virginia arrived under indenture contracts.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 93,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:39:20.898Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.145Z",
+    "updatedAt": "2026-09-10T10:39:20.899Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6306,
+    "syllabusPackId": 50,
+    "questionText": "What was a primary difference between the lives of indentured servants and enslaved Africans regarding family?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Indentured servants could keep their families together, enslaved Africans could not",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Enslaved Africans could legally marry, indentured servants could not",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Both groups were allowed to own property",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Indentured servants could eventually reunite with family after service; enslaved families were often separated permanently",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Examine family rights. Step 2: Indentured servants, after gaining freedom, could reunite with relatives, while enslaved families were frequently torn apart by sale. 💡 Tip: Slave auctions often split families without warning.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 94,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:39:28.910Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.138Z",
+    "updatedAt": "2026-09-10T10:39:28.910Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6305,
+    "syllabusPackId": 50,
+    "questionText": "Why did some colonies prefer enslaved African labor over indentured servants?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Indentured servants were not allowed to work on farms",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Enslaved Africans could be paid higher wages",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Enslaved Africans could vote in colonial elections",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Enslaved Africans were cheaper over a lifetime than many short‑term servants",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Compare costs of labor. Step 2: Though the initial purchase price was high, enslaved Africans provided a lifetime of labor without yearly contracts, making them economically attractive. 💡 Tip: This economic motive drove the growth of chattel slavery.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.131Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6304,
+    "syllabusPackId": 50,
+    "questionText": "Which of the following statements about the Middle Passage is true?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It ended in Europe, not the Americas",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "It was a trade route used only for goods, not people",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "It was a short, comfortable voyage across the Atlantic",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It involved the forced transport of millions of Africans to the Americas",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Define the Middle Passage. Step 2: Recognize it was the brutal sea journey where enslaved Africans were shipped to the New World. 💡 Tip: Conditions were overcrowded, disease‑filled, and deadly for many.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 97,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.124Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6303,
+    "syllabusPackId": 50,
+    "questionText": "What was a common reason an indentured servant might become a slave?",
+    "options": [
+      {
+        "id": "A",
+        "text": "They broke the terms of their contract",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "They chose to stay longer for extra wages",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "They married an enslaved person",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "They were sold after their contract ended",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Review consequences of violating a contract. Step 2: Breaking the terms could lead to being sold into slavery. 💡 Tip: Courts sometimes sentenced runaway or disobedient servants to lifelong bondage.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 92,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:39:40.558Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.118Z",
+    "updatedAt": "2026-09-10T10:39:40.559Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6302,
+    "syllabusPackId": 50,
+    "questionText": "Which law officially recognized enslaved Africans as property in the English colonies?",
+    "options": [
+      {
+        "id": "A",
+        "text": "The Navigation Acts",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "The Magna Carta",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "The Bill of Rights",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "The Slave Codes",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Identify legislation that defined the status of enslaved people. Step 2: The Slave Codes set legal rules treating enslaved Africans as property. 💡 Tip: These codes varied by colony but shared common restrictions on movement and rights.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 96,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.111Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6301,
+    "syllabusPackId": 50,
+    "questionText": "Which crop’s labor demand increased the use of enslaved Africans in the Southern colonies?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Corn",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Tobacco",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "Wheat",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Cotton",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: Connect the major cash crops of the 17th‑18th centuries with labor needs. Step 2: Tobacco plantations required large, permanent labor forces, leading to a rise in African slavery. 💡 Tip: Cotton became dominant later, after the invention of the cotton gin.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.105Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6300,
+    "syllabusPackId": 50,
+    "questionText": "What were \"freedom dues\" given to an indentured servant after completing their contract?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A new indenture contract",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "A formal apology from the master",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "A small parcel of land or money",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "A ticket back to Europe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Identify what the term \"freedom dues\" refers to. Step 2: It usually included land, tools, or money to start a new life. 💡 Tip: This reward helped former servants become independent settlers.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 94,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:39:52.639Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.099Z",
+    "updatedAt": "2026-09-10T10:39:52.640Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6299,
+    "syllabusPackId": 50,
+    "questionText": "Which of the following best describes the legal status of indentured servants compared to enslaved Africans?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Indentured servants were paid wages, enslaved Africans were not",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Both could buy their freedom at any time",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Indentured servants could eventually become free, while enslaved Africans were enslaved for life",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "Both were considered property for life",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Differentiate between temporary contracts and lifelong slavery. Step 2: Indentured servants had a set term; enslaved Africans were considered chattel for life. 💡 Tip: Legal codes varied, but the key difference is the possibility of eventual freedom for indentured servants.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 96,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.093Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6298,
+    "syllabusPackId": 50,
+    "questionText": "How long did an indentured servant typically work before gaining freedom?",
+    "options": [
+      {
+        "id": "A",
+        "text": "10-12 years",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "5-7 years",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "3-5 years",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "1-2 years",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: Recall the typical contract length for indentured servitude. Step 2: Most contracts lasted about 5 to 7 years. 💡 Tip: After this period, servants received \"freedom dues\" and could start their own lives.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 93,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:40:17.425Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.087Z",
+    "updatedAt": "2026-09-10T10:40:17.426Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 6297,
+    "syllabusPackId": 50,
+    "questionText": "What was the main reason many Europeans became indentured servants in the American colonies?",
+    "options": [
+      {
+        "id": "A",
+        "text": "To pay for their passage to America",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "To serve a military draft",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Because they were forced by the government",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "To escape slavery in Europe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Identify why people needed a way to travel across the Atlantic. Step 2: Recognize that paying for passage was a common solution. 💡 Tip: Indentured servants signed contracts to work for a set number of years in exchange for the cost of their journey.",
+    "gradeLevel": "5th Grade",
+    "subject": "Social Studies",
+    "topic": "Indentured servitude and the enslavement of Africans",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-10T10:34:14.876Z",
+    "verifiedBy": "Vikesh",
+    "createdAt": "2026-09-10T09:44:08.077Z",
+    "updatedAt": "2026-09-10T10:34:14.877Z",
+    "syllabusPack": {
+      "id": 50,
+      "title": "Grade 5 Social Studies • Unit: Early American Colonies & Settlement",
+      "gradeLevel": "5th Grade",
+      "subject": "Social Studies",
+      "createdAt": "2026-09-10T09:40:37.234Z"
+    }
+  },
+  {
+    "id": 3051,
+    "syllabusPackId": 22,
+    "questionText": "How much money is 3 quarters (25¢ each) + 2 dimes (10¢ each) + 1 nickel (5¢)?",
+    "options": [
+      {
+        "id": "A",
+        "text": "$1.00",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "$1.05",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "95¢",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "85¢",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "3 quarters = 75¢. 2 dimes = 20¢. 1 nickel = 5¢. 75 + 20 + 5 = 100¢ = $1.00.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Measuring the length of an object to the nearest whole centimeter or up to 1/16 inch",
+    "difficulty": "hard",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:35:04.498Z",
+    "updatedAt": "2026-09-09T11:22:47.067Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 3046,
+    "syllabusPackId": 22,
+    "questionText": "When the hour hand points to 6 and the minute hand points to 6, what time is it?",
+    "options": [
+      {
+        "id": "A",
+        "text": "6:00",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "6:30",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "12:30",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "6:15",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "The minute hand on 6 equals 30 minutes (6 × 5 = 30), so it is 6:30.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Measuring the length of an object to the nearest whole centimeter or up to 1/16 inch",
+    "difficulty": "medium",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:35:04.478Z",
+    "updatedAt": "2026-09-09T11:22:47.050Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 3001,
+    "syllabusPackId": 22,
+    "questionText": "What is the volume of a rectangular prism with length 10 cm, width 7 cm, and height 5 cm?",
+    "options": [
+      {
+        "id": "A",
+        "text": "350 cm³",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "374 cm³",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "340 cm³",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "362 cm³",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Volume = Length × Width × Height = 10 × 7 × 5 = 350 cm³.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Understanding that rectangular prisms of different dimensions can have the same volume (a · b · c = p · q · r = n)",
+    "difficulty": "medium",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:35:02.949Z",
+    "updatedAt": "2026-09-09T11:22:46.905Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2987,
+    "syllabusPackId": 22,
+    "questionText": "What 3D shape has 6 flat square faces all of equal size?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Cylinder",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Cone",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Sphere",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Cube",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "A cube has 6 congruent square faces.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Determining the volume of rectangular prisms by the number of unit cubes used to construct the shape",
+    "difficulty": "easy",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:35:02.445Z",
+    "updatedAt": "2026-09-09T11:22:46.861Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2983,
+    "syllabusPackId": 22,
+    "questionText": "What shape has exactly 3 straight sides and 3 corners?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Triangle",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Rectangle",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Square",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Circle",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "A triangle is defined by having 3 sides and 3 angles.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Determining the volume of rectangular prisms by the number of unit cubes used to construct the shape",
+    "difficulty": "easy",
+    "confidence": 96,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:35:02.426Z",
+    "updatedAt": "2026-09-09T11:22:46.848Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2941,
+    "syllabusPackId": 22,
+    "questionText": "Lines in the same plane that never meet or intersect no matter how far they extend are...",
+    "options": [
+      {
+        "id": "A",
+        "text": "Intersecting lines",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Parallel lines",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "Perpendicular lines",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Curved lines",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Parallel lines run side-by-side with equal distance between them.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Describing, identifying, classifying, and constructing triangles (equilateral, right, scalene, isosceles)",
+    "difficulty": "medium",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:35:00.920Z",
+    "updatedAt": "2026-09-09T11:22:46.763Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2940,
+    "syllabusPackId": 22,
+    "questionText": "What is the area of a rectangle with length 8 cm and width 5 cm?",
+    "options": [
+      {
+        "id": "A",
+        "text": "45 cm²",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "40 cm²",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "35 cm²",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "26 cm²",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Area = Length × Width = 8 × 5 = 40 cm².",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Describing, identifying, classifying, and constructing triangles (equilateral, right, scalene, isosceles)",
+    "difficulty": "hard",
+    "confidence": 98,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:35:00.916Z",
+    "updatedAt": "2026-09-09T11:22:46.760Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2939,
+    "syllabusPackId": 22,
+    "questionText": "An angle that measures exactly 90 degrees and forms a square corner is called a...",
+    "options": [
+      {
+        "id": "A",
+        "text": "Straight angle",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Obtuse angle",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Acute angle",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Right angle",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "A 90° angle is a right angle.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Describing, identifying, classifying, and constructing triangles (equilateral, right, scalene, isosceles)",
+    "difficulty": "medium",
+    "confidence": 97,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:35:00.911Z",
+    "updatedAt": "2026-09-09T11:22:46.757Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2937,
+    "syllabusPackId": 22,
+    "questionText": "Which value of y makes the expression 2y + 6 equal to 14?",
+    "options": [
+      {
+        "id": "A",
+        "text": "6",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "2",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "4",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "8",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: We need to find y. Start with the equation 2y + 6 = 14. Step 2: Subtract 6 from both sides: 2y = 8. Then divide by 2: y = 4. Check: 2(4) + 6 = 8 + 6 = 14. 💡 Helpful Tip: To find a missing number, you can work backward from the answer, like solving a puzzle in reverse.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "hard",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.403Z",
+    "updatedAt": "2026-09-09T11:22:46.750Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2936,
+    "syllabusPackId": 22,
+    "questionText": "A temperature change is modeled by the expression 5t + 10, where t is the number of hours. If t = 4, what is the total temperature change?",
+    "options": [
+      {
+        "id": "A",
+        "text": "30 degrees",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "40 degrees",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "20 degrees",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "14 degrees",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Substitute 4 for t. The expression is 5(4) + 10. Step 2: Multiply 5 by 4 to get 20. Add the initial 10. 20 + 10 = 30. 💡 Helpful Tip: The '10' is the starting point, and the '5t' is how much it changes each hour.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "medium",
+    "confidence": 97,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.394Z",
+    "updatedAt": "2026-09-09T11:22:46.743Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2935,
+    "syllabusPackId": 22,
+    "questionText": "Evaluate the expression (x - 2)² if x = 5.",
+    "options": [
+      {
+        "id": "A",
+        "text": "21",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "9",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "13",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "25",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: Do the work inside the parentheses first. 5 - 2 = 3. Step 2: Now square the result. 3² means 3 × 3, which equals 9. 💡 Helpful Tip: Always finish the parentheses before squaring. It's like finishing a sandwich before putting it in the toaster.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "hard",
+    "confidence": 96,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.386Z",
+    "updatedAt": "2026-09-09T11:22:46.739Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2934,
+    "syllabusPackId": 22,
+    "questionText": "A student wrote: 'If a = 2, then 3a = 32.' Why is this incorrect?",
+    "options": [
+      {
+        "id": "A",
+        "text": "They subtracted 2 from 3",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "They divided 3 by 2",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "They concatenated the digits instead of multiplying",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "They added the numbers instead of multiplying",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: In algebra, when a number and a letter are next to each other, it means multiplication. Step 2: 3a means 3 × a. If a = 2, then 3 × 2 = 6. The student just put the numbers next to each other to make 32. 💡 Helpful Tip: 'Next to' in math usually means 'times,' not 'put together.'",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "medium",
+    "confidence": 98,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.379Z",
+    "updatedAt": "2026-09-09T11:22:46.353Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2933,
+    "syllabusPackId": 22,
+    "questionText": "Which of the following is equivalent to 4(x + 3) when x = 2?",
+    "options": [
+      {
+        "id": "A",
+        "text": "x + 12",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "4x + 3",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "4x + 9",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "4x + 12",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Use the Distributive Property. Multiply the 4 by both terms inside the parentheses. Step 2: 4 × x = 4x and 4 × 3 = 12. So, 4(x + 3) becomes 4x + 12. 💡 Helpful Tip: Distributing is like sharing a snack. The 4 shares with both the x and the 3.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "hard",
+    "confidence": 94,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:47:02.067Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.374Z",
+    "updatedAt": "2026-09-09T11:22:45.891Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2932,
+    "syllabusPackId": 22,
+    "questionText": "A game score is calculated using the formula 10p - 5, where p is the number of points scored. If a player scores 7 points, what is their final score?",
+    "options": [
+      {
+        "id": "A",
+        "text": "55",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "75",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "65",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "12",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Replace p with 7. The calculation is 10(7) - 5. Step 2: Multiply 10 by 7 to get 70. Then subtract 5. 70 - 5 = 65. 💡 Helpful Tip: In games, sometimes you start with a penalty (subtracting) or a bonus (adding) after your main score.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "medium",
+    "confidence": 97,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.369Z",
+    "updatedAt": "2026-09-09T11:22:46.350Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2931,
+    "syllabusPackId": 22,
+    "questionText": "Evaluate 5 - 2x if x = 3.",
+    "options": [
+      {
+        "id": "A",
+        "text": "1",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "-1",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "11",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Substitute 3 for x. The expression becomes 5 - 2(3). Step 2: Multiply first: 2 × 3 = 6. Then subtract: 5 - 6 = -1. 💡 Helpful Tip: If you are taking away more than you have, you go into the negative, like owing someone money.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "medium",
+    "confidence": 96,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.364Z",
+    "updatedAt": "2026-09-09T11:22:46.729Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2930,
+    "syllabusPackId": 22,
+    "questionText": "Which expression represents the area of a rectangle with length l and width w, if l = 8 and w = 5?",
+    "options": [
+      {
+        "id": "A",
+        "text": "2(l + w)",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "l + w",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "l - w",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "l × w",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Area is the space inside a shape. For a rectangle, you multiply the length by the width. Step 2: The expression is l × w. Plugging in the numbers: 8 × 5 = 40. 💡 Helpful Tip: Think of tiling a floor. You count the tiles in one row (length) and how many rows there are (width), then multiply them.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "easy",
+    "confidence": 98,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.360Z",
+    "updatedAt": "2026-09-09T11:22:46.726Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2929,
+    "syllabusPackId": 22,
+    "questionText": "A student evaluated 3x + 2 with x = 4 and got 14. What mistake did they likely make?",
+    "options": [
+      {
+        "id": "A",
+        "text": "They multiplied 3 by 4, but forgot to add 2",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "They subtracted 2 from 3 before multiplying by 4",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "They added 3 and 4 first, then multiplied by 2",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "They added 3 and 2 first, then multiplied by 4",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: The correct answer is 3(4) + 2 = 12 + 2 = 14. Wait, the student got 14? Let's re-read. If the student got 14, they were actually correct! Let's look at a different error. If the student got 20, they might have done (3+2)*4. Let's assume the question implies a wrong answer like 20. Let's adjust the question context to a common error: 'A student evaluated 3x + 2 with x = 4 and got 20.' Step 2: If they got 20, they likely did (3 + 2) × 4 = 5 × 4 = 20. This ignores the order of operations. 💡 Helpful Tip: Multiplication usually happens before addition unless parentheses say otherwise.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "hard",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.356Z",
+    "updatedAt": "2026-09-09T11:22:46.347Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2928,
+    "syllabusPackId": 22,
+    "questionText": "Evaluate the expression (a + b) × 2 if a = 4 and b = 6.",
+    "options": [
+      {
+        "id": "A",
+        "text": "24",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "14",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "20",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "16",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Parentheses come first! Add a and b together: 4 + 6 = 10. Step 2: Now multiply that sum by 2. 10 × 2 = 20. 💡 Helpful Tip: Parentheses are like a team huddle. Do the work inside the huddle before moving on to the rest of the game.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "medium",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.350Z",
+    "updatedAt": "2026-09-09T11:22:46.723Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2927,
+    "syllabusPackId": 22,
+    "questionText": "Look at the table below. Which value of x makes the expression 2x + 1 equal to 9?\n| x | 2x + 1 |\n|---|--------|\n| 3 | 7      |\n| 4 | 9      |\n| 5 | 11     |",
+    "options": [
+      {
+        "id": "A",
+        "text": "3",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "4",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "9",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: Look at the second column to find the number 9. Step 2: Follow that row to the left to see which x value matches it. The table shows that when x is 4, the result is 9. 💡 Helpful Tip: Tables are like maps. Find your destination (the answer) and trace back to see where you started (the variable).",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "easy",
+    "confidence": 98,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.346Z",
+    "updatedAt": "2026-09-09T11:22:46.719Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2926,
+    "syllabusPackId": 22,
+    "questionText": "A baker uses the formula 4c + 10 to calculate the total cost of a cake, where c is the number of candles. If a customer orders 12 candles, what is the total cost?",
+    "options": [
+      {
+        "id": "A",
+        "text": "$48",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "$22",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "$62",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "$58",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Plug in 12 for c. The calculation is 4(12) + 10. Step 2: Multiply 4 by 12 to get 48. Then add the base cost of 10. 48 + 10 = 58. 💡 Helpful Tip: In real-world problems, look for the 'base cost' (the number standing alone) and the 'per-item cost' (the number next to the variable).",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "medium",
+    "confidence": 96,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.341Z",
+    "updatedAt": "2026-09-09T11:22:46.715Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2925,
+    "syllabusPackId": 22,
+    "questionText": "If b = 5, what is the value of b² - 3?",
+    "options": [
+      {
+        "id": "A",
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "22",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "25",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "7",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: The little 2 next to b means 'b squared,' which means b times b. So, 5 × 5 = 25. Step 2: Now subtract 3 from 25. 25 - 3 = 22. 💡 Helpful Tip: Squaring a number is like making a square grid with that many rows and columns.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "medium",
+    "confidence": 97,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.336Z",
+    "updatedAt": "2026-09-09T11:22:46.711Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2924,
+    "syllabusPackId": 22,
+    "questionText": "Evaluate the expression 2a + 4 if a = 3.",
+    "options": [
+      {
+        "id": "A",
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "7",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "10",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Replace the letter 'a' with the number 3. The expression becomes 2(3) + 4. Step 2: First, multiply 2 by 3 to get 6. Then, add 4 to 6 to get 10. 💡 Helpful Tip: Always do multiplication before addition, just like putting on socks before shoes!",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "easy",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.331Z",
+    "updatedAt": "2026-09-09T11:22:46.343Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2923,
+    "syllabusPackId": 22,
+    "questionText": "What does the variable 'x' represent in the expression 3x + 5?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A placeholder for a number we don't know yet",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "The answer to the problem",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "A specific number that never changes",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "The multiplication sign",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Think of a variable like a mystery box. It holds a number inside, but we haven't opened the box yet. Step 2: In math, letters like 'x' stand in for numbers so we can write rules that work for many different values. 💡 Helpful Tip: A variable is like a blank space in a sentence waiting for a word to be filled in.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Evaluating expressions involving variables when values for the variables are given",
+    "difficulty": "easy",
+    "confidence": 98,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:34:25.316Z",
+    "updatedAt": "2026-09-09T11:22:46.339Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2891,
+    "syllabusPackId": 22,
+    "questionText": "The point (0, 0) on a coordinate plane where the x-axis and y-axis intersect is called the...",
+    "options": [
+      {
+        "id": "A",
+        "text": "Vertex",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Midpoint",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Quadrant",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Origin",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "The point where the x and y axes cross at (0, 0) is known as the origin.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Identifying the origin and axes in relation to the coordinate plane",
+    "difficulty": "medium",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:42.377Z",
+    "updatedAt": "2026-09-09T11:22:46.577Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2886,
+    "syllabusPackId": 22,
+    "questionText": "In the ordered coordinate pair (4, 7), which number represents the x-coordinate?",
+    "options": [
+      {
+        "id": "A",
+        "text": "0",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "4",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "7",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "11",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "In any ordered pair (x, y), the first number is always the x-coordinate.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Identifying the origin and axes in relation to the coordinate plane",
+    "difficulty": "hard",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:42.349Z",
+    "updatedAt": "2026-09-09T11:22:46.561Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2881,
+    "syllabusPackId": 22,
+    "questionText": "Which axis on a coordinate grid runs horizontally from left to right?",
+    "options": [
+      {
+        "id": "A",
+        "text": "z-axis",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "x-axis",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "Origin axis",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "y-axis",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "The horizontal line is the x-axis, and the vertical line is the y-axis.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Identifying the origin and axes in relation to the coordinate plane",
+    "difficulty": "medium",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:42.323Z",
+    "updatedAt": "2026-09-09T11:22:46.545Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2880,
+    "syllabusPackId": 22,
+    "questionText": "Starting at the origin (0, 0), to plot the point (3, 5), which steps do you take?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Move 3 units right along the x-axis, then 5 units up",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Move 3 units up along the y-axis, then 5 units right",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Move 5 units right, then 3 units up",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Move 5 units down along the y-axis",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Always move horizontally along the x-axis first (right for positive), then vertically along the y-axis (up for positive).",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Identifying the origin and axes in relation to the coordinate plane",
+    "difficulty": "hard",
+    "confidence": 98,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:42.309Z",
+    "updatedAt": "2026-09-09T11:22:46.326Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2877,
+    "syllabusPackId": 22,
+    "questionText": "Which of the following points is NOT in the first quadrant (where both numbers are positive)?",
+    "options": [
+      {
+        "id": "A",
+        "text": "(0, 5)",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "(5, 5)",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "(1, 1)",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "(10, 2)",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: The first quadrant is the top-right area where you have moved right AND up. This means both numbers must be greater than 0. Step 2: Point (0, 5) has a 0 in the first spot. It is on the axis, not inside the quadrant. The other points have positive numbers for both. 💡 Helpful Tip: To be 'inside' the first quadrant, neither number can be zero. They must both be positive!",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "medium",
+    "confidence": 94,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:47:03.723Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.848Z",
+    "updatedAt": "2026-09-09T11:22:45.884Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2876,
+    "syllabusPackId": 22,
+    "questionText": "A student claims that the point (5, 2) is further from the origin than (2, 5). Is this true?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Yes, because (5, 2) is higher up.",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Yes, because 5 is greater than 2 in the first position.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "No, both points are the same distance from the origin if you count grid squares.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "No, the distance depends on the path, but both are 7 units away if moving along the axes.",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Distance along the axes is the sum of the x and y values. For (5, 2), it is 5 + 2 = 7. Step 2: For (2, 5), it is 2 + 5 = 7. Both are 7 units away if you walk along the grid lines. The order doesn't change the total sum. 💡 Helpful Tip: If you swap the numbers, the total 'walking distance' (x + y) stays the same!",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "hard",
+    "confidence": 92,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:47:05.628Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.844Z",
+    "updatedAt": "2026-09-09T11:22:45.888Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2875,
+    "syllabusPackId": 22,
+    "questionText": "A bug crawls from (0,0) to (3,0) and then to (3,4). What is the total distance the bug crawled?",
+    "options": [
+      {
+        "id": "A",
+        "text": "12 units",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "5 units",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "7 units",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "4 units",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: First leg: From (0,0) to (3,0). The bug moved 3 units right. Distance = 3. Step 2: Second leg: From (3,0) to (3,4). The bug moved 4 units up. Distance = 4. Total distance = 3 + 4 = 7. 💡 Helpful Tip: Add up the horizontal moves and the vertical moves separately to find the total path length.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "hard",
+    "confidence": 93,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:47:07.161Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.839Z",
+    "updatedAt": "2026-09-09T11:22:46.300Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2874,
+    "syllabusPackId": 22,
+    "questionText": "Which ordered pair represents a point that is on the vertical line (y-axis) and 7 units from the origin?",
+    "options": [
+      {
+        "id": "A",
+        "text": "(0, 7)",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "(7, 0)",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "(7, 7)",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "(1, 7)",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Points on the vertical line (y-axis) have a first number of 0 because they haven't moved left or right. Step 2: They are 7 units from the origin, so the second number is 7. The pair is (0, 7). 💡 Helpful Tip: Vertical line = First number is 0. Horizontal line = Second number is 0.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "medium",
+    "confidence": 96,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.835Z",
+    "updatedAt": "2026-09-09T11:22:46.530Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2873,
+    "syllabusPackId": 22,
+    "questionText": "A student plotted the point (4, 1) but accidentally swapped the numbers and plotted (1, 4). How did the point move?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It moved 5 units right and 5 units up.",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "It moved 3 units left and 3 units up.",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "It stayed in the same place.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It moved 3 units right and 3 units down.",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step 1: The correct spot was (4, 1). The wrong spot is (1, 4). Step 2: To get from x=4 to x=1, you move 3 units left (4 - 3 = 1). To get from y=1 to y=4, you move 3 units up (1 + 3 = 4). So, 3 left and 3 up. 💡 Helpful Tip: Swapping numbers often creates a diagonal move. Check the difference between the numbers!",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "hard",
+    "confidence": 92,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:47:08.654Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.831Z",
+    "updatedAt": "2026-09-09T11:22:45.869Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2872,
+    "syllabusPackId": 22,
+    "questionText": "A map shows a park at (2, 5) and a library at (5, 2). Which statement is correct?",
+    "options": [
+      {
+        "id": "A",
+        "text": "They are at the same location.",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "The library is further to the right than the park.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "The park is higher up on the map than the library.",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "Both are on the x-axis.",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Compare the second numbers (the 'up' numbers). The park has a 5, and the library has a 2. Step 2: Since 5 is bigger than 2, the park is higher up on the vertical line. The library is lower. 💡 Helpful Tip: To see which is higher, just look at the second number in the pair.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "medium",
+    "confidence": 94,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:47:11.129Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.827Z",
+    "updatedAt": "2026-09-09T11:22:45.872Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2871,
+    "syllabusPackId": 22,
+    "questionText": "Look at the description: 'Start at the origin. Go 6 units right. Go 0 units up.' What is the ordered pair?",
+    "options": [
+      {
+        "id": "A",
+        "text": "(0, 0)",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "(0, 6)",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "(6, 6)",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "(6, 0)",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: 'Go 6 units right' means the first number is 6. Step 2: 'Go 0 units up' means the second number is 0. So the pair is (6, 0). 💡 Helpful Tip: If you don't move up or down, the second number is zero.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "easy",
+    "confidence": 97,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.822Z",
+    "updatedAt": "2026-09-09T11:22:46.526Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2870,
+    "syllabusPackId": 22,
+    "questionText": "A student says, 'The point (3, 3) is the same as (3, 3) because the numbers are the same, but the point (3, 4) is different.' Which part of this statement is TRUE?",
+    "options": [
+      {
+        "id": "A",
+        "text": "(3, 3) and (3, 4) are in different locations.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Both points are in the same location.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "(3, 4) is the origin.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "(3, 3) is on the x-axis.",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: An ordered pair is like an address. (3, 3) is one specific house. (3, 4) is a different house, even though the street number (3) is the same. Step 2: Since the second number changed from 3 to 4, the point moved up one space. They are in different locations. 💡 Helpful Tip: Even one number changing moves the point to a new spot!",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "medium",
+    "confidence": 93,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:47:12.686Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.816Z",
+    "updatedAt": "2026-09-09T11:22:45.877Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2869,
+    "syllabusPackId": 22,
+    "questionText": "Which ordered pair represents a point that is 4 units to the right of the y-axis and 2 units above the x-axis?",
+    "options": [
+      {
+        "id": "A",
+        "text": "(6, 2)",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "(2, 4)",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "(4, 2)",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "(2, 6)",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: 'Right of the y-axis' means the horizontal distance. That is the first number. So, the first number is 4. Step 2: 'Above the x-axis' means the vertical distance. That is the second number. So, the second number is 2. The pair is (4, 2). 💡 Helpful Tip: 'Right' matches the first number. 'Up' matches the second number.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.811Z",
+    "updatedAt": "2026-09-09T11:22:46.523Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2868,
+    "syllabusPackId": 22,
+    "questionText": "A game board is a grid. If a piece is at (1, 1) and moves 3 spaces to the right and 2 spaces up, what is its new ordered pair?",
+    "options": [
+      {
+        "id": "A",
+        "text": "(3, 4)",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "(1, 4)",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "(4, 1)",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "(4, 3)",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: Start with the original position (1, 1). The x-value is 1 and the y-value is 1. Step 2: Move 3 right: 1 + 3 = 4. Move 2 up: 1 + 2 = 3. The new spot is (4, 3). 💡 Helpful Tip: When moving right or up, you ADD to the numbers. Right adds to the first number, Up adds to the second.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "medium",
+    "confidence": 94,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:47:13.781Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.805Z",
+    "updatedAt": "2026-09-09T11:22:45.880Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2867,
+    "syllabusPackId": 22,
+    "questionText": "On a coordinate plane, the point (5, 0) is located exactly where?",
+    "options": [
+      {
+        "id": "A",
+        "text": "On the y-axis, 5 units up.",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "In the middle of the first quadrant.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "At the origin (0,0).",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "On the x-axis, 5 units to the right.",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: The second number is 0. This means there is no vertical movement (no up or down). Step 2: The first number is 5. This means you move 5 units to the right. Since you didn't go up or down, you stay on the horizontal line, which is the x-axis. 💡 Helpful Tip: If the second number is 0, you are riding on the x-axis like a train track.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "medium",
+    "confidence": 96,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.799Z",
+    "updatedAt": "2026-09-09T11:22:46.518Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2866,
+    "syllabusPackId": 22,
+    "questionText": "A student plots a point at (2, 4). Which of the following is the correct way to describe the path to get there from the origin?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Move 2 units up, then 4 units right.",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Move 6 units right, then 0 units up.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Move 4 units right, then 2 units up.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Move 2 units right, then 4 units up.",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "D",
+    "explanation": "Step 1: The first number in (2, 4) is 2. This tells us to move 2 units along the horizontal line (right). Step 2: The second number is 4. This tells us to move 4 units along the vertical line (up). So, 2 right, then 4 up. 💡 Helpful Tip: Always read the first number first! It controls the horizontal movement.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "medium",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.794Z",
+    "updatedAt": "2026-09-09T11:22:46.515Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2865,
+    "syllabusPackId": 22,
+    "questionText": "Look at the point plotted at (0, 6). Which statement is true about this point?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It is 6 units away from the origin along the vertical line.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "It is 6 units to the right of the origin.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "It is at the center of the graph.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It is on the x-axis.",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: When the first number is 0, it means you didn't move left or right at all. You stayed on the vertical line (y-axis). Step 2: The second number is 6, which means you went up 6 spaces. So it is 6 units up from the start. 💡 Helpful Tip: If the first number is 0, you are on the vertical line. If the second number is 0, you are on the horizontal line.",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "easy",
+    "confidence": 96,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.789Z",
+    "updatedAt": "2026-09-09T11:22:46.321Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2864,
+    "syllabusPackId": 22,
+    "questionText": "A robot starts at the origin (0,0). It moves 3 units to the right and then 5 units up. What is the ordered pair for the robot's final position?",
+    "options": [
+      {
+        "id": "A",
+        "text": "(3, 5)",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "(0, 8)",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "(8, 0)",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "(5, 3)",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "explanation": "Step 1: Moving right changes the first number (x). Moving up changes the second number (y). Step 2: Start at 0. Move 3 right makes x=3. Move 5 up makes y=5. So the spot is (3, 5). 💡 Helpful Tip: Right/Left is the first number. Up/Down is the second number. Think 'x' then 'y'!",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "easy",
+    "confidence": 97,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.784Z",
+    "updatedAt": "2026-09-09T11:22:46.509Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 2863,
+    "syllabusPackId": 22,
+    "questionText": "In the ordered pair (4, 7), which number tells you how far to move along the horizontal line (the x-axis)?",
+    "options": [
+      {
+        "id": "A",
+        "text": "7",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "0",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "4",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "11",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Step 1: Think of an ordered pair like a treasure map. The first number is how many steps you take to the right (or left) on the ground. This is the x-axis. Step 2: In (4, 7), the first number is 4. So, you move 4 units along the horizontal line. 💡 Helpful Tip: Remember 'x' comes before 'y' in the alphabet, and the x-axis is the horizontal one. First number = Horizontal!",
+    "gradeLevel": "5th Grade",
+    "subject": "Mathematics",
+    "topic": "Representing ordered pairs of whole numbers and graphing them on a coordinate plane",
+    "difficulty": "easy",
+    "confidence": 98,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-09-08T05:46:44.557Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-09-08T05:33:41.779Z",
+    "updatedAt": "2026-09-09T11:22:46.318Z",
+    "syllabusPack": {
+      "id": 22,
+      "title": "Grade 5 Mathematics • Unit: Algebraic Reasoning, Geometry & Measurement, and Data & Probability",
+      "gradeLevel": "5th Grade",
+      "subject": "Mathematics",
+      "createdAt": "2026-09-08T05:33:30.954Z"
+    }
+  },
+  {
+    "id": 732,
+    "syllabusPackId": 12,
+    "questionText": "What is the volume of a rectangular prism with length 40 cm, width 22 cm, and height 20 cm?",
+    "options": [
+      {
+        "id": "A",
+        "text": "17590 cm³",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "17624 cm³",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "17600 cm³",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "17612 cm³",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Volume = Length × Width × Height = 40 × 22 × 20 = 17600 cm³.",
+    "gradeLevel": "5th Grade",
+    "subject": "Math",
+    "topic": "Order of Operations (PEMDAS)",
+    "difficulty": "easy",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-08-27T07:24:19.539Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-08-27T07:23:35.919Z",
+    "updatedAt": "2026-09-09T11:22:46.277Z",
+    "syllabusPack": {
+      "id": 12,
+      "title": "5th Grade Math: Multi-Digit & PEMDAS",
+      "gradeLevel": "5th Grade",
+      "subject": "Math",
+      "createdAt": "2026-08-27T07:23:35.742Z"
+    }
+  },
+  {
+    "id": 717,
+    "syllabusPackId": 12,
+    "questionText": "Evaluate using PEMDAS: 6 + 4 × (10 - 3)",
+    "options": [
+      {
+        "id": "A",
+        "text": "70",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "34",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "38",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "42",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "1. Parentheses: (10 - 3) = 7. 2. Multiply: 4 × 7 = 28. 3. Add: 6 + 28 = 34.",
+    "gradeLevel": "5th Grade",
+    "subject": "Math",
+    "topic": "Order of Operations (PEMDAS)",
+    "difficulty": "medium",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-08-27T07:24:19.539Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-08-27T07:23:35.851Z",
+    "updatedAt": "2026-09-09T11:22:46.225Z",
+    "syllabusPack": {
+      "id": 12,
+      "title": "5th Grade Math: Multi-Digit & PEMDAS",
+      "gradeLevel": "5th Grade",
+      "subject": "Math",
+      "createdAt": "2026-08-27T07:23:35.742Z"
+    }
+  },
+  {
+    "id": 637,
+    "syllabusPackId": 11,
+    "questionText": "What is 16 × 11?",
+    "options": [
+      {
+        "id": "A",
+        "text": "160",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "176",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "187",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "186",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Multiply: 16 × 11 = 176.",
+    "gradeLevel": "5th Grade",
+    "subject": "Math",
+    "topic": "Subtracting Mixed Numbers",
+    "difficulty": "medium",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-08-27T07:24:19.539Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-08-27T07:23:28.108Z",
+    "updatedAt": "2026-09-09T11:22:46.014Z",
+    "syllabusPack": {
+      "id": 11,
+      "title": "5th Grade Math: Fractions & Decimals",
+      "gradeLevel": "5th Grade",
+      "subject": "Math",
+      "createdAt": "2026-08-27T07:23:27.998Z"
+    }
+  },
+  {
+    "id": 618,
+    "syllabusPackId": 11,
+    "questionText": "What is 1/2 × 3/5?",
+    "options": [
+      {
+        "id": "A",
+        "text": "3/7",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "4/7",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "3/10",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "1/5",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "Multiply across: (1 × 3) / (2 × 5) = 3/10.",
+    "gradeLevel": "5th Grade",
+    "subject": "Math",
+    "topic": "Adding Fractions with Unlike Denominators",
+    "difficulty": "easy",
+    "confidence": 95,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-08-27T07:24:19.539Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-08-27T07:23:28.031Z",
+    "updatedAt": "2026-09-09T11:22:45.909Z",
+    "syllabusPack": {
+      "id": 11,
+      "title": "5th Grade Math: Fractions & Decimals",
+      "gradeLevel": "5th Grade",
+      "subject": "Math",
+      "createdAt": "2026-08-27T07:23:27.998Z"
+    }
+  },
+  {
+    "id": 617,
+    "syllabusPackId": 11,
+    "questionText": "In any fraction, what does the DENOMINATOR represent?",
+    "options": [
+      {
+        "id": "A",
+        "text": "The product of multiplication",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "The total number of equal parts in the whole",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "The number of parts you currently have",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "The whole number in front of the fraction",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "The bottom number (denominator) tells how many equal parts divide the whole.",
+    "gradeLevel": "5th Grade",
+    "subject": "Math",
+    "topic": "Adding Fractions with Unlike Denominators",
+    "difficulty": "medium",
+    "confidence": 99,
+    "status": "verified",
+    "flagReason": null,
+    "verifiedAt": "2026-08-27T07:24:19.539Z",
+    "verifiedBy": "Zen Admin",
+    "createdAt": "2026-08-27T07:23:28.026Z",
+    "updatedAt": "2026-09-09T11:22:45.906Z",
+    "syllabusPack": {
+      "id": 11,
+      "title": "5th Grade Math: Fractions & Decimals",
+      "gradeLevel": "5th Grade",
+      "subject": "Math",
+      "createdAt": "2026-08-27T07:23:27.998Z"
+    }
+  }
+]

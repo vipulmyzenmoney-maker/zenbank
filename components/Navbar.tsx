@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Zap, CheckCircle2, Database, Sparkles, ExternalLink, Sliders } from "lucide-react";
+import { Zap, CheckCircle2, Database, Sparkles, ExternalLink, Sliders, LifeBuoy } from "lucide-react";
 import ApiKeyModal, { getStoredApiKey } from "@/components/ApiKeyModal";
 
 export default function Navbar() {
@@ -48,6 +48,7 @@ export default function Navbar() {
     { href: "/", label: "Generator", icon: Zap },
     { href: "/review", label: "Review Studio", icon: CheckCircle2 },
     { href: "/bank", label: "Question Bank", icon: Database },
+    { href: "/support", label: "Support & Tickets", icon: LifeBuoy },
   ];
 
   return (

@@ -8,13 +8,15 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await req.json();
-    const { status, flagReason, questionText, explanation, verifiedBy } = body;
+    const { status, flagReason, questionText, explanation, verifiedBy, options, correctAnswer } = body;
 
     const updateData: Record<string, unknown> = {};
     if (status) updateData.status = status;
     if (flagReason !== undefined) updateData.flagReason = flagReason;
     if (questionText) updateData.questionText = questionText;
     if (explanation) updateData.explanation = explanation;
+    if (options) updateData.options = options;
+    if (correctAnswer) updateData.correctAnswer = correctAnswer;
     if (status === "verified") {
       updateData.verifiedAt = new Date();
       updateData.verifiedBy = verifiedBy || "Zen Reviewer";

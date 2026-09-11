@@ -46,6 +46,9 @@ export default function ReviewPage() {
   const [editMode, setEditMode] = useState(false);
   const [editText, setEditText] = useState("");
   const [editExplanation, setEditExplanation] = useState("");
+  const [editOptions, setEditOptions] = useState<{ id: string; text: string; isCorrect: boolean }[]>([]);
+  const [editCorrectAnswer, setEditCorrectAnswer] = useState<string>("A");
+  const [activeTab, setActiveTab] = useState<"draft" | "flagged">("draft");
   const [reviewerName, setReviewerName] = useState("Zen Admin");
   const [stats, setStats] = useState({ total: 0, drafts: 0, verified: 0, flagged: 0 });
   const [simplifyingExplanation, setSimplifyingExplanation] = useState(false);
@@ -59,6 +62,35 @@ export default function ReviewPage() {
   const handleReviewerNameChange = (val: string) => {
     setReviewerName(val);
     localStorage.setItem("zen_reviewer_name", val);
+  };
+
+  const openEditMode = (q: QuestionItem) => {
+    setEditText(q.questionText);
+    setEditExplanation(q.explanation);
+    const rawOpts = Array.isArray(q.options) && q.options.length > 0
+      ? q.options.map((o) => ({ ...o }))
+      : [
+          { id: "A", text: "", isCorrect: q.correctAnswer === "A" },
+          { id: "B", text: "", isCorrect: q.correctAnswer === "B" },
+          { id: "C", text: "", isCorrect: q.correctAnswer === "C" },
+          { id: "D", text: "", isCorrect: q.correctAnswer === "D" },
+        ];
+    setEditOptions(rawOpts);
+    setEditCorrectAnswer(q.correctAnswer || "A");
+    setEditMode(true);
+  };
+
+  const handleOptionTextChange = (id: string, text: string) => {
+    setEditOptions((prev) =>
+      prev.map((opt) => (opt.id === id ? { ...opt, text } : opt))
+    );
+  };
+
+  const handleSetCorrectOption = (id: string) => {
+    setEditCorrectAnswer(id);
+    setEditOptions((prev) =>
+      prev.map((opt) => ({ ...opt, isCorrect: opt.id === id }))
+    );
   };
 
   const handleSimplifyForKids = async () => {
@@ -103,12 +135,13 @@ export default function ReviewPage() {
     }
   };
 
-  const fetchDrafts = useCallback(async (customLimit?: number) => {
+  const fetchDrafts = useCallback(async (customLimit?: number, customTab?: "draft" | "flagged") => {
     setLoading(true);
     const limitToUse = customLimit !== undefined ? customLimit : batchSize;
+    const tabToUse = customTab !== undefined ? customTab : activeTab;
     try {
       const limitParam = limitToUse === 0 ? "5000" : String(limitToUse);
-      const res = await fetch(`/api/questions?status=draft&limit=${limitParam}`);
+      const res = await fetch(`/api/questions?status=${tabToUse}&limit=${limitParam}`);
       const data = await res.json();
       setQuestions(data.questions || []);
       setStats(data.stats || { total: 0, drafts: 0, verified: 0, flagged: 0 });
@@ -118,7 +151,7 @@ export default function ReviewPage() {
     } finally {
       setLoading(false);
     }
-  }, [batchSize]);
+  }, [batchSize, activeTab]);
 
   useEffect(() => {
     fetchDrafts();
@@ -169,25 +202,39 @@ export default function ReviewPage() {
     if (!current) return;
     setActionLoading(true);
     try {
+      const sanitizedOptions = editOptions.map((opt) => ({
+        ...opt,
+        isCorrect: opt.id === editCorrectAnswer,
+      }));
+
       await fetch(`/api/questions/${current.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           questionText: editText,
+          options: sanitizedOptions,
+          correctAnswer: editCorrectAnswer,
           explanation: editExplanation,
           status: "verified",
+          flagReason: null,
           verifiedBy: reviewerName || "Zen Reviewer",
         }),
       });
       const remainingCount = questions.length - 1;
       setQuestions((prev) => prev.filter((_, i) => i !== currentIdx));
       if (currentIdx >= questions.length - 1) setCurrentIdx(Math.max(0, currentIdx - 1));
-      const newDraftsCount = Math.max(0, stats.drafts - 1);
-      setStats((prev) => ({ ...prev, drafts: newDraftsCount, verified: prev.verified + 1 }));
+      const newDraftsCount = activeTab === "draft" ? Math.max(0, stats.drafts - 1) : stats.drafts;
+      const newFlaggedCount = activeTab === "flagged" ? Math.max(0, stats.flagged - 1) : stats.flagged;
+      setStats((prev) => ({
+        ...prev,
+        drafts: newDraftsCount,
+        flagged: newFlaggedCount,
+        verified: prev.verified + 1,
+      }));
       setEditMode(false);
 
       // Auto-refill: if loaded chunk is emptied and there are still drafts in DB, automatically pull next slice!
-      if (remainingCount === 0 && newDraftsCount > 0) {
+      if (remainingCount === 0 && (activeTab === "draft" ? newDraftsCount : newFlaggedCount) > 0) {
         fetchDrafts();
       }
     } catch {
@@ -246,9 +293,7 @@ export default function ReviewPage() {
         handleAction("flag", "Flagged by reviewer");
       } else if (e.key === "e" || e.key === "E") {
         if (current) {
-          setEditText(current.questionText);
-          setEditExplanation(current.explanation);
-          setEditMode(true);
+          openEditMode(current);
         }
       } else if (e.key === "ArrowRight") {
         setCurrentIdx((i) => Math.min(i + 1, questions.length - 1));
@@ -316,9 +361,29 @@ export default function ReviewPage() {
             </div>
 
             <div className="flex items-center gap-1.5 text-xs font-bold">
-              <span className="rounded-lg bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 text-amber-400">
+              <button
+                onClick={() => {
+                  setActiveTab("draft");
+                  fetchDrafts(batchSize, "draft");
+                }}
+                className={`rounded-lg px-2.5 py-1 transition-all ${
+                  activeTab === "draft"
+                    ? "bg-amber-500/20 border border-amber-500/60 text-amber-300 ring-1 ring-amber-500/40"
+                    : "bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20"
+                }`}
+                title="Review pending draft questions"
+              >
                 {stats.drafts} Drafts
-              </span>
+              </button>
+              <Link
+                href="/support"
+                className="rounded-lg px-2.5 py-1 transition-all bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 flex items-center gap-1"
+                title="Manage all student complaints & tickets in the dedicated Support Hub"
+              >
+                <Flag className="h-3 w-3 text-rose-400" />
+                <span>{stats.flagged} Complaints</span>
+                <span className="text-[10px] bg-rose-500/20 px-1 py-0.5 rounded text-rose-200 ml-0.5">Support Hub &rarr;</span>
+              </Link>
               <span className="rounded-lg bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 text-emerald-400">
                 {stats.verified} Verified
               </span>
@@ -418,6 +483,22 @@ export default function ReviewPage() {
 
             {/* Main Dark Card */}
             <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6 sm:p-8 backdrop-blur-xl shadow-2xl">
+              {/* Student Complaint / Flag Banner */}
+              {current.flagReason && (
+                <div className="mb-5 rounded-2xl border border-rose-500/40 bg-rose-500/15 p-4 text-xs animate-in fade-in">
+                  <div className="flex items-center gap-2 font-black text-rose-300">
+                    <Flag className="h-4 w-4 text-rose-400" />
+                    <span>REPORTED COMPLAINT / REASON:</span>
+                  </div>
+                  <p className="mt-1.5 font-medium text-rose-100 text-xs sm:text-sm leading-relaxed">
+                    {current.flagReason}
+                  </p>
+                  <p className="mt-2 text-[11px] text-rose-300/80 font-bold">
+                    💡 Click <strong className="text-rose-200">Edit (E)</strong> below to fix the question text, modify option choices, change the correct answer, or clarify the explanation.
+                  </p>
+                </div>
+              )}
+
               {/* Badges */}
               <div className="flex flex-wrap items-center gap-2 mb-4">
                 <span className="rounded-md border border-slate-700 bg-slate-800 px-2.5 py-0.5 text-[11px] font-bold text-slate-300">
@@ -510,11 +591,7 @@ export default function ReviewPage() {
                     Approve (Enter)
                   </button>
                   <button
-                    onClick={() => {
-                      setEditText(current.questionText);
-                      setEditExplanation(current.explanation);
-                      setEditMode(true);
-                    }}
+                    onClick={() => openEditMode(current)}
                     className="flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs font-bold text-slate-300 hover:text-white transition-all"
                   >
                     <Pencil className="h-3.5 w-3.5" />
@@ -549,11 +626,22 @@ export default function ReviewPage() {
 
         {/* Edit Modal */}
         {current && editMode && (
-          <div className="mt-6 rounded-3xl border border-slate-800 bg-slate-900/90 p-6 sm:p-8 backdrop-blur-xl">
-            <h3 className="font-display text-lg font-bold text-white mb-4">Edit Question</h3>
+          <div className="mt-6 rounded-3xl border border-slate-800 bg-slate-900/95 p-6 sm:p-8 backdrop-blur-xl shadow-2xl animate-in fade-in">
+            <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+              <div>
+                <h3 className="font-display text-lg font-bold text-white">Edit Question & MCQ Options</h3>
+                <p className="text-xs text-slate-400">Modify question wording, adjust option text, or change the correct answer.</p>
+              </div>
+              <button
+                onClick={() => setEditMode(false)}
+                className="rounded-lg px-2.5 py-1 text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-white transition-all"
+              >
+                ✕ Cancel
+              </button>
+            </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-400 mb-1">Question Text</label>
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">Question Text</label>
               <textarea
                 value={editText}
                 onChange={(e) => setEditText(e.target.value)}
@@ -562,13 +650,80 @@ export default function ReviewPage() {
               />
             </div>
 
-            <div className="mt-4">
-              <div className="flex items-center justify-between mb-1">
-                <label className="block text-xs font-bold text-slate-400">
-                  Kid-Friendly Explanation
+            {/* MCQ Options Editor */}
+            <div className="mt-5">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-xs font-bold text-slate-300">
+                  Multiple Choice Options (Click "Mark Correct" to change correct option)
+                </label>
+                <span className="text-xs font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-0.5 rounded-lg">
+                  Correct Answer: Option {editCorrectAnswer}
+                </span>
+              </div>
+
+              <div className="space-y-3">
+                {editOptions.map((opt) => {
+                  const isCorrect = editCorrectAnswer === opt.id;
+                  return (
+                    <div
+                      key={opt.id}
+                      className={`flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 rounded-2xl border p-3 transition-all ${
+                        isCorrect
+                          ? "border-emerald-500/70 bg-emerald-500/15 shadow-sm"
+                          : "border-slate-800 bg-slate-950/70"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span
+                          className={`flex h-8 w-8 items-center justify-center rounded-xl text-xs font-black ${
+                            isCorrect
+                              ? "bg-emerald-500 text-slate-950"
+                              : "bg-slate-800 text-slate-400"
+                          }`}
+                        >
+                          {opt.id}
+                        </span>
+                      </div>
+
+                      <input
+                        type="text"
+                        value={opt.text}
+                        onChange={(e) => handleOptionTextChange(opt.id, e.target.value)}
+                        placeholder={`Option ${opt.id} text...`}
+                        className="flex-1 rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2 text-sm font-semibold text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => handleSetCorrectOption(opt.id)}
+                        className={`flex items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-extrabold transition-all shrink-0 ${
+                          isCorrect
+                            ? "bg-emerald-500 text-slate-950 font-black shadow-md shadow-emerald-500/20"
+                            : "border border-slate-700 bg-slate-800 text-slate-400 hover:text-white hover:border-slate-600"
+                        }`}
+                      >
+                        {isCorrect ? (
+                          <>
+                            <CheckCircle2 className="h-4 w-4" />
+                            Correct Answer
+                          </>
+                        ) : (
+                          "Mark Correct"
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-bold text-slate-300">
+                  Kid-Friendly Explanation & Helpful Tip
                 </label>
                 <span className="text-[10px] text-emerald-400 font-semibold">
-                  Keep it simple & easy for kids to understand
+                  Simple, clear, and easy for students
                 </span>
               </div>
               <textarea
@@ -580,18 +735,18 @@ export default function ReviewPage() {
               />
             </div>
 
-            <div className="mt-5 flex items-center gap-2.5">
+            <div className="mt-6 flex items-center gap-3 border-t border-slate-800 pt-4">
               <button
                 onClick={handleEdit}
                 disabled={actionLoading}
-                className="flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-2.5 text-xs font-extrabold text-slate-950 hover:bg-emerald-400 transition-all disabled:opacity-40"
+                className="flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 text-xs font-black text-slate-950 hover:bg-emerald-400 shadow-md shadow-emerald-500/20 transition-all disabled:opacity-40"
               >
                 <CheckCircle2 className="h-4 w-4" />
                 Save & Approve as {reviewerName || "Zen Reviewer"}
               </button>
               <button
                 onClick={() => setEditMode(false)}
-                className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs font-bold text-slate-400 hover:text-white transition-all"
+                className="rounded-xl border border-slate-700 bg-slate-800 px-5 py-3 text-xs font-bold text-slate-400 hover:text-white transition-all"
               >
                 Cancel
               </button>
