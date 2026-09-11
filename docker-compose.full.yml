@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: zen-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: zenlearning
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d zenlearning"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  zenbank:
+    container_name: zen-bank
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${ZENBANK_PORT:-3001}:8080"
+    environment:
+      PORT: 8080
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/zenbank?schema=public
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      MYZENLEARNING_URL: ${MYZENLEARNING_URL:-http://localhost:3000}
+      NEXT_PUBLIC_MYZENLEARNING_URL: ${NEXT_PUBLIC_MYZENLEARNING_URL:-http://localhost:3000}
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  myzenlearning:
+    container_name: zen-learning
+    build:
+      context: ../myzenlearning
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${ZENLEARNING_PORT:-3000}:8080"
+    environment:
+      PORT: 8080
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/zenlearning?schema=public
+      ZENBANK_INTERNAL_URL: http://zenbank:8080
+      ZENBANK_URL: http://zenbank:8080
+      NEXT_PUBLIC_ZENBANK_URL: ${NEXT_PUBLIC_ZENBANK_URL:-http://localhost:3001}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-zen_platform_local_server_jwt_secret_key_2026}
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      zenbank:
+        condition: service_started
+
+volumes:
+  pgdata:
+    driver: local
